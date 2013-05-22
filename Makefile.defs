@@ -58,7 +58,7 @@ OLEVEL="1"
 VERBOSE_CXXFLAGS_yes = -DGPU_DEBUG_ON
 
 # CONFIG Optional compilation flags
-CONFIG_CXXFLAGS_debug = -O -g -fno-inline
+CONFIG_CXXFLAGS_debug = -g -fno-inline
 CONFIG_CXXFLAGS_profiling = -O$(OLEVEL) -g -pg
 CONFIG_CXXFLAGS_optimized = -O$(OLEVEL) -fomit-frame-pointer -funroll-loops
 
