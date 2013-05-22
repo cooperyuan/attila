@@ -28,7 +28,7 @@
  *  to the Fetch box from the Decode/Execute box.
  *
  */
-
+#include <cstdio>
 #include "ShaderDecodeCommand.h"
 
 using namespace gpu3d;

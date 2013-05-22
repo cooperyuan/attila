@@ -24,6 +24,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <cstdio>
 #include <string>
 
 #include "ACDMatrix.h"

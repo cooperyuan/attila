@@ -15,6 +15,7 @@
 #include "ShaderTranslator.h"
 
 #include <sstream>
+#include <cstdio>
 
 using namespace std;
 using namespace gpu3d;

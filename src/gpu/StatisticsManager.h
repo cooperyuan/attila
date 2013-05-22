@@ -19,6 +19,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cstdio>
 #include "support.h"
 #include "GPUTypes.h"
 

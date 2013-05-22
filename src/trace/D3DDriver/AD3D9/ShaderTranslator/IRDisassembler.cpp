@@ -14,6 +14,7 @@
 #include "IRDisassembler.h"
 
 #include <cstring>
+#include <cstdio>
 
 using namespace std;
 

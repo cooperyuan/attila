@@ -20,6 +20,7 @@
 
 #include "GPUMath.h"
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 using namespace gpu3d;

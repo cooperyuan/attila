@@ -17,6 +17,7 @@
 #include <utility> // to include make_pair
 #include <iomanip> // to use std::setw manipulator
 #include <iostream>
+#include <cstdio>
 #include <bitset>
 
 using namespace gpu3d;

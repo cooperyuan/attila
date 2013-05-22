@@ -14,6 +14,7 @@
 #include "ChannelTransaction.h"
 #include "MemoryRequest.h"
 #include <iostream>
+#include <cstdio>
 #include <sstream>
 #include <cstring>
 

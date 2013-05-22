@@ -13,6 +13,7 @@
 
 #include "DDRCommand.h"
 #include <iostream>
+#include <cstdio>
 #include <sstream>
 
 using namespace std;

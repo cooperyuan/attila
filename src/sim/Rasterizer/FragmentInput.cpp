@@ -23,7 +23,7 @@
  *  the Interpolator, the fragment FIFO and the Pixel Shaders.
  *
  */
-
+#include <cstdio>
 #include "FragmentInput.h"
 
 using namespace gpu3d;

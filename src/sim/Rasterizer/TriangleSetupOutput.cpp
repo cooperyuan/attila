@@ -28,7 +28,7 @@
  *  Setup to Fragment Generation/Triangle Traversal.
  *
  */
-
+#include <cstdio>
 #include "TriangleSetupOutput.h"
 
 using namespace gpu3d;

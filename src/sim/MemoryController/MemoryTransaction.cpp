@@ -15,6 +15,7 @@
 #include "MemorySpace.h"
 #include <cmath>
 #include <iostream>
+#include <cstdio>
 #include <sstream>
 #include <cstring>
 

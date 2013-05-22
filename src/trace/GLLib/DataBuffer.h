@@ -15,6 +15,7 @@
     #define DATABUFFER_H
 
 #include <iostream>
+#include <cstdio>
 #include "QuadReg.h"
 #include "support.h"
 

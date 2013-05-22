@@ -748,7 +748,7 @@ TOK_POINTSIZE TOK_POINT_POINT TOK_ENV TOK_LOCAL
             $$ = $1;
         }
     ;
-    vtxOptWeightNum  : { $$ = 0; }
+    vtxOptWeightNum  : integer
         {
             $$ = 0; // Default value
         }

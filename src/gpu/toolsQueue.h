@@ -913,8 +913,8 @@ void Queue<Item>::dump() const
 #else
     for(u32bit i = 0, next = first; i < elements; i++)
     {
-        Item i = data[next];
-        cout << i << ",";
+        Item j = data[next];
+        cout << j << ",";
         next = (next + 1) & storageSizeMask;
     }
 #endif    

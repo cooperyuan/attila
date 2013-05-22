@@ -19,6 +19,7 @@
 #include "GL2ACD.h"
 #include "GL2ACDX.h"
 #include <iostream>
+#include <cstdio>
 
 using namespace agl;
 using namespace acdlib;
