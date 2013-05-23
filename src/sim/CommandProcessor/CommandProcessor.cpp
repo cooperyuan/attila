@@ -364,9 +364,9 @@ void CommandProcessor::clock(u64bit cycle)
     bool endAllZST;
     bool endAllCW;
 
-    GPU_DEBUG_BOX( printf("CommandProcessor => Clock %lld\n", cycle);)
+    GPU_DEBUG( printf("CommandProcessor => Clock %lld\n", cycle);)
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("CommandProcessor => State: ");
         switch(state.statusRegister)
         {
@@ -1029,7 +1029,7 @@ void CommandProcessor::clock(u64bit cycle)
                 /*  Update transmission counter.  */
                 transCycles--;
 
-                GPU_DEBUG_BOX( printf("CommandProcessor => Writing to memory.  Remaining cycles: %d.\n", transCycles); )
+                GPU_DEBUG( printf("CommandProcessor => Writing to memory.  Remaining cycles: %d.\n", transCycles); )
 
                 /*  Check if the current transaction has finished.  */
                 if (transCycles == 0)
@@ -1134,13 +1134,13 @@ void CommandProcessor::clock(u64bit cycle)
                 /*  Update memory transmission counter.  */
                 transCycles--;
 
-                GPU_DEBUG_BOX( printf("CommandProcessor => Reading data from memory.  Remaining cycles: %d.\n", transCycles); )
+                GPU_DEBUG( printf("CommandProcessor => Reading data from memory.  Remaining cycles: %d.\n", transCycles); )
 
                 /*  Check if the memory transmission has finished.  */
                 if (transCycles == 0)
                 {
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => End of data transmision.\n");
                     )
 
@@ -1172,7 +1172,7 @@ void CommandProcessor::clock(u64bit cycle)
                             /*  Set requested bytes to memory.  */
                             size = GPU_MIN(state.vertexProgramSize - requested, MAX_TRANSACTION_SIZE);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("CommandProcessor => Requesting from memory at %x %d bytes.\n",
                                     state.programMemoryBaseAddr + state.vertexProgramAddr + requested,
                                     size);
@@ -1220,7 +1220,7 @@ void CommandProcessor::clock(u64bit cycle)
                         for (i = 0; i < numVShaders; i++)
                         {
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("CommandProcessor => Sending vertex program to vertex shader %d.\n",
                                     i);
                             )
@@ -1263,7 +1263,7 @@ void CommandProcessor::clock(u64bit cycle)
                             /*  Set requested bytes to memory.  */
                             size = GPU_MIN(state.fragProgramSize - requested, MAX_TRANSACTION_SIZE);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("CommandProcessor => Requesting from memory at %x %d bytes.\n",
                                     state.programMemoryBaseAddr + state.fragProgramAddr + requested,
                                     size);
@@ -1310,7 +1310,7 @@ void CommandProcessor::clock(u64bit cycle)
                         for (i = 0; i < numFShaders; i++)
                         {
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("CommandProcessor => Sending fragment program to fragment shader %d.\n",
                                     i);
                             )
@@ -1353,7 +1353,7 @@ void CommandProcessor::clock(u64bit cycle)
                             //  Set requested bytes to memory.  */
                             size = GPU_MIN(state.programSize - requested, MAX_TRANSACTION_SIZE);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("CommandProcessor => Requesting from memory at %x %d bytes.\n",
                                     state.programMemoryBaseAddr + state.programAddress + requested,
                                     size);
@@ -1400,7 +1400,7 @@ void CommandProcessor::clock(u64bit cycle)
                         for (i = 0; i < numFShaders; i++)
                         {
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("CommandProcessor => Sending shader program to fragment shader %d.\n",
                                     i);
                             )
@@ -2030,7 +2030,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
 //printf("CP => State %d geometryStarted %d locked %d\n", state.statusRegister, geometryStarted,
 //    lastAGPTrans->getLocked());
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => Processing New AGP Transaction: AGP_WRITE.\n");
                     printf("CommandProcessor => AGP_WRITE addr %x size %d\n", lastAGPTrans->getAddress(),
                         lastAGPTrans->getSize());
@@ -2155,7 +2155,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => Processing New AGP Transaction: AGP_PRELOAD.\n");
                     printf("CommandProcessor => AGP_PRELOAD addr %x size %d\n", lastAGPTrans->getAddress(),
                         lastAGPTrans->getSize());
@@ -2197,7 +2197,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
         case AGP_READ:
             /*  Data read request from GPU local memory.  */
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => Procesing AGP Transaction: AGP_READ.\n"); )
+            GPU_DEBUG( printf("CommandProcessor => Procesing AGP Transaction: AGP_READ.\n"); )
 
             /*  Check that the AGP transaction can be processed.  */
 
@@ -2241,7 +2241,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
                             BROKEN.  THE AGP TRANSACTION OR THE COOKIES SHOULD BE KEPT UNTIL THE
                             UPDATE IS SENT TO THE UNIT.  */
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("CommandProcessor => Procesing AGP Transaction: AGP_REG_WRITE.\n");
                         )
 
@@ -2274,7 +2274,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => Procesing AGP Transaction: AGP_REG_WRITE.\n");
                 )
 
@@ -2293,7 +2293,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
 
         case AGP_REG_READ:
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => Procesing AGP Transaction: AGP_REG_READ.\n"); )
+            GPU_DEBUG( printf("CommandProcessor => Procesing AGP Transaction: AGP_REG_READ.\n"); )
 
             /*  Process a register read request.  */
             processGPURegisterRead(lastAGPTrans->getGPURegister(), lastAGPTrans->getGPUSubRegister(),
@@ -2310,7 +2310,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
 
         case AGP_COMMAND:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Procesing AGP Transaction: AGP_COMMAND.\n");
             )
 
@@ -2322,7 +2322,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
 
         case AGP_INIT_END:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Processing AGP Transaction : AGP_INIT_END.\n");
             )
 
@@ -2342,7 +2342,7 @@ void CommandProcessor::processNewAGPTransaction(u64bit cycle)
 
         case AGP_EVENT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Processign AGP Transaction : AGP_EVENT.\n");
             )
 
@@ -2390,7 +2390,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU display registers.  */
         case GPU_DISPLAY_X_RES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DISPLAY_X_RES.\n");
             )
 
@@ -2465,7 +2465,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DISPLAY_Y_RES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DISPLAY_Y_RES.\n");
             )
 
@@ -2540,7 +2540,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_D3D9_PIXEL_COORDINATES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_D3D9_PIXEL_COORDINATES.\n");
             )
 
@@ -2578,7 +2578,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VIEWPORT_INI_X:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VIEWPORT_INI_X.\n");
             )
 
@@ -2650,7 +2650,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VIEWPORT_INI_Y:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VIEWPORT_INI_Y.\n");
             )
 
@@ -2722,7 +2722,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VIEWPORT_HEIGHT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VIEWPORT_HEIGHT.\n");
             )
 
@@ -2795,7 +2795,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VIEWPORT_WIDTH:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VIEWPORT_WIDTH.\n");
             )
 
@@ -2868,7 +2868,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_RANGE_NEAR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTHRANGE_NEAR.\n");
             )
 
@@ -2895,7 +2895,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_RANGE_FAR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTHRANGE_FAR.\n");
             )
 
@@ -2922,7 +2922,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_BUFFER_CLEAR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_COLOR_BUFFER_CLEAR = {%f, %f, %f, %f}.\n",
                     gpuData.qfVal[0], gpuData.qfVal[1], gpuData.qfVal[2], gpuData.qfVal[3]);
             )
@@ -2966,7 +2966,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_INI_X:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_INI_X = %x.\n", gpuData.uintVal);
             )
 
@@ -2989,7 +2989,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_INI_Y:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_INI_Y = %x.\n", gpuData.uintVal);
             )
 
@@ -3012,7 +3012,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_X_OFFSET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_X_OFFSET = %x.\n", gpuData.uintVal);
             )
 
@@ -3035,7 +3035,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_Y_OFFSET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_Y_OFFSET = %x.\n", gpuData.uintVal);
             )
 
@@ -3058,7 +3058,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_WIDTH:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_WIDTH = %x.\n", gpuData.uintVal);
             )
 
@@ -3081,7 +3081,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_HEIGHT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_HEIGHT = %x.\n", gpuData.uintVal);
             )
 
@@ -3104,7 +3104,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_DST_ADDRESS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_DST_ADDRESS = %x.\n", gpuData.uintVal);
             )
 
@@ -3127,7 +3127,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_DST_TX_WIDTH2:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_DST_TX_WIDTH2 = %x.\n", gpuData.txFormat);
             )
 
@@ -3150,7 +3150,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_DST_TX_FORMAT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_DST_TX_FORMAT = %x.\n", gpuData.txFormat);
             )
 
@@ -3173,7 +3173,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLIT_DST_TX_BLOCK:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLIT_DST_TX_BLOCK = %x.\n", gpuData.txFormat);
             )
 
@@ -3196,7 +3196,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_Z_BUFFER_CLEAR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_Z_BUFFER_CLEAR.\n");
             )
 
@@ -3249,7 +3249,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_Z_BUFFER_BIT_PRECISSION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_Z_BUFFER_BIT_PRECISSION.\n");
             )
 
@@ -3306,7 +3306,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STENCIL_BUFFER_CLEAR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STENCIL_BUFFER_CLEAR.\n");
             )
 
@@ -3352,7 +3352,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             state.frontBufferBaseAddr = gpuData.uintVal;
             state.rtAddress[0] = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_FRONTBUFFER_ADDR = %x.\n", gpuData.uintVal);
             )
 
@@ -3395,7 +3395,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             state.backBufferBaseAddr = gpuData.uintVal;
             state.rtAddress[0] = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_BACKBUFFER_ADDR = %x.\n", gpuData.uintVal);
             )
 
@@ -3432,7 +3432,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_ZSTENCILBUFFER_ADDR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_ZSTENCILBUFFER_ADDR.\n");
             )
 
@@ -3441,7 +3441,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set GPU Z/Stencil buffer address in GPU memory register.  */
             state.zStencilBufferBaseAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_ZSTENCILBUFFER_ADDR = %x.\n", gpuData.uintVal);
             )
 
@@ -3483,7 +3483,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set GPU color block state buffer memory address register.  */
             state.colorStateBufferAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_COLOR_STATE_BUFFER_MEM_ADDR = %x.\n", gpuData.uintVal);
             )
 
@@ -3508,7 +3508,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_ZSTENCIL_STATE_BUFFER_MEM_ADDR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_ZSTENCIL_STATE_BUFFER_MEM_ADDR.\n");
             )
 
@@ -3517,7 +3517,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set GPU Z/Stencil block state buffer address in GPU memory register.  */
             state.zstencilStateBufferAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => GPU_ZSTENCIL_STATE_BUFFER_MEM_ADDR = %x.\n", gpuData.uintVal); )
+            GPU_DEBUG( printf("CommandProcessor => GPU_ZSTENCIL_STATE_BUFFER_MEM_ADDR = %x.\n", gpuData.uintVal); )
 
             /*  Send state to Z Stencil Test.  */
 
@@ -3539,7 +3539,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MEM_ADDR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MEM_ADDR.\n");
             )
 
@@ -3548,7 +3548,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set GPU texture memory base address in GPU memory register.  */
             state.textureMemoryBaseAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => GPU_TEXTURE_MEM_ADDR = %x.\n", gpuData.uintVal); )
+            GPU_DEBUG( printf("CommandProcessor => GPU_TEXTURE_MEM_ADDR = %x.\n", gpuData.uintVal); )
 
             /*  Send state change to texture unit.  */
 
@@ -3556,7 +3556,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_PROGRAM_MEM_ADDR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_PROGRAM_MEM_ADDR.\n");
             )
 
@@ -3565,7 +3565,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set GPU program memory base address in GPU memory register.  */
             state.programMemoryBaseAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => GPU_FRONTBUFFER_ADDR = %x.\n", gpuData.uintVal); )
+            GPU_DEBUG( printf("CommandProcessor => GPU_FRONTBUFFER_ADDR = %x.\n", gpuData.uintVal); )
 
             /*  Send state change to vertex shader unit.  */
 
@@ -3574,7 +3574,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU vertex shader.  */
         case GPU_VERTEX_PROGRAM:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_PROGRAM.\n");
             )
 
@@ -3583,7 +3583,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set vertex program address register.  */
             state.vertexProgramAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_VERTEX_PROGRAM = %x.\n", gpuData.uintVal);
             )
 
@@ -3591,7 +3591,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VERTEX_PROGRAM_PC:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_PROGRAM_PC.\n");
             )
 
@@ -3600,7 +3600,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set vertex program start PC register.  */
             state.vertexProgramStartPC = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_VERTEX_PROGRAM_PC = %x.\n", gpuData.uintVal);
             )
 
@@ -3622,14 +3622,14 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VERTEX_PROGRAM_SIZE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_PROGRAM_SIZE.\n");
             )
 
             /*  Set vertex program to load size (instructions).  */
             state.vertexProgramSize = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_VERTEX_PROGRAM_SIZE = %x.\n", gpuData.uintVal);
             )
 
@@ -3637,14 +3637,14 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VERTEX_THREAD_RESOURCES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_THREAD_RESOURCES.\n");
             )
 
             /*  Set vertex program to load size (instructions).  */
             state.vertexThreadResources = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_THREAD_RESOURCES = %x.\n", gpuData.uintVal);
             )
 
@@ -3666,7 +3666,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VERTEX_CONSTANT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_CONSTANT.\n");
             )
 
@@ -3699,7 +3699,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VERTEX_OUTPUT_ATTRIBUTE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_OUTPUT_ATTRIBUTE[%d] = %s.\n",
                     gpuSubReg, gpuData.booleanVal?"ENABLED":"DISABLED");
             )
@@ -3754,7 +3754,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU vertex stream buffer registers.  */
         case GPU_VERTEX_ATTRIBUTE_MAP:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_ATTRIBUTE_MAP.\n");
             )
 
@@ -3809,7 +3809,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_VERTEX_ATTRIBUTE_DEFAULT_VALUE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_VERTEX_ATTRIBUTE_DEFAULT_VALUE.\n");
             )
 
@@ -3853,7 +3853,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_ADDRESS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_ADDRESS.\n");
             )
 
@@ -3894,7 +3894,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_STRIDE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_STRIDE.\n");
             )
 
@@ -3935,7 +3935,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_DATA:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_DATA.\n");
             )
 
@@ -3976,7 +3976,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_ELEMENTS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_ELEMENTS.\n");
             )
 
@@ -4017,7 +4017,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_FREQUENCY:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_FREQUENCY.\n");
             )
 
@@ -4058,7 +4058,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_START:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_START.\n");
             )
 
@@ -4079,7 +4079,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_COUNT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_COUNT.\n");
             )
 
@@ -4111,7 +4111,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STREAM_INSTANCES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STREAM_INSTANCES.\n");
             )
 
@@ -4143,7 +4143,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_INDEX_MODE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_INDEX_MODE.\n");
             )
 
@@ -4164,7 +4164,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_INDEX_STREAM:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_INDEX_STREAM.\n");
             )
 
@@ -4191,7 +4191,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_D3D9_COLOR_STREAM:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_D3D9_COLOR_STREAM.\n");
             )
 
@@ -4232,7 +4232,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_ATTRIBUTE_LOAD_BYPASS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_ATTRIBUTE_LOAD_BYPASS.\n");
             )
 
@@ -4255,7 +4255,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_PRIMITIVE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_PRIMITIVE.\n");
             )
 
@@ -4278,7 +4278,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU clipping and culling registers.  */
         case GPU_FRUSTUM_CLIPPING:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_FRUSTUM_CLIPPING.\n");
             )
 
@@ -4311,7 +4311,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_USER_CLIP:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_USER_CLIP.\n");
             )
 
@@ -4351,7 +4351,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_USER_CLIP_PLANE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_USER_CLIP_PLANE.\n");
             )
 
@@ -4384,7 +4384,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_FACEMODE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_FACEMODE.\n");
             )
 
@@ -4405,7 +4405,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_CULLING:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_CULLING.\n");
             )
 
@@ -4427,7 +4427,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  Hierarchical Z registers.  */
         case GPU_HIERARCHICALZ:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_HIERARCHICALZ.\n");
             )
 
@@ -4449,7 +4449,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  Hierarchical Z registers.  */
         case GPU_EARLYZ:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_EARLYZ.\n");
             )
 
@@ -4496,7 +4496,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_SCISSOR_TEST:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_SCISSOR_TEST.\n");
             )
 
@@ -4516,7 +4516,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_SCISSOR_INI_X:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_SCISSOR_INI_X.\n");
             )
 
@@ -4537,7 +4537,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_SCISSOR_INI_Y:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_SCISSOR_INI_Y.\n");
             )
 
@@ -4558,7 +4558,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_SCISSOR_WIDTH:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_SCISSOR_WIDTH.\n");
             )
 
@@ -4579,7 +4579,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_SCISSOR_HEIGHT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_SCISSOR_HEIGHT.\n");
             )
 
@@ -4600,7 +4600,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_SLOPE_FACTOR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_SLOPE_FACTOR.\n");
             )
 
@@ -4621,7 +4621,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_UNIT_OFFSET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_UNIT_OFFSET.\n");
             )
 
@@ -4642,7 +4642,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_D3D9_DEPTH_RANGE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_D3D9_DEPTH_RANGE = %s.\n", gpuData.booleanVal ? "T" : "F");
             )
 
@@ -4674,7 +4674,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_D3D9_RASTERIZATION_RULES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_D3D9_RASTERIZATION_RULES = %s.\n", gpuData.booleanVal ? "T" : "F");
             )
 
@@ -4695,7 +4695,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TWOSIDED_LIGHTING:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TWOSIDED_LIGHTING.\n");
             )
 
@@ -4716,7 +4716,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_MULTISAMPLING:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_MULTISAMPLING.\n");
             )
 
@@ -4791,7 +4791,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_MSAA_SAMPLES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_MSAA_SAMPLES.\n");
             )
 
@@ -4866,7 +4866,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_INTERPOLATION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_INTERPOLATION.\n");
             )
 
@@ -4887,7 +4887,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_FRAGMENT_INPUT_ATTRIBUTES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_FRAGMENT_INPUT_ATTRIBUTES[%d] = %s.\n",
                 gpuSubReg, gpuData.booleanVal?"ENABLED":"DISABLED");
             )
@@ -4935,7 +4935,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set fragment program address register.  */
             state.fragProgramAddr = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_FRAGMENT_PROGRAM = %x.\n", gpuData.uintVal);
             )
 
@@ -4948,7 +4948,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set fragment program start PC register.  */
             state.fragProgramStartPC = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_FRAGMENT_PROGRAM_PC = %x.\n", gpuData.uintVal);
             )
 
@@ -4975,7 +4975,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             /*  Set fragment program to load size (instructions).  */
             state.fragProgramSize = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_FRAGMENT_PROGRAM_SIZE = %x.\n", gpuData.uintVal);
             )
 
@@ -4983,14 +4983,14 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_FRAGMENT_THREAD_RESOURCES:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_FRAGMENT_THREAD_RESOURCES.\n");
             )
 
             /*  Set per fragment thread resource usage.  */
             state.fragThreadResources = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_FRAGMENT_THREAD_RESOURCE = %x.\n", gpuData.uintVal);
             )
 
@@ -5012,7 +5012,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_FRAGMENT_CONSTANT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_FRAGMENT_CONSTANT.\n");
             )
 
@@ -5045,7 +5045,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_MODIFY_FRAGMENT_DEPTH:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_MODIFY_FRAGMENT_DEPTH.\n");
             )
 
@@ -5087,7 +5087,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             //  Set shader program address register.  */
             state.programAddress = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_SHADER_PROGRAM_ADDDRESS = %x.\n", gpuData.uintVal);
             )
 
@@ -5100,7 +5100,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             //  Set shader program size (bytes).
             state.programSize = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_SHADER_PROGRAM_SIZE = %x.\n", gpuData.uintVal);
             )
 
@@ -5113,7 +5113,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             //  Set shader program load PC register.
             state.programLoadPC = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => GPU_SHADER_PROGRAM_LOAD_PC = %x.\n", gpuData.uintVal);
             )
 
@@ -5150,7 +5150,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
                         break;
                 }
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => GPU_SHADER_PROGRAM_LOAD_PC[");
 
                     switch(gpuSubReg)
@@ -5220,7 +5220,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
                         break;
                 }
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => GPU_SHADER_THREAD_RESOURCES[");
 
                     switch(gpuSubReg)
@@ -5265,7 +5265,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU Texture Unit registers.  */
         case GPU_TEXTURE_ENABLE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_ENABLE.\n");
             )
 
@@ -5290,7 +5290,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MODE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MODE.\n");
             )
 
@@ -5326,7 +5326,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             mipmap = GPU_MOD(gpuSubReg / CUBEMAP_IMAGES, MAX_TEXTURE_SIZE);
             cubemap = GPU_MOD(gpuSubReg, CUBEMAP_IMAGES);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_ADDRESS.\n");
             )
 
@@ -5351,7 +5351,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_WIDTH:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_WIDTH.\n");
             )
 
@@ -5376,7 +5376,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_HEIGHT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_HEIGHT.\n");
             )
 
@@ -5401,7 +5401,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_DEPTH:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_DEPTH.\n");
             )
 
@@ -5426,7 +5426,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_WIDTH2:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_WIDTH2.\n");
             )
 
@@ -5451,7 +5451,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_HEIGHT2:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_HEIGHT2.\n");
             )
 
@@ -5476,7 +5476,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_DEPTH2:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_DEPTH2.\n");
             )
 
@@ -5501,7 +5501,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_BORDER:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_BORDER.\n");
             )
 
@@ -5527,7 +5527,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_FORMAT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_FORMAT.\n");
             )
 
@@ -5552,7 +5552,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_REVERSE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_REVERSE.\n");
             )
 
@@ -5577,7 +5577,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_D3D9_COLOR_CONV:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_D3D9_COLOR_CONV.\n");
             )
 
@@ -5602,7 +5602,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_D3D9_V_INV:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_D3D9_V_INV.\n");
             )
 
@@ -5627,7 +5627,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_COMPRESSION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_COMPRESSION.\n");
             )
 
@@ -5652,7 +5652,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_BLOCKING:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_BLOCKING.\n");
             )
 
@@ -5677,7 +5677,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_BORDER_COLOR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_COLOR.\n");
             )
 
@@ -5705,7 +5705,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_WRAP_S:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_WRAP_S.\n");
             )
 
@@ -5730,7 +5730,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_WRAP_T:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_WRAP_T.\n");
             )
 
@@ -5755,7 +5755,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_WRAP_R:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_WRAP_R.\n");
             )
 
@@ -5780,7 +5780,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_NON_NORMALIZED:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_NON_NORMALIZED.\n");
             )
 
@@ -5806,7 +5806,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MIN_FILTER:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MIN_FILTER.\n");
             )
 
@@ -5831,7 +5831,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MAG_FILTER:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MAG_FILTER.\n");
             )
 
@@ -5856,7 +5856,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_ENABLE_COMPARISON:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_ENABLE_COMPARISON = %s.\n", gpuData.booleanVal ? "T" : "F");
             )
 
@@ -5881,7 +5881,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_COMPARISON_FUNCTION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_COMPARISON_FUNCTION = ");
                 switch(gpuData.compare)
                 {
@@ -5943,7 +5943,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_SRGB:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_SRGB = %s.\n", gpuData.booleanVal ? "T" : "F");
             )
 
@@ -5969,7 +5969,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MIN_LOD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MIN_LOD.\n");
             )
 
@@ -5994,7 +5994,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MAX_LOD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MAX_LOD.\n");
             )
 
@@ -6019,7 +6019,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_LOD_BIAS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_LOD_BIAS.\n");
             )
 
@@ -6044,7 +6044,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MIN_LEVEL:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MIN_LEVEL.\n");
             )
 
@@ -6069,7 +6069,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MAX_LEVEL:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MAX_LEVEL.\n");
             )
 
@@ -6095,7 +6095,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXT_UNIT_LOD_BIAS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXT_UNIT_LOD_BIAS.\n");
             )
 
@@ -6120,7 +6120,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_TEXTURE_MAX_ANISOTROPY:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_TEXTURE_MAX_ANISOTROPY.\n");
             )
 
@@ -6146,7 +6146,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU Stencil test registers.  */
         case GPU_STENCIL_TEST:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STENCIL_TEST.\n");
             )
 
@@ -6187,7 +6187,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STENCIL_FUNCTION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STENCIL_FUNCTION.\n");
             )
 
@@ -6214,7 +6214,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STENCIL_REFERENCE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STENCIL_REFERENCE.\n");
             )
 
@@ -6242,7 +6242,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STENCIL_COMPARE_MASK:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STENCIL_COMPARE_MASK.\n");
             )
 
@@ -6270,7 +6270,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STENCIL_UPDATE_MASK:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_UPDATE_MASK.\n");
             )
 
@@ -6297,7 +6297,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_STENCIL_FAIL_UPDATE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_STENCIL_FAIL_UPDATE.\n");
             )
 
@@ -6324,7 +6324,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_FAIL_UPDATE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_FAIL_UPDATE.\n");
             )
 
@@ -6351,7 +6351,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_PASS_UPDATE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_PASS_UPDATE.\n");
             )
 
@@ -6379,7 +6379,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU Depth test registers.  */
         case GPU_DEPTH_TEST:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_TEST.\n");
             )
 
@@ -6420,7 +6420,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_FUNCTION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_FUNCION.\n");
             )
 
@@ -6460,7 +6460,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_DEPTH_MASK:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_DEPTH_MASK.\n");
             )
 
@@ -6487,7 +6487,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_ZSTENCIL_COMPRESSION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_ZSTENCIL_COMPRESSION.\n");
             )
 
@@ -6528,7 +6528,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_BUFFER_FORMAT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_COLOR_BUFFER_FORMAT.\n");
             )
 
@@ -6567,7 +6567,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_COMPRESSION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_COLOR_COMPRESSION = %s.\n", gpuData.booleanVal ? "T" : "F");
             )
 
@@ -6606,7 +6606,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_SRGB_WRITE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_COLOR_WRITE_SRGB.\n");
             )
 
@@ -6633,7 +6633,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
             
         case GPU_RENDER_TARGET_ENABLE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_RENDER_TARGET_ENABLE.\n");
             )
 
@@ -6700,7 +6700,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_RENDER_TARGET_FORMAT:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_RENDER_TARGET_FORMAT.\n");
             )
 
@@ -6739,7 +6739,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_RENDER_TARGET_ADDRESS:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_RENDER_TARGET_ADDRESS[%d] = %08x.\n", gpuSubReg, gpuData.uintVal);
             )
 
@@ -6782,7 +6782,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU Color Blend registers.  */
         case GPU_COLOR_BLEND:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_COLOR_BLEND.\n");
             )
 
@@ -6810,7 +6810,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLEND_EQUATION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_EQUATION.\n");
             )
 
@@ -6839,7 +6839,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLEND_SRC_RGB:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_SRC_RGB.\n");
             )
 
@@ -6868,7 +6868,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLEND_DST_RGB:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_DST_RGB.\n");
             )
 
@@ -6896,7 +6896,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLEND_SRC_ALPHA:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_SRC_ALPHA.\n");
             )
 
@@ -6924,7 +6924,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLEND_DST_ALPHA:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_DST_ALPHA.\n");
             )
 
@@ -6952,7 +6952,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_BLEND_COLOR:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_COLOR.\n");
             )
 
@@ -6983,7 +6983,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_MASK_R:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_MASK_R.\n");
             )
 
@@ -7024,7 +7024,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_MASK_G:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_MASK_G.\n");
             )
 
@@ -7064,7 +7064,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_MASK_B:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_MASK_B.\n");
             )
 
@@ -7105,7 +7105,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_COLOR_MASK_A:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_BLEND_MASK_A.\n");
             )
 
@@ -7146,7 +7146,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
         /*  GPU Color Logical Operation registers.  */
         case GPU_LOGICAL_OPERATION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_LOGICAL_OPERATION.\n");
             )
 
@@ -7174,7 +7174,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
         case GPU_LOGICOP_FUNCTION:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_LOGICOP_FUNCTION.\n");
             )
 
@@ -7200,7 +7200,7 @@ void CommandProcessor::processGPURegisterWrite(u64bit cycle, GPURegister gpuReg,
 
             break;
         case GPU_MCV2_2ND_INTERLEAVING_START_ADDR:
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => Write GPU_MCV2_2ND_INTERLEAVING_START_ADDR.\n");
             )
             state.mcSecondInterleavingStartAddr = gpuData.uintVal;
@@ -7283,7 +7283,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
         case GPU_RESET:
             /*  Send a reset signal to all GPU units.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => RESET command.\n");
             )
 
@@ -7420,7 +7420,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //        panic("CommandProcessor", "processGPUCommand", "Draw command while still drawing not supported.");
                 //)
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => DRAW command.\n");
                 )
 
@@ -7572,7 +7572,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => SWAPBUFFERS command.\n");
                 )
 
@@ -7647,7 +7647,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => DUMPCOLOR command.\n");
                 )
 
@@ -7694,7 +7694,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => DUMPDEPTH command.\n");
                 )
 
@@ -7741,7 +7741,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => DUMPSTENCIL command.\n");
                 )
 
@@ -7840,7 +7840,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
         case GPU_CLEARBUFFERS:
             /*  Clear Z, Stencil and Color buffer.  */
 
-            GPU_DEBUG_BOX(printf("CommandProcessor => CLEARBUFFERS command.\n"); )
+            GPU_DEBUG(printf("CommandProcessor => CLEARBUFFERS command.\n"); )
 
             panic("CommandProcessor", "processGPUCommand", "CLEARBUFFERS command not implemented.");
 
@@ -7849,7 +7849,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
         case GPU_CLEARZBUFFER:
             /*  Clear Z buffer.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("CommandProcessor => CLEARZBUFFER command.\n");
             )
 
@@ -7880,7 +7880,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => CLEARZSTENCILBUFFERS command.\n");
                 )
 
@@ -7931,7 +7931,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => CLEARCOLORBUFFER command.\n");
                 )
 
@@ -7975,7 +7975,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => FLUSHZSTENCIL command.\n");
                     )
 
@@ -8026,7 +8026,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => FLUSHCOLOR command.\n");
                     )
 
@@ -8073,7 +8073,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => LOAD_VERTEX_PROGRAM command.\n");
                 )
 
@@ -8117,7 +8117,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                     /*  Set requested bytes to memory.  */
                     requested = GPU_MIN(state.vertexProgramSize, MAX_TRANSACTION_SIZE);
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => Requesting from memory at %x %d bytes\n",
                             state.programMemoryBaseAddr + state.vertexProgramAddr,
                             requested);
@@ -8188,7 +8188,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 }
                 else
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => LOAD_FRAGMENT_PROGRAM command.\n");
                     )
 
@@ -8231,7 +8231,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                         /*  Set requested bytes to memory.  */
                         requested = GPU_MIN(state.fragProgramSize, MAX_TRANSACTION_SIZE);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("CommandProcessor => Requesting from memory at %x %d bytes\n",
                                 state.programMemoryBaseAddr + state.fragProgramAddr,
                                 requested);
@@ -8289,7 +8289,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("CommandProcessor => LOAD_SHADER_PROGRAM command.\n");
                 )
 
@@ -8332,7 +8332,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                     //  Set requested bytes to memory.
                     requested = GPU_MIN(state.fragProgramSize, MAX_TRANSACTION_SIZE);
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => Requesting from memory at %x %d bytes\n",
                             state.programMemoryBaseAddr + state.programAddress,
                             requested);
@@ -8392,7 +8392,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => SAVE_COLOR_STATE command.\n");
                     )
 
@@ -8442,7 +8442,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => RESTORE_COLOR_STATE command.\n");
                     )
 
@@ -8492,7 +8492,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => SAVE_ZSTENCIL_STATE command.\n");
                     )
 
@@ -8542,7 +8542,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CP (%lld) => RESTORE_ZSTENCIL_STATE command.  Transaction %p\n", cycle, lastAGPTrans);
                     )
 
@@ -8592,7 +8592,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => GPU_RESET_ZSTENCIL_STATE command.\n");
                     )
 
@@ -8651,7 +8651,7 @@ void CommandProcessor::processGPUCommand(u64bit cycle, GPUCommand gpuComm)
                 //  Check if command has to be ignored because skip frames mode active.
                 if (!skipFrames)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("CommandProcessor => GPU_RESET_COLOR_STATE command.\n");
                     )
 
@@ -8767,7 +8767,7 @@ void CommandProcessor::processMemoryTransaction(MemoryTransaction *memTrans)
         case MT_STATE:
             /*  Memory Controller is ready to receive new requests.  */
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => Memory transaction: MT_STATE.\n"); )
+            GPU_DEBUG( printf("CommandProcessor => Memory transaction: MT_STATE.\n"); )
 
             memoryState = memTrans->getState();
             break;
@@ -8776,7 +8776,7 @@ void CommandProcessor::processMemoryTransaction(MemoryTransaction *memTrans)
         case MT_READ_DATA:
             /*  Return data from the previous memory request.  */
 
-            GPU_DEBUG_BOX( printf("CommandProcessor => Memory transaction: MT_READ_DATA.  Trans. cycles: %d\n", memTrans->getBusCycles()); )
+            GPU_DEBUG( printf("CommandProcessor => Memory transaction: MT_READ_DATA.  Trans. cycles: %d\n", memTrans->getBusCycles()); )
 
             /*  Check memory transmissions.  */
             GPU_ASSERT(

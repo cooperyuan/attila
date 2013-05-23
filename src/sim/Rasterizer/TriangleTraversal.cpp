@@ -153,7 +153,7 @@ void TriangleTraversal::clock(u64bit cycle)
     u32bit i, j;
     bool rasterizationWorking;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("TriangleTraversal => clock %lld.\n", cycle);
     )
 
@@ -191,7 +191,7 @@ storedTriangles, requestedTriangles, lastFragment?"T":"F");
         case RAST_RESET:
             /*  Reset state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => RESET state.\n");
             )
 
@@ -214,7 +214,7 @@ storedTriangles, requestedTriangles, lastFragment?"T":"F");
         case RAST_READY:
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => READY state.\n");
             )
 
@@ -232,7 +232,7 @@ storedTriangles, requestedTriangles, lastFragment?"T":"F");
 
             /*  Draw state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => DRAWING state.\n");
             )
 
@@ -271,7 +271,7 @@ storedTriangles, requestedTriangles, lastFragment?"T":"F");
                             for(j = 0; j < STAMP_FRAGMENTS; j++)
                                 stamp[j] = NULL;
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("TriangleTraversal => Generating an empty fragment (last triangle).\n");
                             )
 
@@ -301,7 +301,7 @@ storedTriangles, requestedTriangles, lastFragment?"T":"F");
                             
                             rasterizationWorking = true;
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("TriangleTraversal => Generating new stamp.\n");
                             )
 
@@ -424,7 +424,7 @@ storedTriangles, requestedTriangles, lastFragment?"T":"F");
                             /*  Send fragment to Interpolator.  */
                             newFragment->write(cycle, frInput);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("TriangleTraversal => Sending Fragment to Hierarchical Z.\n");
                             )
                         }
@@ -545,7 +545,7 @@ printf("B");
                 }
                 else
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("TriangleTraversal => Last triangle (ID %d) received.\n",
                             triangleQueue[nextTriangle]->getTriangleID());
                     )
@@ -555,7 +555,7 @@ printf("B");
             /*  Receive setup triangles from Triangle Setup.  */
             while (setupTriangle->read(cycle, (DynamicObject *&) tsOutput))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("TriangleTraversal => Received new setup triangle ID %d from Triangle Setup.\n",
                         tsOutput->getTriangleID());
                 )
@@ -584,7 +584,7 @@ printf("B");
             /*  Check if triangles can be requested to setup.  */
             if ((storedTriangles + requestedTriangles + trianglesCycle) <= triangleQSize)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("TriangleTraversal => Requested triangle to Triangle Setup.\n");
                 )
  
@@ -616,7 +616,7 @@ printf("B");
         case RAST_END:
             /*  Draw end state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => END state.\n");
             )
 
@@ -653,7 +653,7 @@ void TriangleTraversal::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_RESET:
             /*  Reset command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => RESET command received.\n");
             )
 
@@ -665,7 +665,7 @@ void TriangleTraversal::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_DRAW:
             /*  Draw command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => DRAW command received.\n");
             )
 
@@ -715,7 +715,7 @@ void TriangleTraversal::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_END:
             /*  End command received from Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => END command received.\n");
             )
 
@@ -734,7 +734,7 @@ void TriangleTraversal::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_REG_WRITE:
             /*  Write register command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => REG_WRITE command received.\n");
             )
 
@@ -766,7 +766,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write display horizontal resolution register.  */
             hRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_DISPLAY_X_RES = %d.\n", hRes);
             )
 
@@ -776,7 +776,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write display vertical resolution register.  */
             vRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_DISPLAY_Y_RES = %d.\n", vRes);
             )
 
@@ -786,7 +786,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport initial x coordinate register.  */
             startX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_INI_X = %d.\n", startX);
             )
 
@@ -796,7 +796,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport initial y coordinate register.  */
             startY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_INI_Y = %d.\n", startY);
             )
 
@@ -806,7 +806,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport width register.  */
             width = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_WIDTH = %d.\n", width);
             )
 
@@ -816,7 +816,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport height register.  */
             height = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_HEIGHT = %d.\n", height);
             )
 
@@ -827,7 +827,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write Multisampling enable flag.
             multisampling = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => Write GPU_MULTISAMPLING = %s\n", multisampling?"TRUE":"FALSE");
             )
                        
@@ -841,7 +841,7 @@ void TriangleTraversal::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Precalculate the number of cycles it takes for all the samples in a fragment to be generated.
             msaaCycles = u32bit(ceil(f32bit(msaaSamples) / f32bit(samplesCycle)));
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleTraversal => Write GPU_MSAA_SAMPLES = %d\n", msaaSamples);
             )
 

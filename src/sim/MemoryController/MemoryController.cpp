@@ -859,7 +859,7 @@ void MemoryController::clock(u64bit cycle)
     //MemState unitState;
     //u32bit currentUnit;
 
-    GPU_DEBUG_BOX( printf("MemoryController => Clock " U64FMT "\n", cycle);)
+    GPU_DEBUG( printf("MemoryController => Clock " U64FMT "\n", cycle);)
 
     // Process memory controller commands coming from CP
     processCommand(cycle);
@@ -931,7 +931,7 @@ printf("MC => pending services %d\n", pendingServices);
     /*  Read new memory requests from Command Processor.  */
     if (commProcWriteSignal->read(cycle, (DynamicObject *&) memTrans))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("MemoryController => Request from the Command Processor.\n");
         )
 
@@ -944,7 +944,7 @@ printf("MC => pending services %d\n", pendingServices);
     {
         if (streamLoadReqSignal[i]->read(cycle, (DynamicObject *&) memTrans))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("MemoryController => Request from the Streamer Loader unit %d. \n", i);
             )
 
@@ -956,7 +956,7 @@ printf("MC => pending services %d\n", pendingServices);
     /*  Read new memory request from Streamer Fetch.  */
     if (streamFetchReqSignal->read(cycle, (DynamicObject *&) memTrans))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("MemoryController => Request from the Streamer Fetch. \n");
         )
 
@@ -970,7 +970,7 @@ printf("MC => pending services %d\n", pendingServices);
         /*  Read new memory request from Z Stencil Test unit.  */
         if (zStencilReqSignal[i]->read(cycle, (DynamicObject *&) memTrans))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("MemoryController => Request from Z Stencil Test unit %d. \n", i);
             )
 
@@ -981,7 +981,7 @@ printf("MC => pending services %d\n", pendingServices);
         /*  Read new memory request from Color Write unit.  */
         if (colorWriteReqSignal[i]->read(cycle, (DynamicObject *&) memTrans))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("MemoryController => Request from Color Write unit %d. \n", i);
             )
 
@@ -993,7 +993,7 @@ printf("MC => pending services %d\n", pendingServices);
     /*  Read new memory request from DAC unit.  */
     if (dacReqSignal->read(cycle, (DynamicObject *&) memTrans))
     {
-        GPU_DEBUG_BOX( printf("MemoryController "U64FMT" => Request from DAC unit. \n", cycle); )
+        GPU_DEBUG( printf("MemoryController "U64FMT" => Request from DAC unit. \n", cycle); )
 
         /*  Add the memory transaction to the request queue.  */
         receiveTransaction(memTrans);
@@ -1004,7 +1004,7 @@ printf("MC => pending services %d\n", pendingServices);
     {
         if (tuReqSignal[i]->read(cycle, (DynamicObject *&) memTrans))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("MemoryController => Request from Texture Unit %d. \n", i);
             )
 
@@ -1021,7 +1021,7 @@ printf("MC => pending services %d\n", pendingServices);
             /*  Check there is a transmission in progress.  */
             if (busCycles[i][j] > 0)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("MemoryController => Bus %s [%d] remaining cycles %d.\n",
                         busNames[i], j, busCycles[i][j]);
                 )
@@ -1276,7 +1276,7 @@ void MemoryController::receiveTransaction(MemoryTransaction *memTrans)
             {
                 case GPU_ADDRESS_SPACE:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MC => Received READ transaction address %x size %d unit %s id %d\n",
                             memTrans->getAddress(), memTrans->getSize(), busNames[memTrans->getRequestSource()],
                             memTrans->getUnitID());
@@ -1289,7 +1289,7 @@ void MemoryController::receiveTransaction(MemoryTransaction *memTrans)
 
                 case SYSTEM_ADDRESS_SPACE:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MC => Received READ transaction address %x size %d unit %s id %d\n",
                             memTrans->getAddress(), memTrans->getSize(), busNames[memTrans->getRequestSource()],
                             memTrans->getUnitID());
@@ -1348,7 +1348,7 @@ void MemoryController::receiveTransaction(MemoryTransaction *memTrans)
             {
                 case GPU_ADDRESS_SPACE:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MC => Received WRITE transaction address %x size %d unit %s id %d\n",
                             memTrans->getAddress(), memTrans->getSize(), busNames[memTrans->getRequestSource()],
                             memTrans->getUnitID());
@@ -1368,7 +1368,7 @@ void MemoryController::receiveTransaction(MemoryTransaction *memTrans)
 
                 case SYSTEM_ADDRESS_SPACE:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MC => Received WRITE transaction address %x size %d unit %s id %d\n",
                             memTrans->getAddress(), memTrans->getSize(), busNames[memTrans->getRequestSource()],
                             memTrans->getUnitID());
@@ -1424,7 +1424,7 @@ void MemoryController::receiveTransaction(MemoryTransaction *memTrans)
                     panic("MemoryController", "receiveTransaction", "Undefined data buffer.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("MemoryController => Processed MT_PRELOAD_DATA (%x, %d).\n", address, size);
             )
 
@@ -1510,7 +1510,7 @@ u32bit MemoryController::addRequest(MemoryTransaction *memTrans)
             panic("MemoryController", "addRequest", "Request buffer full.");
     )
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("MemoryController => Added new request.\n");
     )
 
@@ -1651,7 +1651,7 @@ u32bit MemoryController::addMappedRequest(MemoryTransaction *memTrans)
             panic("MemoryController", "addMappedRequest", "Mapped memory request queue full.");
     )
 
-    GPU_DEBUG_BOX( printf("MemoryController => Added new mapped request.\n"); )
+    GPU_DEBUG( printf("MemoryController => Added new mapped request.\n"); )
 
     /*  Update free request entries counter.  */
     numFreeMapped--;
@@ -1906,7 +1906,7 @@ void MemoryController::issueTransaction(u64bit cycle, u32bit bus)
             panic("MemoryController", "issueTransaction", "Memory bus identifier out of range.");
     )
 
-    GPU_DEBUG_BOX( printf("MemoryController => Issue a new request.\n"); )
+    GPU_DEBUG( printf("MemoryController => Issue a new request.\n"); )
 
     /*  Determine if shared gpu memory banks mode is disabled.  */
     if (!gpuSharedBanks)
@@ -1972,7 +1972,7 @@ printf("MC "U64FMT" > address %x size %d usOffset %x unit %s id %d\n",
                 /*  Get pointer to the data buffer.  */
                 data = memTrans->getData();
 
-                GPU_DEBUG_BOX
+                GPU_DEBUG
                 (
                     printf("MemoryController "U64FMT" => Issuing MT_READ_REQ (%x, %d) from unit %s id %d to bus %d.\n", cycle, address, size,
                        busNames[memTrans->getRequestSource()], memTrans->getUnitID(), bus);
@@ -2117,7 +2117,7 @@ printf("MC "U64FMT" > address %x size %d usOffset %x unit %s id %d\n",
                         panic("MemoryController", "issueTransaction", "Undefined data buffer.");
                 )
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("MemoryController "U64FMT" => Issuing MT_WRITE (%x, %d)"
                     "from unit %s id %d to bus %d.\n", cycle, address, size,
                         busNames[memTrans->getRequestSource()], memTrans->getUnitID(), bus);
@@ -2126,7 +2126,7 @@ printf("MC "U64FMT" > address %x size %d usOffset %x unit %s id %d\n",
                 /*  Check if it is a masked write.  */
                 if (memTrans->isMasked())
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MemoryController => Masked write.\n");
                     )
 
@@ -2238,7 +2238,7 @@ void MemoryController::issueSystemTransaction(u64bit cycle)
     /*  NOTE:  Two unidirectional buses, one for writes and one for reads.
         In current implementation bus 0 is used for reads and bus 1 for writes.  */
 
-    GPU_DEBUG_BOX( printf("MemoryController => Issue a new request.\n"); )
+    GPU_DEBUG( printf("MemoryController => Issue a new request.\n"); )
 
     /*  Get first request from the ready request FIFO.  */
     req = readyMapped[firstMapped];
@@ -2266,7 +2266,7 @@ void MemoryController::issueSystemTransaction(u64bit cycle)
             /*  Get pointer to the data buffer.  */
             data = memTrans->getData();
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
 //if (cycle > 1769000)
                 printf("MemoryController => Issuing MT_READ_REQ (%x, %d) to system memory bus %d.\n", address, size, 0);
             )
@@ -2366,7 +2366,7 @@ void MemoryController::issueSystemTransaction(u64bit cycle)
                     panic("MemoryController", "issueSystemTransaction", "Undefined data buffer.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
 //if (cycle > 1769000)
                 printf("MemoryController => Issuing MT_WRITE (%x, %d) to system memory bus %d.\n", address, size, 0);
             )
@@ -2374,7 +2374,7 @@ void MemoryController::issueSystemTransaction(u64bit cycle)
             /*  Check if it is a masked write.  */
             if (memTrans->isMasked())
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("MemoryController => Masked write.\n");
                 )
 
@@ -2619,7 +2619,7 @@ void MemoryController::serveRequest(u64bit cycle)
                         break;
                 }
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("MemoryController %I64d => Response %d to the GPU Unit %s[%d].  Bus cycles %d.\n",
                         cycle, memTrans->getID(), busNames[unit], unitID, memTrans->getBusCycles());
                 )
@@ -2694,7 +2694,7 @@ void MemoryController::moduleTransaction(u64bit cycle, u32bit bus)
                 panic("MemoryController", "moduleTransaction", "Memory bus busy.");
         )
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("MemoryController => Transaction from memory module %d.\n", bus);
         )
 
@@ -2758,7 +2758,7 @@ void MemoryController::updateMemoryBus(u64bit cycle, u32bit bus)
         //dataCycles[bus]->inc();
         dataCycles[address2Bus(moduleTrans[bus]->getAddress())]->inc();
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("MemoryController => Transmiting data bus %d.  Remaining cycles %d.\n", bus, busCycles[MEMORYMODULE][bus]);
         )
 
@@ -2767,7 +2767,7 @@ void MemoryController::updateMemoryBus(u64bit cycle, u32bit bus)
         /*  Check end of transaction.  */
         if (busCycles[MEMORYMODULE][bus] == 0)
         {
-            GPU_DEBUG_BOX( printf("MemoryController => End of transmission.\n"); )
+            GPU_DEBUG( printf("MemoryController => End of transmission.\n"); )
 
             /*  Determine the bank for the transaction.  */
             if (gpuSharedBanks)
@@ -2789,7 +2789,7 @@ void MemoryController::updateMemoryBus(u64bit cycle, u32bit bus)
                     /*  Get current unit.  */
                     currentUnit = moduleTrans[bus]->getRequestSource();
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MemoryController => Storing transaction for unit %d service queue entry %d.\n",
                             currentUnit, nextFreeService);
                     )
@@ -2899,7 +2899,7 @@ void MemoryController::updateSystemBus(u64bit cycle, u32bit bus)
         /*  Update statistics.  */
         sysDataCycles[bus]->inc();
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("MemoryController => Transmiting system data bus %d.  Remaining cycles %d.\n", bus, busCycles[SYSTEM][bus]);
         )
 
@@ -2911,7 +2911,7 @@ void MemoryController::updateSystemBus(u64bit cycle, u32bit bus)
         /*  Check end of transaction.  */
         if (busCycles[SYSTEM][bus] == 0)
         {
-            GPU_DEBUG_BOX( printf("MemoryController => End of transmission.\n"); )
+            GPU_DEBUG( printf("MemoryController => End of transmission.\n"); )
 
             /*  Terminate current transaction.  */
             switch(systemTrans[bus]->getCommand())
@@ -2924,7 +2924,7 @@ void MemoryController::updateSystemBus(u64bit cycle, u32bit bus)
                             panic("MemoryController", "updateSystemBus", "No free service entry available.");
                     )
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("MemoryController => Storing system transaction for unit %d in service queue entry %d.\n",
                             systemTrans[bus]->getRequestSource(), nextFreeService);
                     )
@@ -2996,7 +2996,7 @@ void MemoryController::mappedTransaction(u64bit cycle, u32bit bus)
                 panic("MemoryController", "mappedTransaction", "System memory bus busy.");
         )
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
 //if (cycle > 1769000)
             printf("MemoryController "U64FMT" => Transaction %p from system memory bus %d.\n", cycle, memTrans, bus);
         )

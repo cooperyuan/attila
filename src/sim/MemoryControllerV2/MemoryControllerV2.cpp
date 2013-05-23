@@ -31,13 +31,6 @@
 using namespace std;
 using namespace gpu3d::memorycontroller;
 
-#ifdef GPU_DEBUG
-    #undef GPU_DEBUG
-#endif
-//#define GPU_DEBUG(expr) { expr }
-#define GPU_DEBUG(expr) { }
-
-
 #define DEBUG_CYCLE(expr) { if (cycle > 2105) { expr } }
 
 
@@ -772,12 +765,6 @@ void MemoryController::stage_readRequests(u64bit cycle)
     {
         if ( (*it)->read(cycle, (DynamicObject* &) memTrans) ) // transaction received
         {
-            GPU_DEBUG
-            (
-                cout << "MemoryControllerV2 => Request from the ";
-                cout << memTrans->getRequestSourceStr();
-                cout << " Unit: " << memTrans->getUnitID << "\n";
-            )
             processMemoryTransaction(cycle, memTrans);
         }
     }
@@ -1314,19 +1301,8 @@ void MemoryController::updateSystemBuses(u64bit cycle)
             // busCycles[SYSTEM][bus]--;
             --busState.busCycles;
 
-            GPU_DEBUG
-            (
-                printf("MemoryController => Transmiting system data bus %d"
-                    ".  Remaining cycles %d.\n", bus, busCycles[SYSTEM][bus]);
-            )
             currentUnit = systemTrans[bus]->getRequestSource();
             u32bit unitID = systemTrans[bus]->getUnitID();
-
-
-            GPU_DEBUG(
-                cout << "MC => Transmiting system data bus " << bus
-                     << ". Remaining cycles " << busCycles[SYSTEM][bus] << ".\n";
-            )
 
             // if ( busCycles[SYSTEM][bus] == 0 ) // check end of transmission
             if ( busState.busCycles == 0 ) // check end of transmission
@@ -1797,13 +1773,6 @@ void MemoryController::updateBusCounters(u64bit cycle)
             BusState& busState = _busState[i][j];
             if ( busState.busCycles > 0 )
             {
-                GPU_DEBUG
-                (
-                    cout << "MemoryController => Bus "
-                        << MemoryTransaction::getBusName(GPUUnit(i)) <<
-                          "[" << j << "] remaining cycles " << busCycles[i][j] << "\n";
-                )
-
                 // Send bus usage signal
                 if ( useInnerSignals && isSignalTracingRequired(cycle) )
                     memBusIn[i][j]->write(cycle, busElement[i][j][elemSelect[i][j]]);

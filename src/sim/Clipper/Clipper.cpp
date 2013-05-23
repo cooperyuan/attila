@@ -125,7 +125,7 @@ void Clipper::clock(u64bit cycle)
     u32bit triRequest;
     u32bit i;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("Clipper => Clock %lld.\n", cycle);
     )
 
@@ -156,7 +156,7 @@ void Clipper::clock(u64bit cycle)
 
             /*  Reset state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => RESET state.\n");
             )
 
@@ -183,7 +183,7 @@ void Clipper::clock(u64bit cycle)
 
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => READY state.\n");
             )
 
@@ -197,7 +197,7 @@ void Clipper::clock(u64bit cycle)
 
             /*  Draw state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => DRAW state.\n");
             )
 
@@ -218,7 +218,7 @@ void Clipper::clock(u64bit cycle)
             /*  Check if there is a triangle being clipped.  */
             if (clipCycles > 0)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("Clipper => Remaining cycles for next triangle %d.\n",
                         clipCycles);
                 )
@@ -239,14 +239,14 @@ void Clipper::clock(u64bit cycle)
                     /*  Check if it is an already culled triangle.  */
                     if (tsInput->isLast())
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("Clipper => Last triangle (ID %d) received.\n",
                                 tsInput->getTriangleID());
                         )
                     }
                     else
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("Clipper => Triangle (ID %d) received from Primitive Assembly.\n",
                                 tsInput->getTriangleID());
                         )
@@ -294,7 +294,7 @@ void Clipper::clock(u64bit cycle)
                     /*  Perform trivial reject test with the triangle.  */
                     if (ClipperEmulator::trivialReject(v1[0], v2[0], v3[0], d3d9DepthRange))
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("Clipper => Triangle (ID %d) culled.\n",
                             tsInput->getTriangleID());
                         )
@@ -340,7 +340,7 @@ void Clipper::clock(u64bit cycle)
                 /*  Send clipped triangles to Rasterizer.  */
                 for(i = 0; (i < trianglesCycle) && (clippedTriangles > 0) && (requestedTriangles > 0); i++)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("Clipper => Sending triangle (ID %d) to Rasterizer.\n",
                             clipBuffer[nextClipTriangle]->getTriangleID());
                     )
@@ -390,7 +390,7 @@ void Clipper::clock(u64bit cycle)
 
             /*  End state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => END state.\n");
             )
 
@@ -426,7 +426,7 @@ void Clipper::processCommand(ClipperCommand *clipComm)
         case CLPCOM_RESET:
             /*  Reset command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => CLPCOM_RESET command received.\n");
             )
 
@@ -439,7 +439,7 @@ void Clipper::processCommand(ClipperCommand *clipComm)
 
             /*  Start command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => CLPCOM_START command received.\n");
             )
 
@@ -483,7 +483,7 @@ void Clipper::processCommand(ClipperCommand *clipComm)
 
             /*  End command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => CLPCOM_END command received.\n");
             )
 
@@ -502,7 +502,7 @@ void Clipper::processCommand(ClipperCommand *clipComm)
 
             /*  Register write command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => CLPCOM_REG_WRITE command received.\n");
             )
 
@@ -516,7 +516,7 @@ void Clipper::processCommand(ClipperCommand *clipComm)
 
             /*  Register read command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => CLPCOM_REG_READ command received.\n");
             )
 
@@ -544,7 +544,7 @@ void Clipper::processRegisterWrite(GPURegister reg, u32bit subReg,
 
             frustumClip = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => Write GPU_FRUSTUM_CLIPPING = %s.\n",
                     frustumClip?"ENABLED":"DISABLED");
             )
@@ -573,7 +573,7 @@ void Clipper::processRegisterWrite(GPURegister reg, u32bit subReg,
             
             d3d9DepthRange = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Clipper => Write GPU_D3D9_DEPTH_RANGE = %s\n", d3d9DepthRange ? "T" : "F");
             )
             

@@ -54,17 +54,15 @@ GLDIR = $(SRCDIR)/GL
 # Compiler Optimization level by default
 OLEVEL="1"
 
-# VERBOSE compilation flags
-VERBOSE_CXXFLAGS_yes = -DGPU_DEBUG_ON
-
 # CONFIG Optional compilation flags
 CONFIG_CXXFLAGS_debug = -g -fno-inline
 CONFIG_CXXFLAGS_profiling = -O$(OLEVEL) -g -pg
 CONFIG_CXXFLAGS_optimized = -O$(OLEVEL) -fomit-frame-pointer -funroll-loops
+CONFIG_CXXFLAGS_verbose = -g -fno-inline -DGPU_DEBUG_ON
 
 CONFIG_LDFLAGS_debug = 
 CONFIG_LDFLAGS_profiling =
-CONFIG_LDFLAGS_optimized = -static -static-libgcc
+CONFIG_LDFLAGS_optimized =
 CONFIG_LDFLAGS_verbose = 
 
 # CPU Optional compilation flags
@@ -80,14 +78,12 @@ PLATFORM_CXXFLAGS_linux = -D _LINUX_ -D GL_GLEXT_LEGACY -D GL_GLEXT_PROTOTYPES
 PLATFORM_CXXFLAGS_cygwin = -D _CYGWIN_ -D GL_GLEXT_LEGACY -D GL_GLEXT_PROTOTYPES
 
 # Default options
-VERBOSE=no
 CONFIG=optimized
 #UNIFIED=yes
 CPU=
 PLATFORM=linux
 
 # Variables exports
-export VERBOSE
 export CONFIG
 #export UNIFIED
 export CPU
@@ -95,7 +91,6 @@ export PLATFORM
 
 # C++ compilation flags
 CXXFLAGS = \
-	$(VERBOSE_CXXFLAGS_$(VERBOSE)) \
 	$(CONFIG_CXXFLAGS_$(CONFIG)) \
 	$(CPU_CXXFLAGS_$(CPU)) \
 	$(PLATFORM_CXXFLAGS_$(PLATFORM)) \
@@ -103,7 +98,6 @@ CXXFLAGS = \
 
 # Linker flags
 LDFLAGS = \
-	$(VERBOSE_LDFLAGS_$(VERBOSE)) \
 	$(CONFIG_LDFLAGS_$(CONFIG)) \
 	$(CPU_LDFLAGS_$(CPU)) \
 	$(PLATFORM_LDFLAGS_$(PLATFORM)) \

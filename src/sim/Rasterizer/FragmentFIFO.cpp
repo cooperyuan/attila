@@ -750,7 +750,7 @@ void FragmentFIFO::clock(u64bit cycle)
     u32bit minFreeRast;
     char buffer[64];
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("FragmentFIFO => Clock %lld.\n", cycle);
     )
 
@@ -876,7 +876,7 @@ switch(state)
     {
         case RAST_RESET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => RESET state.\n");
             )
 
@@ -982,7 +982,7 @@ switch(state)
 
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => READY state.\n");
             )
 
@@ -1025,7 +1025,7 @@ switch(state)
 
             /*  Draw state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Drawing state.\n");
             )
 
@@ -1164,7 +1164,7 @@ switch(state)
         case RAST_END:
 
             /*  End state.  */
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => END state.\n");
             )
 
@@ -1303,7 +1303,7 @@ void FragmentFIFO::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_RESET:
             /*  Reset command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => RESET command received.\n");
             )
 
@@ -1315,7 +1315,7 @@ void FragmentFIFO::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_DRAW:
             /*  Draw command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO %lld => DRAW command received.\n", cycle);
             )
 
@@ -1414,7 +1414,7 @@ void FragmentFIFO::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_END:
             /*  End command received from Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => END command received.\n");
             )
 
@@ -1433,7 +1433,7 @@ void FragmentFIFO::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_REG_WRITE:
             /*  Write register command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => REG_WRITE command received.\n");
             )
 
@@ -1467,7 +1467,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             /*  Set early Z test flag.  */
             earlyZ = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Write GPU_EARLY_Z = %s.\n",
                     data.booleanVal?"ENABLED":"DISABLED");
             )
@@ -1486,7 +1486,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             /*  Write the fragment attribute active flag.  */
             fragmentAttributes[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Write GPU_FRAGMENT_INPUT_ATTRIBUTES[%d] = %s.\n",
                     subreg, data.booleanVal?"ACTIVE":"INACTIVE");
             )
@@ -1498,7 +1498,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             /*  Write the stencil test enable flag register.  */
             stencilTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_STENCIL_TEST = %s.\n", data.booleanVal?"ENABLED":"DISABLED");
             )
 
@@ -1509,7 +1509,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             /*  Write the depth test enable flag register.  */
             depthTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_DEPTH_TEST = %s.\n", data.booleanVal?"ENABLED":"DISABLED");
             )
 
@@ -1520,7 +1520,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             //  Write the render target enable register.
             rtEnable[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_RENDER_TARGET_ENABLE[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1531,7 +1531,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             //  Write the red component mask register.
             colorMaskR[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_COLOR_MASK_R[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1542,7 +1542,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             //  Write the green component mask register.
             colorMaskG[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_COLOR_MASK_G[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1553,7 +1553,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             //  Write the blue component mask register.
             colorMaskB[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_COLOR_MASK_B[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1564,7 +1564,7 @@ void FragmentFIFO::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegDa
             //  Write the alpha component mask register.
             colorMaskA[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => GPU_COLOR_MASK_A[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1599,7 +1599,7 @@ void FragmentFIFO::receiveVertices(u64bit cycle)
                     panic("FragmentFIFO", "receiveVertices", "Vertex received after last vertex commit.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO %lld => Received vertex input for entry %d from virtual vertex shader signal %d stored at %d\n",
                     cycle, shInput->getEntry(), i, nextFreeInput);
             )
@@ -1652,7 +1652,7 @@ void FragmentFIFO::receiveTriangles(u64bit cycle)
                 panic("FragmentFIFO", "receiveTriangle", "No free triangle input queue entry.");
         )
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("FragmentFIFO => Received triangle input from Triangle Setup to be stored at %d\n",
                 nextFreeInTriangle);
         )
@@ -1777,7 +1777,7 @@ void FragmentFIFO::receiveStamps(u64bit cycle)
                         panic("FragmentFIFO", "receiveStamps", "Not enough room in the rasterizer queue for incoming stamp.");
                 )
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("FragmentFIFO => Received stamp from Hierarchical Z.  Stored in rasterized queue %d position %d.\n",
                         unit, nextFreeRast[unit]);
                 )
@@ -1803,7 +1803,7 @@ void FragmentFIFO::receiveStamps(u64bit cycle)
                             panic("FragmentFIFO", "receiveStamps", "Not enough room in the rasterizer queue for incoming stamp.");
                     )
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("FragmentFIFO => Received last stamp from Hierarchical Z.  Stored in %d.\n", nextFreeRast[k]);
                     )
 
@@ -1894,7 +1894,7 @@ void FragmentFIFO::endInterpolation(u64bit cycle)
         /*  Check if a stamp has been received.  */
         if (receivedFragment)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Received interpolated stamp from Interpolator.  Stored in interpolated queue %d position %d.\n",
                     unit, nextFreeInt[unit]);
             )
@@ -1940,7 +1940,7 @@ void FragmentFIFO::startInterpolation(u64bit cycle)
 
         for(i = 0; (i < stampsCycle) && (rastStamps[nextRastUnit] > 0) && (freeInt[nextRastUnit] > 0); i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending stamp from unit %d stored at %d to Interpolator.\n", nextRastUnit,
                 nextRast[nextRastUnit]);
             )
@@ -2025,7 +2025,7 @@ void FragmentFIFO::startInterpolationEarlyZ(u64bit cycle)
 
         for(i = 0; (i < stampsCycle) && (testStamps[nextTestUnit] > 0) && (freeInt[nextTestUnit] > 0);)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending stamp from unit %d stored at %d to Interpolator.\n",
                     nextTestUnit, nextTest[nextTestUnit]);
             )
@@ -2100,7 +2100,7 @@ void FragmentFIFO::startEarlyZ(u64bit cycle)
         /*  Send n stamps to a Z Stencil Test unit.  */
         for(i = 0; (rastStamps[unit] > 0) && (zstState[unit] == ROP_READY) && (i < stampsPerUnit); i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending rasterized stamp for unit %d at %d to Z Stencil Test unit %d.\n",
                     unit, nextRast[unit], unit);
             )
@@ -2184,7 +2184,7 @@ void FragmentFIFO::endEarlyZ(u64bit cycle)
                             panic("FragmentFIFO", "endEarlyZ", "Early Z tested stamp queue is full.");
                     )
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("FragmentFIFO => Receive early z tested stamp from unit %d at Z Stencil Test unit to be stored at %d.\n",
                             unit, nextFreeTest[unit]);
                     )
@@ -2237,7 +2237,7 @@ void FragmentFIFO::endEarlyZ(u64bit cycle)
                                 panic("FragmentFIFO", "endEarlyZ", "Early Z tested stamp queue is full.");
                         )
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("FragmentFIFO => Receive early z tested stamp from Z Stencil Test unit %d to be stored at %d.\n",
                                 unit, nextFreeTest[unit]);
                         )
@@ -2339,7 +2339,7 @@ void FragmentFIFO::shadeStamps(u64bit cycle)
                 {
                     /*  Create a fake shader input to fill the thread group.  */
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("FragmentFIFO => Creating fake shader input for padding.\n");
                     )
 
@@ -2418,7 +2418,7 @@ GPU_TEX_TRACE(
                 /*  Check if an input must be queued in the shader input queue.  */
                 if (!lastStamp || addPadding)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("FragmentFIFO => Storing fragment into shader input queue %d position %d from interpolated queue %d position %d\n",
                             nextFreeShInQ, nextFreeShInput[nextFreeShInQ], nextIntUnit, nextInt[nextIntUnit]);
                     )
@@ -2611,7 +2611,7 @@ void FragmentFIFO::receiveShaderOutput(u64bit cycle)
                 //        panic("FragmentFIFO", "receiveShaderOutput", "Shader output type changed.");
                 //)
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("FragmentFIFO => Received shader output type %s from shader unit %d to be stored at output queue entry %d\n",
                         (outputMode == SHIM_FRAGMENT)?"F":((outputMode == SHIM_VERTEX)?"V":"F"), i, nextFreeShOutput[i]);
                 )
@@ -2702,7 +2702,7 @@ void FragmentFIFO::distributeShaderOutput(u64bit cycle)
                         /*  Process a stamp of fragments.  */
                         for(j = 0; j < STAMP_FRAGMENTS; j++)
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("FragmentFIFO => Processing shaded fragment from output queue %d position %d to be stored at stamp unit queue %d position %d\n",
                                     i, nextShaderOutput[i], shOutput->getUnit(), shOutput->getEntry());
                             )
@@ -2729,7 +2729,7 @@ void FragmentFIFO::distributeShaderOutput(u64bit cycle)
                             /*  Check of fake (padding) fragments.  */
                             if ((shadedUnit == numStampUnits) && (shadedEntry == 0))
                             {
-                                GPU_DEBUG_BOX(
+                                GPU_DEBUG(
                                     printf("FragmentFIFO => Removing fake fragment ouput queue %d position %d\n",
                                         i, nextShaderOutput[i]);
                                 )
@@ -2821,7 +2821,7 @@ printf("FFIFO (%lld) => Pixel (%d, %d) -> O<ShadedQ>[1] = {%f, %f, %f, %f}\n", c
                         /*  Check for triangle outputs used for shader group padding.  */
                         if (shOutput->getKill())
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("FragmentFIFO => Removing pad triangle output from shader output queue %d position %d.\n",
                                     i, nextShaderOutput[i]);
                             )
@@ -2837,7 +2837,7 @@ printf("FFIFO (%lld) => Pixel (%d, %d) -> O<ShadedQ>[1] = {%f, %f, %f, %f}\n", c
                         }
                         else
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("FragmentFIFO => Storing shaded triangle from shader output queue %d position %d into triangle queue position %d.\n",
                                     i, nextShaderOutput[i], nextFreeOutTriangle);
                             )
@@ -2884,7 +2884,7 @@ printf("FFIFO (%lld) => Pixel (%d, %d) -> O<ShadedQ>[1] = {%f, %f, %f, %f}\n", c
                         /*  Check if fake (killed) vertex input used to complete vertex input group.  */
                         if (shOutput->getKill() && (!shOutput->isLast()))
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("FragmentFIFO => Removing fake vertex from shader output queue %d position %d\n",
                                     i, nextShaderOutput[i]);
                             )
@@ -2900,7 +2900,7 @@ printf("FFIFO (%lld) => Pixel (%d, %d) -> O<ShadedQ>[1] = {%f, %f, %f, %f}\n", c
                         }
                         else
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("FragmentFIFO => Storing shaded vertex from shader output queue %d position %d at vertex queue position %d\n",
                                     i, nextShaderOutput[i], nextFreeShVertex);
                             )
@@ -2968,7 +2968,7 @@ void FragmentFIFO::sendShaderInputs(u64bit cycle)
         for(j = 0; (numShaderInputs[i] > 0) && (shState[i] != SH_BUSY) &&
             (j < shInputsCycle); j++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending shader input for shader %d queue position %d\n",
                     i, nextShaderInput[i]);
             )
@@ -3029,7 +3029,7 @@ void FragmentFIFO::shadeTriangles(u64bit cycle)
         /*  Add fake triangle inputs.  */
         for(i = inputTriangles; i < threadGroup; i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Adding triangle for pading at position %d.\n", nextFreeInTriangle);
             )
 
@@ -3067,7 +3067,7 @@ void FragmentFIFO::shadeTriangles(u64bit cycle)
         /*  Send the triangle input attributes of a group of triangle inputs to the shader.  */
         for(i = 0; i < threadGroup; i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending triangle input stored at %d to shader input queue %d position %d.\n",
                     nextInputTriangle, nextFreeShInQ, nextFreeShInput[nextFreeShInQ]);
             )
@@ -3127,7 +3127,7 @@ void FragmentFIFO::shadeVertices(u64bit cycle)
         /*  Add fake vertex inputs.  */
         for(i = vertexInputs; i < threadGroup; i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Adding vertex for pading at position %d.\n", nextFreeInput);
             )
 
@@ -3171,7 +3171,7 @@ void FragmentFIFO::shadeVertices(u64bit cycle)
         /*  Send the vertex input attributes of a group of input vertices to the shader.  */
         for(i = 0; i < threadGroup; i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending vertex input stored at %d to shader input queue %d position %d.\n",
                     nextInputVertex, nextFreeShInQ, nextFreeShInput[nextFreeShInQ]);
             )
@@ -3240,7 +3240,7 @@ void FragmentFIFO::sendStampsZStencil(u64bit cycle)
             /*  Check if stamp is shaded.  */
             if (shaded[unit][nextShaded[unit]])
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("FragmentFIFO => Sending shaded stamp for unit %d at %d to Z Stencil Test unit %d.\n",
                         unit, nextShaded[unit], unit);
                 )
@@ -3330,7 +3330,7 @@ void FragmentFIFO::sendStampsColorWrite(u64bit cycle)
             /*  Check if stamp is shaded.  */
             if (shaded[unit][nextShaded[unit]])
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("FragmentFIFO => Sending shaded stamp for unit %d at %d to Color Write unit %d.\n",
                         unit, nextShaded[unit], unit);
                 )
@@ -3412,7 +3412,7 @@ void FragmentFIFO::sendTestedStampsColorWrite(u64bit cycle)
     {
         for(i = 0; (testStamps[unit] > 0) && (cwState[unit] == ROP_READY) && (i < stampsPerUnit); i++)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("FragmentFIFO => Sending z tested stamp for unit %d at tested queue position %d to Color Write.\n",
                     unit, nextTest[unit]);
             )
@@ -3491,7 +3491,7 @@ void FragmentFIFO::sendTriangles(u64bit cycle)
     /*  Send setup triangles to Triangle Setup.  */
     for(i = 0; (i < trianglesCycle) && (outputTriangles > 0); i++)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("FragmentFIFO => Sending setup triangle at %d to Triangle Setup.\n", nextOutputTriangle);
         )
 
@@ -3523,7 +3523,7 @@ void FragmentFIFO::sendVertices(u64bit cycle)
         pre reserves vertex storage).  */
     for(i = 0; (i < numVShaders) && (shadedVertices > 0) && (consumerState[i] == CONS_READY); i++)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("FragmentFIFO %lld => Sending vertex for entry %d at %d to shader %d.\n",
              cycle, shadedVertexQueue[nextShadedVertex]->getEntry(), nextShadedVertex, i);
         )

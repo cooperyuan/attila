@@ -335,7 +335,7 @@ VectorShaderFetch::VectorShaderFetch(ShaderEmulator &shEmu, u32bit nThreads, u32
 //  Clock instruction for ShaderFetch Box.  Drives the time of the simulation.
 void VectorShaderFetch::clock(u64bit cycle)
 {
-    GPU_DEBUG_BOX( printf("%s >> Clock %lld.\n", getName(), cycle); )
+    GPU_DEBUG( printf("%s >> Clock %lld.\n", getName(), cycle); )
 
     //  Receive shader inputs from producer unit.
     receiveInputs(cycle);
@@ -376,7 +376,7 @@ void VectorShaderFetch::clock(u32bit domain, u64bit cycle)
             break;
     }
     
-    GPU_DEBUG_BOX
+    GPU_DEBUG
     (
         printf("%s >> Domain %s Clock %lld.\n", getName(), clockName.c_str(), cycle);
     )
@@ -504,7 +504,7 @@ void VectorShaderFetch::sendBackPreassure(u64bit cycle)
     requiredResources = 2 * maxThreadResources;
     freeVectorThreads = freeThreadFIFO.items();
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => requiredThreads = %d | freeVectorThreads = %d | requiredResources = %d | freeResources = %d\n",
             getName(), requiredThreads, freeVectorThreads, requiredResources, freeResources);
     )
@@ -512,7 +512,7 @@ void VectorShaderFetch::sendBackPreassure(u64bit cycle)
     //  Update Shader state signal.
     if ((freeVectorThreads < requiredThreads) || (freeResources < requiredResources))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s >> Sending Busy.\n", getName());
         )
 
@@ -520,7 +520,7 @@ void VectorShaderFetch::sendBackPreassure(u64bit cycle)
     }
     else if (freeThreadFIFO.empty())
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s >> Sending Empty.\n", getName());
         )
 
@@ -528,7 +528,7 @@ void VectorShaderFetch::sendBackPreassure(u64bit cycle)
     }
     else
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s >> Sending Ready.\n", getName());
         )
 
@@ -547,7 +547,7 @@ void VectorShaderFetch::fetchStage(u64bit cycle)
         cyclesToNextFetch--;
     }
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         cout << getName() << " => Cycles to next fetch = " << cyclesToNextFetch << endl;
     )
 
@@ -562,7 +562,7 @@ void VectorShaderFetch::fetchStage(u64bit cycle)
     //  Check if shader decode stage can receive new instructions.
     if (decoderState == SHDEC_READY)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             cout << getName() << " => Decoder is ready.  Cycles to next fetch = " << cyclesToNextFetch << endl;
         )
 
@@ -591,7 +591,7 @@ void VectorShaderFetch::fetchStage(u64bit cycle)
                     panic("VectorShaderFetch", "clock", "No runnable (ready) vector thread when there should be one.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Fetching from vector thread %d\n", getName(), fetchVectorThread);
             )
 
@@ -689,7 +689,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
 
             //  New Shader Program must be loaded.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s >> LOAD_PROGRAM Size %d PC %06x\n",
                     getName(), command->getProgramCodeSize(), command->getLoadPC());
             )
@@ -715,7 +715,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
             //  Write a single value in the constant/parameter memory.  Thread field is unused for constant memory.
             shEmul.loadShaderState(0, PARAM, values, firstAddr, command->getNumValues());
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 for (u32bit i = firstAddr; i < lastAddr; i ++)
                     printf("%s >> PARAM_WRITE %d = {%f, %f, %f, %f}\n",
                         getName(), i, values[i - firstAddr][0], values[i - firstAddr][1],
@@ -728,7 +728,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
 
             //  New shader program initial PC.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => SET_INIT_PC[", getName());
                 switch(command->getShaderTarget())
                 {
@@ -766,7 +766,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
             //  Recalculate max thread resources.
             maxThreadResources = computeMaxThreadResources();
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 char buffer[256];
                 switch(command->getShaderTarget())
                 {
@@ -802,7 +802,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
                     panic("VectorShaderFetch", "processShaderCommand", "Out of range shader input register identifier.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Setting input attribute %d as %s for partition %s\n", getName(), command->getAttribute(),
                     command->isAttributeActive()?"ACTIVE":"INACTIVE",
                     (partition == VERTEX_PARTITION)?"VERTEX":((partition == FRAGMENT_PARTITION)?"FRAGMENT":"TRIANGLE"));
@@ -833,7 +833,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
                     panic("VectorShaderFetch", "processShaderCommand", "Out of range shader output register identifier.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Setting output attribute %d as %s for partition %s\n", getName(), command->getAttribute(),
                     command->isAttributeActive()?"ACTIVE":"INACTIVE",
                     (partition == VERTEX_PARTITION)?"VERTEX":((partition == FRAGMENT_PARTITION)?"FRAGMENT":"TRIANGLE"));
@@ -858,7 +858,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
  
             //  Set multisampling enabled/disabled.
  
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Setting multisampling register: %s\n", getName(), command->multisamplingEnabled()?"ENABLED":"DISABLED");
             )
  
@@ -871,7 +871,7 @@ void VectorShaderFetch::processShaderCommand(ShaderCommand *command, u32bit part
          
             //  Set the MSAA number of samples.
              
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Setting MSAA samples register: %d\n", getName(), command->samplesMSAA());
             )
  
@@ -1076,7 +1076,7 @@ void VectorShaderFetch::processShaderInput(u64bit cycle, ShaderInput *input)
         }
     }
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s >> New Shader Input for vectorThread = %d element = %d for partition %s\n", getName(), inputThread,
             nextInputElement, partition==VERTEX_PARTITION?"VERTEX":(partition==FRAGMENT_PARTITION)?"FRAGMENT":"TRIANGLE");
     )
@@ -1093,7 +1093,7 @@ void VectorShaderFetch::processShaderInput(u64bit cycle, ShaderInput *input)
         //  Update the counter of ready vector threads.
         readyThreads++;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => All elements have been loaded.  Setting vectorThread %d to READY.\n", getName(), inputThread);
         )
     }
@@ -1155,7 +1155,7 @@ void VectorShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
     {
         case UNBLOCK_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => UNBLOCK_THREAD VectorThreadID = %d PC = %x\n", getName(), vectorThreadID, pc);
             )
 
@@ -1184,7 +1184,7 @@ void VectorShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case BLOCK_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => BLOCK_THREAD VectorThreadID = %d PC = %x\n", getName(), vectorThreadID, pc);
             )
 
@@ -1216,7 +1216,7 @@ void VectorShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case END_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => END_THREAD VectorThreadID = %d PC = %x\n", getName(), vectorThreadID, pc);
             )
 
@@ -1227,7 +1227,7 @@ void VectorShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case REPEAT_LAST:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => REPEAT_LAST VectorThreadID = %d PC = %x\n", getName(), vectorThreadID, pc);
             )
 
@@ -1249,7 +1249,7 @@ void VectorShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case NEW_PC:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => NEW_PC VectorThreadID = %d PC = %x\n", getName(), vectorThreadID, pc);
             )
 
@@ -1267,7 +1267,7 @@ void VectorShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case ZEXPORT_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => ZEXPORT_THREAD VectorThreadID = %d PC = %x\n", getName(), vectorThreadID, pc);
             )
 
@@ -1322,7 +1322,7 @@ void VectorShaderFetch::fetchElementInstruction(u64bit cycle, u32bit threadID, u
         //  Check if a SIMD instruction was already fetched for the thread.
         if (fetchedSIMD && (!shInstr->isScalar()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 if (element == 0)
                     printf("%s => Ignoring second SIMD instruction fetch.\n", getName());
             )
@@ -1344,7 +1344,7 @@ void VectorShaderFetch::fetchElementInstruction(u64bit cycle, u32bit threadID, u
         //  Check if a scalar and SIMD instruction were already fetched for the thread.
         if (fetchedScalar && fetchedSIMD && shInstr->isScalar())
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 if (element == 0)
                     printf("VectorShaderFetch => Ignoring second scalar instruction fetch.\n");
             )
@@ -1472,7 +1472,7 @@ void VectorShaderFetch::sendVectorInstruction(u64bit cycle, u32bit threadID)
         //  Send vector instruction to decode stage.
         instructionSignal->write(cycle, vectorInstruction);
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             char dis[4096];
             ShaderExecInstruction *shExecInstr = vectorFetch[instruction][0];
             if (!shExecInstr->getFakeFetch())
@@ -1543,7 +1543,7 @@ void VectorShaderFetch::sendOutput(u64bit cycle, u32bit threadID, u32bit element
     }
     
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Output sent\n", getName());
         printf("vo[0] = {%f %f %f %f}\n",
             shOutput->getAttributes()[0][0],
@@ -1586,7 +1586,7 @@ void VectorShaderFetch::processOutputs(u64bit cycle)
     //  Check if there is a transmission in progress.
     if (transInProgress)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Transmission in progress Vector Thread = %d | Output Element = %d | Remaining cycles = %d.\n",
                 getName(), outputThread, nextOutputElement, transCycles);
         )
@@ -1609,7 +1609,7 @@ void VectorShaderFetch::processOutputs(u64bit cycle)
                 //  Free the vector thread.
                 freeVectorThread(cycle, outputThread, outputResources);
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Vector thread output fully transmited.\n", getName());
                 )
             }
@@ -1630,7 +1630,7 @@ void VectorShaderFetch::processOutputs(u64bit cycle)
                     //  Get next end thread.
                     outputThread = endThreadFIFO.pop();
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Initiating transference of outputs for vectorThread = %d\n", getName(), outputThread);
                     )
 
@@ -1689,7 +1689,7 @@ void VectorShaderFetch::processOutputs(u64bit cycle)
                         //  Free the vector thread.
                         freeVectorThread(cycle, outputThread, outputResources);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Vector thread output fully transmited.\n", getName());
                         )
                     }

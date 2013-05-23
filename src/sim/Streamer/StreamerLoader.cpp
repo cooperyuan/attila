@@ -175,7 +175,7 @@ void StreamerLoader::clock(u64bit cycle)
     u32bit visited;
     u32bit verticesSentThisCycle;
 
-    GPU_DEBUG_BOX( printf("%s => Clock %lld\n", getName(), cycle);)
+    GPU_DEBUG( printf("%s => Clock %lld\n", getName(), cycle);)
 
     /*  Get state from the Shaders.  */
     for (i = 0; i < numShaders; i++)
@@ -224,7 +224,7 @@ void StreamerLoader::clock(u64bit cycle)
         case ST_RESET:
             /*  Reset state.  Set default state.  */
 
-            GPU_DEBUG_BOX( printf("%s => RESET state.\n", getName()); )
+            GPU_DEBUG( printf("%s => RESET state.\n", getName()); )
 
             /*  Reset registers.  */
             for(i = 0; i < MAX_VERTEX_ATTRIBUTES; i++)
@@ -267,7 +267,7 @@ void StreamerLoader::clock(u64bit cycle)
         case ST_READY:
             /*  Ready state.  Wait for command from the Streamer main box.  */
 
-            GPU_DEBUG_BOX( printf("%s => READY state.\n", getName()); )
+            GPU_DEBUG( printf("%s => READY state.\n", getName()); )
 
             /*  Process commands from the Streamer main box.  */
             if(streamerCommand->read(cycle, (DynamicObject *&) streamCom))
@@ -279,7 +279,7 @@ void StreamerLoader::clock(u64bit cycle)
             /*  Streaming state.  Wait for new indexes to load
                 from the StreamerOutputCache box.  */
 
-            GPU_DEBUG_BOX( printf("%s => STREAMING state.\n", getName()); )
+            GPU_DEBUG( printf("%s => STREAMING state.\n", getName()); )
 
             /*  Reset the number of vertices sent this cycle.  */
             verticesSentThisCycle = 0;
@@ -317,12 +317,12 @@ void StreamerLoader::clock(u64bit cycle)
                         for(j = 0; j < MAX_VERTEX_ATTRIBUTES; j++)
                             iaux[j] = inputRequestQ[nextLoadInput].attributes[j];
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Sending input (%d, %d) to shader.\n", getName(),
                                 inputRequestQ[nextLoadInput].index, inputRequestQ[nextLoadInput].instance);
                         )
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             for(j = 0; j < MAX_VERTEX_ATTRIBUTES; j++)
                             {
                                 if (attributeMap[j] != ST_INACTIVE_ATTRIBUTE)
@@ -434,7 +434,7 @@ void StreamerLoader::clock(u64bit cycle)
                     /*  Increment vertices sent.  */
                     verticesSentThisCycle++;
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Deallocating IRQ entry for index %d instance %d sent to Shader\n",
                             getName(), inputRequestQ[nextLoadInput].index, inputRequestQ[nextLoadInput].instance);
                     )
@@ -504,7 +504,7 @@ void StreamerLoader::clock(u64bit cycle)
                             f32bit indexAux;
                             f32bit instanceAux;
                             
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("%s => Load INDEX_ATTRIBUTE with value (%d, %d)\n", getName(),
                                     inputRequestQ[nextReadInput].index, inputRequestQ[nextReadInput].instance);
                             )
@@ -521,7 +521,7 @@ void StreamerLoader::clock(u64bit cycle)
                             inputRequestQ[nextReadInput].attributes[INDEX_ATTRIBUTE][3] = 0.0;
                         }
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Input index %d instance %d fully read.\n", getName(), inputRequestQ[nextReadInput].index,
                                 inputRequestQ[nextReadInput].instance);
                         )
@@ -544,7 +544,7 @@ void StreamerLoader::clock(u64bit cycle)
                         {
                             //  Per instance attribute already present in the per instance attribute cache.
                             
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("%s => Reading attribute from the per-instance attribute cache\n", getName());
                             )
                                                             
@@ -562,7 +562,7 @@ void StreamerLoader::clock(u64bit cycle)
                                 /*  Check which part of the splitted attribute is going ot be read.  */
                                 if (inputRequestQ[nextReadInput].nextSplit)
                                 {
-                                    GPU_DEBUG_BOX(
+                                    GPU_DEBUG(
                                         printf("%s => Reading attribute %d for input index %d instance %d at address %x\n",
                                             getName(), nextAttribute, inputRequestQ[nextReadInput].index,
                                             inputRequestQ[nextReadInput].instance, inputRequestQ[nextReadInput].address[nextAttribute][1]);
@@ -578,7 +578,7 @@ void StreamerLoader::clock(u64bit cycle)
                                         /*  Load the input attribute with the read data.  */
                                         loadAttribute(&inputRequestQ[nextReadInput], nextAttribute, buffer);
 
-                                        GPU_DEBUG_BOX(
+                                        GPU_DEBUG(
                                              printf("%s => Attribute read (second half).  Unreserving cache line.\n", getName());
                                         )
 
@@ -602,7 +602,7 @@ void StreamerLoader::clock(u64bit cycle)
                                 }
                                 else
                                 {
-                                    GPU_DEBUG_BOX(
+                                    GPU_DEBUG(
                                         printf("%s => Reading attribute %d for input index %d instance %d at address %x\n",
                                             getName(), nextAttribute, inputRequestQ[nextReadInput].index,
                                             inputRequestQ[nextReadInput].instance, inputRequestQ[nextReadInput].address[nextAttribute][0]);
@@ -615,7 +615,7 @@ void StreamerLoader::clock(u64bit cycle)
                                         inputRequestQ[nextReadInput].size[nextAttribute][0],
                                         buffer))
                                     {
-                                        GPU_DEBUG_BOX(
+                                        GPU_DEBUG(
                                             printf("%s => Attribute read (first half).  Unreserving cache line.\n", getName());
                                         )
 
@@ -637,7 +637,7 @@ void StreamerLoader::clock(u64bit cycle)
                             }
                             else
                             {
-                                GPU_DEBUG_BOX(
+                                GPU_DEBUG(
                                     printf("%s => Reading attribute %d for input index %d instance %d at address %x\n",
                                         getName(), nextAttribute, inputRequestQ[nextReadInput].index,
                                         inputRequestQ[nextReadInput].instance, inputRequestQ[nextReadInput].address[nextAttribute][0]);
@@ -650,7 +650,7 @@ void StreamerLoader::clock(u64bit cycle)
                                     inputRequestQ[nextReadInput].size[nextAttribute][0],
                                     buffer))
                                 {
-                                    GPU_DEBUG_BOX(
+                                    GPU_DEBUG(
                                         printf("%s => Attribute read.  Unreserving cache line.\n", getName());
                                     )
 
@@ -693,7 +693,7 @@ void StreamerLoader::clock(u64bit cycle)
                         ((attributeMap[nextAttribute] == ST_INACTIVE_ATTRIBUTE) || attributeLoadBypass);
                         nextAttribute++)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Reset to default value attribute %d of input index %d instance %d\n",
                                 getName(), nextAttribute, inputRequestQ[nextFetchInput].index,
                                 inputRequestQ[nextFetchInput].instance);
@@ -711,7 +711,7 @@ void StreamerLoader::clock(u64bit cycle)
                     {
                         /*  All the input attributes have been fetched.  */
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Fetch of input index %d instance %d attributes finished.\n",
                                 getName(), inputRequestQ[nextFetchInput].index, inputRequestQ[nextFetchInput].instance);
                         )
@@ -744,7 +744,7 @@ void StreamerLoader::clock(u64bit cycle)
                     }
                     else
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Fetching attribute %d for index %d instance %d\n",
                                 getName(), nextAttribute, inputRequestQ[nextFetchInput].index, inputRequestQ[nextFetchInput].instance);
                         )
@@ -851,7 +851,7 @@ void StreamerLoader::clock(u64bit cycle)
                 /*  Check if the index is a hit into the output cache and not the last index in the batch.  */
                 if (streamCCom->isAHit() && (!streamCCom->isLast()))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Deallocating IRQ entry for HIT index %d instance %d\n",
                             getName(), streamCCom->getIndex(), streamCCom->getInstanceIndex());
                     )
@@ -895,7 +895,7 @@ void StreamerLoader::clock(u64bit cycle)
                         /*  Reset next split flag.  */
                         inputRequestQ[nextFreeInput].nextSplit = FALSE;
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Received NEW INDEX idx %d instance %d. Added to IRQ entry %d\n",
                                 getName(), streamCCom->getIndex(), streamCCom->getInstanceIndex(), nextFreeInput);
                         )
@@ -951,14 +951,14 @@ void StreamerLoader::processMemoryTransaction(MemoryTransaction *memTrans)
             /*  Memory Controller sends state.  */
             memoryState = memTrans->getState();
 
-            GPU_DEBUG_BOX( printf("%s => MT_STATE received.\n", getName()); )
+            GPU_DEBUG( printf("%s => MT_STATE received.\n", getName()); )
 
             break;
 
         case MT_READ_DATA:
             /*  Return data from the previous memory request.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => MT_READ_DATA received ID %d.\n",
                     getName(), memTrans->getID());
             )
@@ -1000,7 +1000,7 @@ void StreamerLoader::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_RESET:
             /*  Reset command from the Command Processor.  */
 
-            GPU_DEBUG_BOX( printf("%s => RESET command.\n", getName()); )
+            GPU_DEBUG( printf("%s => RESET command.\n", getName()); )
 
             /*  Do whatever to do.  */
 
@@ -1012,7 +1012,7 @@ void StreamerLoader::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_REG_WRITE:
             /*  Write to register command.  */
 
-            GPU_DEBUG_BOX( printf("%s => REG_WRITE command.\n", getName()); )
+            GPU_DEBUG( printf("%s => REG_WRITE command.\n", getName()); )
 
             /*  Check Streamer state.  */
             GPU_ASSERT(
@@ -1029,7 +1029,7 @@ void StreamerLoader::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_REG_READ:
             /*  Read from register command.  */
 
-            GPU_DEBUG_BOX( printf("%s => REG_READ command.\n", getName()); )
+            GPU_DEBUG( printf("%s => REG_READ command.\n", getName()); )
 
 
             /*  Not supported.  */
@@ -1040,7 +1040,7 @@ void StreamerLoader::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_START:
             /*  Start streaming (drawing) command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => START command.\n", getName());
             )
 
@@ -1092,7 +1092,7 @@ void StreamerLoader::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_END:
             /*  End streaming (drawing) command.  */
 
-            GPU_DEBUG_BOX( printf("%s => END command.\n", getName()); )
+            GPU_DEBUG( printf("%s => END command.\n", getName()); )
 
             /*  Check Streamer state.  */
             GPU_ASSERT(
@@ -1130,7 +1130,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
         case GPU_VERTEX_ATTRIBUTE_MAP:
             /*  Mapping between stream buffers and vertex input parameters.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_VERTEX_ATTRIBUTE_MAP[%d] = %d.\n",
                     getName(), gpuSubReg, gpuData.uintVal);
             )
@@ -1156,7 +1156,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
 
             /*  Vertex attribute default value register.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_VERTEX_ATTRIBUTE_DEFAULT_VALUE[%d] = {%f, %f, %f, %f}.\n",
                     getName(), gpuSubReg, gpuData.qfVal[0], gpuData.qfVal[1], gpuData.qfVal[2], gpuData.qfVal[3]);
             )
@@ -1188,7 +1188,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
             /*  Write the register.  */
             streamAddress[gpuSubReg] = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_STREAM_ADDRESS[%d] = %x.\n",
                     getName(), gpuSubReg, gpuData.uintVal);
             )
@@ -1207,7 +1207,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
             /*  Write the register.  */
             streamStride[gpuSubReg] = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                printf("%s => GPU_STREAM_STRIDE[%d] = %d.\n",
                     getName(), gpuSubReg, gpuData.uintVal);
             )
@@ -1227,7 +1227,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
             streamData[gpuSubReg] = gpuData.streamData;
 
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_STREAMDATA[%d] = ", getName(), gpuSubReg);
                 switch(gpuData.streamData)
                 {
@@ -1293,7 +1293,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
             /*  Write the register.  */
             streamElements[gpuSubReg] = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_STREAM_ELEMENTS[%d] = %d.\n",
                     getName(), gpuSubReg, gpuData.uintVal);
             )
@@ -1313,7 +1313,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
             //  Write the register.
             streamFrequency[gpuSubReg] = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_STREAM_FREQUENCY[%d] = %d.\n", getName(), gpuSubReg, gpuData.uintVal);
             )
 
@@ -1324,7 +1324,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
 
             streamStart = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_STREAM_START = %d.\n", getName(), gpuData.uintVal);
             )
 
@@ -1342,7 +1342,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
 
             d3d9ColorStream[gpuSubReg] = gpuData.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_D3D9_COLOR_STREAM[%d] = %s.\n", getName(), gpuSubReg, gpuData.booleanVal? "TRUE" : "FALSE");
             )
             
@@ -1353,7 +1353,7 @@ void StreamerLoader::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
             //  Sets if attribute load is disabled.
             attributeLoadBypass = gpuData.booleanVal || forceAttrLoadBypass;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => GPU_ATTRIBUTE_LOAD_BYPASS = %s.\n", getName(), gpuData.booleanVal? "TRUE" : "FALSE");
             )
             

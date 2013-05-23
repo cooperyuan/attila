@@ -222,7 +222,7 @@ void StreamerFetch::clock(u64bit cycle)
     u32bit selectedSLUnit;
     u32bit testedUnits;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("StreamerFetch => Clock %lld\n", cycle);
     )
 
@@ -286,7 +286,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
 
             /*  Reset stream state.  */
 
-            GPU_DEBUG_BOX( printf("Streamer => RESET state.\n"); )
+            GPU_DEBUG( printf("Streamer => RESET state.\n"); )
 
             /*  Set reset stream state.  */
 
@@ -317,7 +317,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
 
             /*  Accepts stream start commands and stream state changes.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => READY state.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => READY state.\n"); )
 
             /*  Get command from the Streamer main box.  */
             if (streamerFetchCommand->read(cycle, (DynamicObject *&) streamCom))
@@ -329,14 +329,14 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
 
             /*  Streaming a batch of vertex/inputs.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => STREAMING state.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => STREAMING state.\n"); )
 
             /*  Read signals from the stream loader units.  */
             for (i = 0; i < streamerLoaderUnits; i++)
             {
                 while(streamerLoaderDeAlloc[i]->read(cycle, (DynamicObject *&) streamCCom))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch => Received DEALLOC from Loader.\n");
                     )
 
@@ -351,7 +351,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                 arrrive an Output FIFO DeAlloc and an Output Memory DeAlloc.  */
             while(streamerCommitDeAlloc->read(cycle, (DynamicObject *&) streamCCom))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("StreamerFetch => Received DEALLOC from Commit.\n");
                 )
 
@@ -403,7 +403,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                     //  Align request address.
                     indexAddress = indexAddress - streamPaddingBytes;
                     
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch (%lld) => Adding %d bytes of padding to align the start of the index stream\n",
                             cycle, streamPaddingBytes);
                     )
@@ -415,7 +415,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                     (streamCount * streamDataSize[indexStreamData]) - requestedIndexData + alignPadding),
                     indexBufferSize - nextFreeIndex);
                     
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("StreamerFetch (%lld) => Requesting Index data: Address %08x | Size %d | BufferPosition = %08x\n",
                         cycle, indexAddress, size, nextFreeIndex);
                 )
@@ -473,7 +473,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                 requestedIndexData += (requestedIndexData == 0) ? (size - alignPadding) : size;
             }
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => requestedIndexData = %d | instance data = %d\n",
                 requestedIndexData, (streamCount * streamDataSize[indexStreamData]));
             )
@@ -489,7 +489,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                     //  size.
                     u32bit alignPadding = GPU_MOD(MAX_TRANSACTION_SIZE - GPU_MOD(nextFreeIndex, MAX_TRANSACTION_SIZE), MAX_TRANSACTION_SIZE);
                     
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch (%lld) => indexData = %d | requestedData = %d | bufferPaddingBytes = %d | alignPadding = %d | indexBufferSize = %d\n",
                             cycle, indexData, requestedData, bufferPaddingBytes, alignPadding, indexBufferSize);
                     )
@@ -500,7 +500,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                         //  Update the number of instances already read.
                         readInstance++;
                      
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerFetch (%lld) => readInstance = %d | streamInstances = %d\n", cycle, readInstance, streamInstances);
                         )
                         
@@ -516,7 +516,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                             //  Set buffer padding bytes.
                             bufferPaddingBytes += alignPadding;
                             
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("StreamerFetch (%lld) => Restarting index buffer read for instance %d.  Next free buffer position at %08x.\n",
                                     cycle, readInstance, nextFreeIndex);
                                 printf("StreamerFetch (%lld) => Adding %d bytes for padding.  Total buffer padding bytes %d\n", cycle, alignPadding, bufferPaddingBytes);
@@ -577,7 +577,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                         /*  Fetch next index from the index buffer.  */
                         newIndex = indexDataConvert(indexStreamData, &indexBuffer[nextIndex]);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerFetch (%lld) => Getting new index %d from the index buffer position %08x for instance %d\n", cycle, newIndex, nextIndex, fetchInstance);
                         )
                     }
@@ -588,7 +588,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                         /*  Generate a sequential index number.  */
                         newIndex = nextIndex;
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerFetch (%lld) => Generating sequential index %d for instance %d\n", cycle, newIndex, fetchInstance);
                         )
 
@@ -602,7 +602,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                         NOTE: Other distribution schemes should be considered as well, to improve index locality. */
                     streamCCom->setUnitID(selectedSLUnit);
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch (%lld) => NEW_INDEX idx %d instance %d OFIFO %d\n", cycle, newIndex, fetchInstance, streamCCom->getOFIFOEntry());
                     )
 
@@ -654,7 +654,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                     /*  Mark as last index if required.  */
                     streamCCom->setLast((fetchedIndexes == streamCount) && (fetchInstance == (streamInstances - 1)));
                     
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         if ((fetchedIndexes == streamCount) && (fetchInstance == (streamInstances - 1)))
                         {
                             printf("StreamerFetch => Marked INDEX as LAST.\n");
@@ -701,7 +701,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
 
                     fetchedIndexes = 0;
                     
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch (%lld) => Starting new instance %d.  Next index at buffer position %08x.\n", cycle, fetchInstance,
                             nextIndex);
                     )
@@ -712,7 +712,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                     //  Change to finished state if all the instance and indexes have been fetched.
                     state = ST_FINISHED;
                     
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch => End of current draw call.\n");
                     )                   
                 }
@@ -724,14 +724,14 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
 
             /*  End of streaming of a batch of vertexes/inputs.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => FINISHED state.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => FINISHED state.\n"); )
 
             /*  Read signals from the stream loader units.  */
             for (i = 0; i < streamerLoaderUnits; i++)
             {
                 while (streamerLoaderDeAlloc[i]->read(cycle, (DynamicObject *&) streamCCom))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerFetch => Received DEALLOC from Loader.\n");
                     )
 
@@ -746,7 +746,7 @@ cycle, indexedMode?"T":"F", fetchedIndexes, (indexBufferSize - indexData), freeO
                 arrrive an Output FIFO DeAlloc and an Output Memory DeAlloc.  */
             while(streamerCommitDeAlloc->read(cycle, (DynamicObject *&) streamCCom))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("StreamerFetch => Received DEALLOC from Commit.\n");
                 )
 
@@ -786,7 +786,7 @@ void StreamerFetch::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_RESET:
             /*  Reset command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => RESET command.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => RESET command.\n"); )
 
             /*  Set state to reset.  */
             state = ST_RESET;
@@ -795,7 +795,7 @@ void StreamerFetch::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_REG_WRITE:
             /*  Write to register command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => REG_WRITE command.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => REG_WRITE command.\n"); )
 
             /*  Check Streamer state.  */
             GPU_ASSERT(
@@ -813,7 +813,7 @@ void StreamerFetch::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_REG_READ:
             /*  Read from register command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => REG_READ command.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => REG_READ command.\n"); )
 
             /*  Not supported.  */
             panic("StreamerFetch", "processStreamerCommand", "STCOM_REG_READ not supported.");
@@ -823,7 +823,7 @@ void StreamerFetch::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_START:
             //  Start streaming.
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => START command.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => START command.\n"); )
 
             //  Check Streamer Fetch state.
             GPU_ASSERT(
@@ -884,7 +884,7 @@ void StreamerFetch::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_END:
             /*  End streaming (drawing) command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => END command.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => END command.\n"); )
 
             /*  Check Streamer Fetch state.  */
             GPU_ASSERT(
@@ -919,7 +919,7 @@ void StreamerFetch::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubReg
             /*  Write the register.  */
             indexStreamAddress = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Index GPU_STREAM_ADDRESS = 0x%0x.\n",
                     gpuData.uintVal);
             )
@@ -932,7 +932,7 @@ void StreamerFetch::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubReg
             /*  Write the register.  */
             indexStreamData = gpuData.streamData;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Index GPU_STREAMDATA = ");
                 switch(gpuData.streamData)
                 {
@@ -971,7 +971,7 @@ void StreamerFetch::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubReg
 
             streamStart = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => GPU_STREAM_START = %d.\n", gpuData.uintVal);
             )
 
@@ -982,7 +982,7 @@ void StreamerFetch::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubReg
 
             streamCount = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => GPU_STREAM_COUNT = %d.\n", gpuData.uintVal);
             )
 
@@ -993,7 +993,7 @@ void StreamerFetch::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubReg
             //  Streaming instance count.
             streamInstances = gpuData.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => GPU_STREAM_INSTANCES = %d.\n", gpuData.uintVal);
             )
 
@@ -1004,7 +1004,7 @@ void StreamerFetch::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubReg
 
             indexedMode = gpuData.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => GPU_INDEX_MODE = %s.\n",
                     gpuData.booleanVal?"TRUE":"FALSE");
             )
@@ -1028,14 +1028,14 @@ void StreamerFetch::processMemoryTransaction(MemoryTransaction *memTrans)
             /*  Memory Controller is ready to receive new requests.  */
             memoryState = memTrans->getState();
 
-            GPU_DEBUG_BOX( printf("StreamerFetch => MT_STATUS received.\n"); )
+            GPU_DEBUG( printf("StreamerFetch => MT_STATUS received.\n"); )
 
             break;
 
         case MT_READ_DATA:
             /*  Return data from the previous memory request.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => MT_READ_DATA received ID %d.\n",
                     memTrans->getID());
             )
@@ -1135,7 +1135,7 @@ void StreamerFetch::processStreamerControlCommand(u32bit cycle, StreamerControlC
 
             unitId = streamCCom->getUnitID();
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Deallocating IRQ entry %d from Streamer Loader unit %d\n",
                     streamCCom->getIRQEntry(), unitId);
             )
@@ -1157,7 +1157,7 @@ void StreamerFetch::processStreamerControlCommand(u32bit cycle, StreamerControlC
         case STRC_DEALLOC_OFIFO:
             /*  Deallocate an output FIFO entry.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Deallocating output FIFO entry %d\n",
                     streamCCom->getOFIFOEntry());
             )
@@ -1177,7 +1177,7 @@ void StreamerFetch::processStreamerControlCommand(u32bit cycle, StreamerControlC
 
             /*  New deallocated output memory line pending to be confirmed.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Received new deallocated output memory line %d pending to be confirmed\n",
                     streamCCom->getOMLine());
             )
@@ -1195,7 +1195,7 @@ void StreamerFetch::processStreamerControlCommand(u32bit cycle, StreamerControlC
 
             /*  New confirmation of a deallocated output memory line.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Received new deallocated output memory line %d confirmation\n",
                     streamCCom->getOMLine());
             )
@@ -1206,7 +1206,7 @@ void StreamerFetch::processStreamerControlCommand(u32bit cycle, StreamerControlC
                  /*  If confirmed output memory line deallocation then release the output memory line.  */
                  if (unconfirmedOMLineDeAllocs[GPU_MOD(cycle + 1, 2)][i] == streamCCom->getOMLine())
                  {
-                     GPU_DEBUG_BOX(
+                     GPU_DEBUG(
                          printf("StreamerFetch => Deallocating output memory line %d\n",
                              streamCCom->getOMLine());
                      )
@@ -1226,7 +1226,7 @@ void StreamerFetch::processStreamerControlCommand(u32bit cycle, StreamerControlC
 
         case STRC_OM_ALREADY_ALLOC:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("StreamerFetch => Streamer Commit had already allocated the OM Line %d for a new index sent\n",   
                     streamCCom->getOMLine());
             )

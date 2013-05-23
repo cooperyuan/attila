@@ -249,7 +249,7 @@ VectorShaderDecodeExecute::VectorShaderDecodeExecute(ShaderEmulator &shEmu, u32b
 //  Clock function for the class.  Drives the time of the simulation.
 void VectorShaderDecodeExecute::clock(u64bit cycle)
 {
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Clock %lld.\n", getName(), cycle);
     )
 
@@ -313,7 +313,7 @@ void VectorShaderDecodeExecute::clock(u32bit domain, u64bit cycle)
             break;
     }
     
-    GPU_DEBUG_BOX
+    GPU_DEBUG
     (
         printf("%s => Domain %s Clock %lld.\n", getName(), clockName.c_str(), cycle);
     )
@@ -422,7 +422,7 @@ void VectorShaderDecodeExecute::sendDecodeState(u64bit cycle)
     //  stage or if the current vector fetch is executing and will end in 2 cycles or less.
     decodeState = ((!vectorFetchAvailable) && (cyclesToNextFetch <= 2)) ? SHDEC_READY : SHDEC_BUSY;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s (%lld) => vectorFetchAvailable = %s | cyclesToNextFetch = %d.  Sending %s state to fetch",
             getName(), cycle, vectorFetchAvailable ? "TRUE" : "FALSE", cyclesToNextFetch,
             (decodeState == SHDEC_READY) ? "SHDEC_READY" : "SHDEC_BUSY");
@@ -443,7 +443,7 @@ void VectorShaderDecodeExecute::executeStage(u64bit cycle)
     //  Check if there is a decoded vector instruction in execution and the next execution can start.
     if (executingVector && (cyclesToNextExec == 0))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Executing vector instruction elements starting at %d.  Current repeat rate = %d\n",
                 getName(), execElement, currentRepeatRate);
         )
@@ -467,7 +467,7 @@ void VectorShaderDecodeExecute::executeStage(u64bit cycle)
                 {
                     //  Delete fake instruction object.
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         if (execElement == 0)
                             printf("%s => Deleting fake instruction %d\n", getName(), instruction);
                     )
@@ -550,7 +550,7 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
         //  Reset the current repeat rate for the current vector instruction fetch.
         currentRepeatRate = 1;
         
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Vector fetch received and available for decoding.\n", getName());
         )
 
@@ -569,7 +569,7 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
                 //  Check if the instructions have to be dropped.
                 drop = !exec && !stall;
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Instruction %d decoded: exec = %s | stall = %s | drop = %s\n",
                         getName(), instruction, exec ? "true" : "false", stall ? "true" : "false", drop ? "true" : "false");
                 )
@@ -590,7 +590,7 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
             }
             else
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Instruction %d is a fake instruction.  Skipping decode.\n", getName(), instruction);
                 )
 
@@ -613,14 +613,14 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
         //    }
         //)
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Instructions decoded that are executable -> %d\n", getName(), execInstructions);
         )
 
         //  If an instruction was stalled send a stall/repeat signal to the fetch stage.
         if (stall)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Instruction %d is stalled.\n", getName(), execInstructions);
             )
 
@@ -629,7 +629,7 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
             //  proceed.  Otherwise the stalling instruction is requested again to fetch.
             if (waitOnStall && (execInstructions == 0))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Decode stage stalled.\n", getName());
                 )
             }
@@ -643,7 +643,7 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
                 {
                     for(u32bit instruction = execInstructions; instruction < instrCycle; instruction++)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             if (element == 0)
                                 printf("%s => Deleting instruction %d due to stall\n", getName(), instruction);
                         )
@@ -679,7 +679,7 @@ void VectorShaderDecodeExecute::decodeStage(u64bit cycle)
             {
                 for(u32bit instruction = execInstructions; instruction < instrCycle; instruction++)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         if (element == 0)
                             printf("%s => Deleting instruction dropped instruction %d (thread in end/pending jump/block state).\n", getName(), instruction);
                     )
@@ -755,7 +755,7 @@ void VectorShaderDecodeExecute::sendRequestsToTextureUnits(u64bit cycle)
                 //textRequest->copyParentCookies(?shExecInstr);
                 //textRequest->addCookie();
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s (%lld) => Sending texture request to texture unit %d\n", getName(), cycle, nextRequestTU);
                 )
 
@@ -831,7 +831,7 @@ void VectorShaderDecodeExecute::wakeUpTextureThreads(u64bit cycle)
                 panic("VectorShaderDecodeExecute", "wakeUpTextureThreads", "Waking up a thread that is not waiting for textures.");
         )
         
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Wake up thread waiting for texture.  ThreadID = %d\n", getName(), threadID);
         )
                 
@@ -896,7 +896,7 @@ void VectorShaderDecodeExecute::changePC(u64bit cycle, u32bit threadID, u32bit P
     //  Send control command to fetch.
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Sending NEW_PC vectorThreadID = %d PC = %06x.\n", getName(), threadID, PC);
     )
 
@@ -919,7 +919,7 @@ void VectorShaderDecodeExecute::replayInstruction(u64bit cycle, u32bit threadID,
     //  Send control command to fetch.
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Sending REPEAT_LAST vectorThreadID = %d PC = %06x.\n", getName(), threadID, PC);
     )
 
@@ -946,7 +946,7 @@ void VectorShaderDecodeExecute::endThread(u64bit cycle, u32bit threadID, u32bit 
     /*  Send control command to fetch.  */
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Sending END_THREAD vectorThreadID = %d PC = %06x.\n", getName(), threadID, PC);
     )
 
@@ -973,7 +973,7 @@ void VectorShaderDecodeExecute::zExportThread(u64bit cycle, u32bit threadID, u32
     /*  Send control command to fetch.  */
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Sending ZEXPORT_THREAD vectorThreadID = %d PC = %06x.\n", getName(), threadID, PC);
     )
 
@@ -1002,7 +1002,7 @@ void VectorShaderDecodeExecute::blockThread(u64bit cycle, u32bit threadID, u32bi
         //  Send control command to fetch.
         controlSignal->write(cycle, decodeCommand) ;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Sending BLOCK_THREAD vectorThreadID = %d PC = %06x.\n", getName(), threadID, PC);
         )
 
@@ -1036,7 +1036,7 @@ void VectorShaderDecodeExecute::unblockThread(u64bit cycle, u32bit threadID, u32
         //  Send control command to fetch.
         controlSignal->write(cycle, decodeCommand) ;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Sending UNBLOCK_THREAD vectorThreadID = %d PC = %06x.\n", getName(), threadID, PC);
         )
 
@@ -1057,7 +1057,7 @@ void VectorShaderDecodeExecute::processCommand(ShaderCommand *shCom)
     {
         case RESET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RESET command received.\n", getName());
             )
 
@@ -1101,7 +1101,7 @@ void VectorShaderDecodeExecute::writeBackStage(u64bit cycle)
             //  Get shader thread PC after execution of the instruction.
             pc = shEmul.threadPC(shEmuElemID);
 
-            GPU_DEBUG_BOX
+            GPU_DEBUG
             (
                 shInstr->disassemble(&dis[0]);
                 printf("%s => End Execution vectorThreadID = %d PC = %06x : %s\n", getName(), threadID, pc, dis);
@@ -1163,7 +1163,7 @@ void VectorShaderDecodeExecute::writeBackStage(u64bit cycle)
             //  Execute the jump instruction.
             jump = shEmul.checkJump(shInstrDec, vectorLength, destinationPC);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => JMP instruction executed.  Jump Taken? = %s Target PC = %06x\n", getName(), jump? "Yes": "No", destinationPC);
             )
             
@@ -1221,7 +1221,7 @@ void VectorShaderDecodeExecute::startExecution(u64bit cycle, u32bit element, Sha
     //  Check for the first element in the vector.
     if ((element % vectorALUWidth) == 0)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             
             //  Get the shader emulator element identifier.
             shEmuElemID = shInstrDec->getNumThread();
@@ -1335,7 +1335,7 @@ void VectorShaderDecodeExecute::updateDecodeStage(u64bit cycle, ShaderExecInstru
     //{
         //  Ignore any instruction from a blocked thread.
 
-    //    GPU_DEBUG_BOX(
+    //    GPU_DEBUG(
     //        printf("VectorShaderDecodeExecute => Ignoring instruction from blocked thread.\n");
     //    )
     //    return;
@@ -1443,7 +1443,7 @@ void VectorShaderDecodeExecute::updateDecodeStage(u64bit cycle, ShaderExecInstru
         }
     }
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 
 //if (cycle > 71000)
@@ -1562,7 +1562,7 @@ void VectorShaderDecodeExecute::repeatInstruction(u64bit cycle, u32bit instructi
     //  Get instruction PC.
     pc = shInstrDec->getPC();
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 
         printf("%s => Instruction stalled (repeat) for vectorThreadID = %d  PC = %06x : %s \n",
@@ -1608,7 +1608,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
     //  Get instruction PC.
     pc = shInstrDec->getPC();
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 //if (cycle > 71000)
         printf("%s (%lld) => Decode Instr. Vector Thread = %d  PC = %06x : %s \n",
@@ -1628,7 +1628,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
     {
         //  Ignore any instruction after a thread receives END.
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Ignoring instruction after END.\n", getName());
         )
 
@@ -1640,7 +1640,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
     {
         //  Ignore any instruction until the pending jump is executed.
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Ignoring instruction after JMP.\n", getName());
         )
 
@@ -1652,7 +1652,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
     {
         //  Ignore any instruction from a blocked thread.
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Ignoring instruction from blocked thread.\n", getName());
         )
 
@@ -1662,7 +1662,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
     //  Check if there are enough texture tickets for the whole texture instruction.
     if (shInstr->isALoad() && (textureTickets[nextRequestTU] < vectorLength))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => No texture ticket available for the texture instruction.\n", getName());
         )
 
@@ -1683,7 +1683,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
         //  Only allow one scalar op per cycle and thread rate.
         if (shInstr->isScalar() && reserveScalarALU)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("VectorShaderDecodeExecute => No more ALU ops allowed in current cycle.\n");
             )
 
@@ -1696,7 +1696,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
         //  Only allow one SIMD op per cycle and thread rate.
         if ((!shInstr->isScalar()) && reserveSIMDALU)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => No more SIMD ops allowed in current cycle.\n", getName());
             )
 
@@ -1715,7 +1715,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
         //  Check RAW dependence.
         if (checkRAWDependence(threadID, shInstr->getBankOp1(), shInstr->getOp1()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RAW dependence found for first operand.\n", getName());
             )
 
@@ -1733,7 +1733,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
         //  Check RAW dependence.  */
         if (checkRAWDependence(threadID, shInstr->getBankOp2(), shInstr->getOp2()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RAW dependence found for second operand.\n", getName());
             )
 
@@ -1750,7 +1750,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
         //  Check RAW dependence.
         if (checkRAWDependence(threadID, shInstr->getBankOp3(), shInstr->getOp3()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RAW dependence found for third operand.\n", getName());
             )
 
@@ -1767,7 +1767,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
         //  Check RAW dependence.
         if (checkRAWDependence(threadID, ADDR, shInstr->getRelMAddrReg()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RAW dependence for address register %d in relative access mode to the constant bank.\n",
                     getName(), shInstr->getRelMAddrReg());
             )
@@ -1799,7 +1799,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
                 //  Check WAW dependence for output bank register.
                 if (threadInfo[threadID].outpBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => WAW dependence for OUTPUT register %d.\n", getName(), resReg);
                     )
 
@@ -1816,7 +1816,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
                 //  Check WAW dependence for address bank register.
                 if (threadInfo[threadID].addrBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => WAW dependence for ADDRESS register %d.\n", getName(), resReg);
                     )
 
@@ -1833,7 +1833,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
                 //  Check WAW dependence for temporal bank register.
                 if (threadInfo[threadID].tempBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => WAW dependence for TEMPORAL register %d.\n", getName(), resReg);
                     )
 
@@ -1850,7 +1850,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
                 //  Check WAW dependence for predicate bank register.
                 if (threadInfo[threadID].predBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => WAW dependence for PREDICATE register %d.\n", getName(), resReg);
                     )
 
@@ -1875,7 +1875,7 @@ void VectorShaderDecodeExecute::decodeInstruction(u64bit cycle, u32bit instructi
     //  Check register write ports availability.
     if (regWrites[GPU_MOD(nextRegWrite + instrLat, MAX_EXEC_LAT)] >= (MAX_EXEC_BW * instrCycle))
     {
-       GPU_DEBUG_BOX(
+       GPU_DEBUG(
             printf("%s => Register write port limit reached.\n", getName());
        )
 

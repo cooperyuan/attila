@@ -18,13 +18,6 @@
 #include <iostream>
 #include "GPUMemorySpecs.h"
 
-
-#ifdef GPU_DEBUG
-    #undef GPU_DEBUG
-#endif
-//#define GPU_DEBUG(expr) { expr }
-#define GPU_DEBUG(expr) {  }
-
 #define ASSERT_DATAPINS_PUSH(funcname, nextLastCycle) \
     GPU_ASSERT(\
         if ( !dataPinsItem.empty() && dataPinsItem.back().first >= nextLastCycle ) {\
@@ -376,7 +369,7 @@ void DDRModule::clock(u64bit cycle)
             // cout << "Cycle=" << cycle << ". DDRModule::clock() -> Burst written" << endl;
             GPU_DEBUG(
                 {
-                    DDRBurst* b = readin.front().second;
+                    const DDRBurst* b = readin.front().second;
                     cout << getName() << " => Writing " << (4 * b->getSize()) << " bytes.\n";
                 }
             )
@@ -624,7 +617,7 @@ void DDRModule::processCommand(u64bit cycle, DDRCommand* cmd)
             break;
         case DDRCommand::Dummy:
             GPU_DEBUG(
-                cout << getName() << " => DDRCommand received. Processing " << cmd->toString() << "\n"
+                cout << getName() << " => DDRCommand received. Processing " << cmd->toString() << "\n";
             )
             processDummyCommand(cycle, cmd);
             break;

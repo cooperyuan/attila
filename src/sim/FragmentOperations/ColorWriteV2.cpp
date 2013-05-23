@@ -359,7 +359,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
         //  Get fragment.
         fr = stamp->stamp[f]->getFragment();
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s (%lld) => Pixel (%d, %d)\n", getName(), cycle, fr->getX(), fr->getY());
         )
         
@@ -409,7 +409,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         inputColorQF[rt * STAMP_FRAGMENTS + f][2], inputColorQF[rt * STAMP_FRAGMENTS + f][3]);
                 }
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Color {%f, %f, %f, %f}\n", getName(), inputColorQF[rt * STAMP_FRAGMENTS + f][0], 
                         inputColorQF[rt * STAMP_FRAGMENTS + f][1], inputColorQF[rt * STAMP_FRAGMENTS + f][2],
                         inputColorQF[rt * STAMP_FRAGMENTS + f][3]);
@@ -424,7 +424,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 2] = writeB[rt] && !stamp->culled[f];
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 3] = writeA[rt] && !stamp->culled[f];
                         
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Stamp write mask : (%d, %d, %d, %d)\n",  getName(),
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4],
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 1],
@@ -440,7 +440,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 2] =
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 3] = writeG[rt] && !stamp->culled[f];
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Stamp write mask : (%d, %d, %d, %d)\n",  getName(),
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4],
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 1],
@@ -457,7 +457,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 2] =
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 3] = writeR[rt] && !stamp->culled[f];
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Stamp write mask : (%d, %d, %d, %d)\n",  getName(),
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4],
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 4 + 1],
@@ -478,7 +478,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 8 + 6] =
                         stamp->mask[(rt * STAMP_FRAGMENTS + f) * 8 + 7] = writeA[rt] && !stamp->culled[f];
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Stamp write mask : (%d, %d, %d, %d, %d, %d, %d, %d)\n", getName(),
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 8 + 0], stamp->mask[(rt * STAMP_FRAGMENTS + f) * 8 + 1],
                                 stamp->mask[(rt * STAMP_FRAGMENTS + f) * 8 + 2], stamp->mask[(rt * STAMP_FRAGMENTS + f) * 8 + 3],
@@ -532,7 +532,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         inputColorQF[sampleOffset][3] = attrib[COLOR_ATTRIBUTE + rt][3];
                     }
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ColorWrite => Color {%f, %f, %f, %f}\n", inputColorQF[sampleOffset][0],
                             inputColorQF[sampleOffset][1], inputColorQF[sampleOffset][2],
                             inputColorQF[sampleOffset][3]);
@@ -547,7 +547,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                             stamp->mask[sampleOffset * 4 + 2] = writeB[rt] && sampleCoverage[s];
                             stamp->mask[sampleOffset * 4 + 3] = writeA[rt] && sampleCoverage[s];
                     
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("%s => Stamp write mask for fragment %d sample %d : (%d, %d, %d, %d)\n",
                                     getName(), f, s,
                                     stamp->mask[sampleOffset * 4 + 0], stamp->mask[sampleOffset * 4 + 1],
@@ -560,7 +560,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                             stamp->mask[sampleOffset * 4 + 0] = stamp->mask[sampleOffset * 4 + 1] = writeR[rt] && sampleCoverage[s];
                             stamp->mask[sampleOffset * 4 + 2] = stamp->mask[sampleOffset * 4 + 3] = writeG[rt] && sampleCoverage[s];
                     
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("%s => Stamp write mask for fragment %d sample %d : (%d, %d, %d, %d)\n",
                                     getName(), f, s,
                                     stamp->mask[sampleOffset * 4 + 0], stamp->mask[sampleOffset * 4 + 1],
@@ -573,7 +573,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                             stamp->mask[sampleOffset * 4 + 0] = stamp->mask[sampleOffset * 4 + 1] = 
                             stamp->mask[sampleOffset * 4 + 2] = stamp->mask[sampleOffset * 4 + 3] = writeR[rt] && sampleCoverage[s];
                     
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("%s => Stamp write mask for fragment %d sample %d : (%d, %d, %d, %d)\n",
                                     getName(), f, s,
                                     stamp->mask[sampleOffset * 4 + 0], stamp->mask[sampleOffset * 4 + 1],
@@ -589,7 +589,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                             stamp->mask[sampleOffset * 8 + 4] = stamp->mask[sampleOffset * 8 + 5] = writeB[rt] && sampleCoverage[s];
                             stamp->mask[sampleOffset * 8 + 6] = stamp->mask[sampleOffset * 8 + 7] = writeA[rt] && sampleCoverage[s];
                     
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("ColorWrite => Stamp write mask for fragment %d sample %d : (%d, %d, %d, %d, %d, %d, %d, %d)\n", f, s,
                                     stamp->mask[sampleOffset * 8 + 0], stamp->mask[sampleOffset * 8 + 1],
                                     stamp->mask[sampleOffset * 8 + 2], stamp->mask[sampleOffset * 8 + 3],
@@ -756,7 +756,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
         //  Determine if blend mode is active.
         if (blend[rt])
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Blending stamp.\n");
             
                 for(u32bit i = 0; i < STAMP_FRAGMENTS; i++)
@@ -844,7 +844,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                 }
             }
             
-            GPU_DEBUG_BOX(        
+            GPU_DEBUG(        
                 for(u32bit i = 0; i < STAMP_FRAGMENTS; i++)
                     printf("<<  Input Color = { %f, %f, %f %f }\n", inputColorQF[i][0], inputColorQF[i][1],
                         inputColorQF[i][2], inputColorQF[i][3]);
@@ -911,7 +911,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
         //  Determine if logical operation is active (only for back buffer/render target 0).
         if ((rt == 0) && logicOperation)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => LogicOp stamp.\n");
             )
 
@@ -980,7 +980,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                     
                         colorRGBA32FToRGBA8(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
                         
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                             printf("%s => Output data for rt %d : %08x %08x %08x %08x\n", getName(), rt, 
                                 data[0], data[1], data[2], data[3]);
@@ -992,7 +992,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                     
                         colorRGBA32FToRG16F(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                             printf("%s => Output data for rt %d : %08x %08x %08x %08x\n", getName(), rt, 
                                 data[0], data[1], data[2], data[3]);
@@ -1003,7 +1003,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                     
                         colorRGBA32FToR32F(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                             printf("%s => Output data for rt %d : %08x %08x %08x %08x\n", getName(), rt, 
                                 data[0], data[1], data[2], data[3]);
@@ -1014,7 +1014,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                     
                         colorRGBA32FToRGBA16(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                             printf("%s => Output data for rt %d : %08x %08x %08x %08x %08x %08x %08x %08x\n", getName(), rt, 
                                 data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
@@ -1025,7 +1025,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                     
                         colorRGBA32FToRGBA16F(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
                         
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                             printf("%s => Output data for rt %d : %08x %08x %08x %08x %08x %08x %08x %08x\n", getName(), rt, 
                                 data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
@@ -1120,7 +1120,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         
                             colorRGBA32FToRGBA8(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                                 printf("%s => Output data for sample %d for rt %d : %08x %08x %08x %08x\n",
                                     getName(), s, rt, 
@@ -1133,7 +1133,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         
                             colorRGBA32FToRG16F(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                                 printf("%s => Output data for sample %d for rt %d : %08x %08x %08x %08x\n",
                                     getName(), s, rt, 
@@ -1146,7 +1146,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         
                             colorRGBA32FToR32F(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                                 printf("%s => Output data for sample %d for rt %d : %08x %08x %08x %08x\n",
                                     getName(), s, rt, 
@@ -1159,7 +1159,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         
                             colorRGBA32FToRGBA16(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
 
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                                 printf("%s => Output data for sample %d for rt %d : %08x %08x %08x %08x %08x %08x %08x %08x\n",
                                     getName(), s, rt, 
@@ -1172,7 +1172,7 @@ void ColorWriteV2::operateStamp(u64bit cycle, ROPQueue *stamp)
                         
                             colorRGBA32FToRGBA16F(&inputColorQF[dataInOffset], &stamp->data[dataOutOffset]);
                             
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 u32bit *data = (u32bit *) &stamp->data[dataOutOffset];
                                 printf("%s => Output data for sample %d for rt %d : %08x %08x %08x %08x %08x %08x %08x %08x\n",
                                     getName(), s, rt, 
@@ -1493,7 +1493,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_RESET:
             //  Reset command from the Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => RESET command received.\n");
             )
 
@@ -1505,7 +1505,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_DRAW:
             //  Draw command from the Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => DRAW command received.\n");
             )
 
@@ -1575,7 +1575,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_END:
             //  End command received from Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => END command received.\n");
             )
 
@@ -1593,7 +1593,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_REG_WRITE:
             //  Write register command from the Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => REG_WRITE command received.\n");
             )
 
@@ -1612,7 +1612,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_SWAP:
             //  Swap front and back buffer command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => SWAP command received.\n");
             )
 
@@ -1651,7 +1651,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         
             //  Dump color buffer command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => DUMPCOLOR command received.\n");
             )
 
@@ -1675,7 +1675,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_FLUSH:
             //  Flush ColorWrite Unit command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => FLUSH command received.\n");
             )
 
@@ -1696,7 +1696,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_SAVE_STATE:
             //  Save state ColorWrite Unit command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => SAVE_STATE command received.\n");
             )
 
@@ -1717,7 +1717,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_RESTORE_STATE:
             //  Restore state ColorWrite Unit command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => RESTORE_STATE command received.\n");
             )
 
@@ -1738,7 +1738,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_CLEAR_COLOR_BUFFER:
             //  Clear color buffer command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => CLEAR_COLOR_BUFFER command received.\n");
             )
 
@@ -1760,7 +1760,7 @@ void ColorWriteV2::processCommand(RasterizerCommand *command, u64bit cycle)
         
             //  Reset the color buffer block state.
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite-%s (%lld) => RESET_STATE command received.\n", getName(), cycle);
             )
             
@@ -1794,7 +1794,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write display horizontal resolution register.
             hRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_DISPLAY_X_RES = %d.\n", hRes);
             )
 
@@ -1818,7 +1818,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write display vertical resolution register.
             vRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_DISPLAY_Y_RES = %d.\n", vRes);
             )
 
@@ -1842,7 +1842,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport initial x coordinate register.
             startX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_VIEWPORT_INI_X = %d.\n", startX);
             )
 
@@ -1852,7 +1852,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport initial y coordinate register.
             startY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_VIEWPORT_INI_Y = %d.\n", startY);
             )
 
@@ -1862,7 +1862,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport width register.
             width = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_VIEWPORT_WIDTH = %d.\n", width);
             )
 
@@ -1872,7 +1872,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport height register.
             height = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_VIEWPORT_HEIGHT = %d.\n", height);
             )
 
@@ -1932,7 +1932,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
                     break;
             }
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_BUFFER_CLEAR = (%f, %f, %f, %f).\n", clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
             )
 
@@ -1943,7 +1943,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write front color buffer address register.
             frontBuffer = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_FRONTBUFFER_ADDR = %x.\n",
                     frontBuffer);
             )
@@ -1964,7 +1964,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set color buffer address in the color cache.
             colorCache->swap(backBuffer);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BACKBUFFER_ADDR = %x.\n",
                     backBuffer);
             )
@@ -1979,7 +1979,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set block state buffer address in the Color cache.
             colorCache->setStateAddress(stateBufferAddress);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_STATE_BUFFER_MEM_ADDR = %x\n", stateBufferAddress);
             )
 
@@ -1990,7 +1990,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write Multisampling enable flag.
             multisampling = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_MULTISAMPLING = %s\n", multisampling?"TRUE":"FALSE");
             )
                        
@@ -2007,7 +2007,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write MSAA z samples per fragment register.
             msaaSamples = data.uintVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_MSAA_SAMPLES = %d\n", msaaSamples);
             )
 
@@ -2091,7 +2091,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
                     break;
             }
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_BUFFER_FORMAT = ");
                 switch(colorBufferFormat)
                 {
@@ -2127,7 +2127,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set color compression flag in the Color Cache.
             colorCache->setCompression(compression);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_COMPRESSION = %s\n", compression ? "TRUE" : "FALSE");
             )
             
@@ -2138,7 +2138,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write conversion from linear to sRGB on color write enable/disable register.
             colorSRGBWrite = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_SRGB_WRITE = %s\n", colorSRGBWrite ? "TRUE" : "FALSE");
             )
             
@@ -2155,7 +2155,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write render target enable register.
             rtEnable[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_RENDER_TARGET_ENABLE[%d] = %s.\n", subreg, data.booleanVal ? "TRUE" : "FALSE");
             )
             
@@ -2193,7 +2193,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
                     break;
             }
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_RENDER_TARGET_FORMAT[%d] = ", subreg);
                 switch(data.txFormat)
                 {
@@ -2239,7 +2239,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             if (subreg == 0)
                 backBuffer = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_RENDER_TARGET_ADDRESS[%d] = %d.\n", subreg, data.uintVal);
             )
             
@@ -2253,7 +2253,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP read data flag.
             readDataROP[subreg] = blend[subreg] || ((subreg == 0) &&  logicOperation);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_BLEND[%d] = %s.\n", subreg, blend?"ENABLED":"DISABLED");
             )
 
@@ -2264,7 +2264,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write blend equation register.
             equation[subreg] = data.blendEquation;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BLEND_EQUATION[%d] = ", subreg);
 
                 switch(equation[subreg])
@@ -2302,7 +2302,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write source RGB weight function.
             srcRGB[subreg] = data.blendFunction;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BLEND_SRC_RGB[%d] = ", subreg);
 
                 switch(srcRGB[subreg])
@@ -2379,7 +2379,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write destination RGB weight function.
             dstRGB[subreg] = data.blendFunction;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BLEND_DST_RGB[%d] = ", subreg);
 
                 switch(dstRGB[subreg])
@@ -2456,7 +2456,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write source alpha weight function.
             srcAlpha[subreg] = data.blendFunction;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BLEND_SRC_ALPHA[%d] = ", subreg);
 
                 switch(srcAlpha[subreg])
@@ -2533,7 +2533,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write destination ALPHA weight function.
             dstAlpha[subreg] = data.blendFunction;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BLEND_DST_ALPHA[%d] = ", subreg);
 
                 switch(dstAlpha[subreg])
@@ -2613,7 +2613,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             constantColor[subreg][2] = data.qfVal[2];
             constantColor[subreg][3] = data.qfVal[3];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_BLEND_COLOR[%d] = {%f, %f, %f, %f}\n",
                     subreg, constantColor[subreg][0], constantColor[subreg][1], constantColor[subreg][2], constantColor[subreg][3]);
             )
@@ -2628,7 +2628,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP bypass flag.
             bypassROP[subreg] = !writeR[subreg] && !writeG[subreg] && !writeB[subreg] && !writeA[subreg];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_MASK_R[%d] = %s.\n", subreg, writeR[subreg]?"ENABLED":"DISABLED");
             )
 
@@ -2642,7 +2642,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP bypass flag.
             bypassROP[subreg] = !writeR[subreg] && !writeG[subreg] && !writeB[subreg] && !writeA[subreg];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_MASK_G[%d] = %s.\n", subreg, writeG[subreg]?"ENABLED":"DISABLED");
             )
 
@@ -2656,7 +2656,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP bypass flag.
             bypassROP[subreg] = !writeR[subreg] && !writeG[subreg] && !writeB[subreg] && !writeA[subreg];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_MASK_B[%d] = %s.\n", subreg, writeB[subreg]?"ENABLED":"DISABLED");
             )
 
@@ -2670,7 +2670,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP bypass flag.
             bypassROP[subreg] = !writeR[subreg] && !writeG[subreg] && !writeB[subreg] && !writeA[subreg];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_COLOR_MASK_A[%d] = %s.\n", subreg, writeA[subreg]?"ENABLED":"DISABLED");
             )
 
@@ -2684,7 +2684,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP read data flag.
             readDataROP[0] = blend[0] || logicOperation;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_LOGICAL_OPERATION = %s.\n", logicOperation?"ENABLED":"DISABLED");
             )
 
@@ -2695,7 +2695,7 @@ void ColorWriteV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write logical operation function register.
             logicOpMode = data.logicOp;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ColorWrite => Write GPU_LOGICOP_FUNCTION = ");
 
                 switch(logicOpMode)

@@ -190,7 +190,7 @@ void TriangleSetup::clock(u64bit cycle)
     u32bit shOutputTriangle;
     u32bit i;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("TriangleSetup => clock %lld\n", cycle);
     )
 
@@ -200,7 +200,7 @@ void TriangleSetup::clock(u64bit cycle)
         /*  A new setup triangle has been requested.  */
         trianglesRequested += tsRequest->getRequest();
 
-        GPU_DEBUG_BOX( printf("TriangleSetup => Requested setup triangle.\n"); )
+        GPU_DEBUG( printf("TriangleSetup => Requested setup triangle.\n"); )
 
         /*  Delete Setup Triangle Request object.  */
         delete tsRequest;
@@ -229,7 +229,7 @@ void TriangleSetup::clock(u64bit cycle)
         case RAST_RESET:
             /*  Reset state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => RESET state.\n");
             )
 
@@ -286,7 +286,7 @@ void TriangleSetup::clock(u64bit cycle)
         case RAST_READY:
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => READY state.\n");
             )
 
@@ -299,7 +299,7 @@ void TriangleSetup::clock(u64bit cycle)
         case RAST_DRAWING:
             /*  Draw state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => DRAWING state.\n");
             )
 
@@ -343,7 +343,7 @@ void TriangleSetup::clock(u64bit cycle)
             /*  Check if setup is blocked processing a triangle.  */
             if (setupWait > 0)
             {
-                GPU_DEBUG_BOX( printf("TriangleSetup => Setting triangle.\n"); )
+                GPU_DEBUG( printf("TriangleSetup => Setting triangle.\n"); )
 
                 /*  Update next setup wait cycle counter.  */
                 setupWait--;
@@ -360,7 +360,7 @@ void TriangleSetup::clock(u64bit cycle)
                             panic("TriangleSetup", "clock", "No free setup FIFO entries.");
                     )
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("TriangleSetup => Start setup of a new %s triangle ID %d.\n",
                             tsInput->isLast()?"last":"", tsInput->getTriangleID());
                     )
@@ -465,7 +465,7 @@ void TriangleSetup::clock(u64bit cycle)
                         shAttributes[W_ATTRIBUTE][3] = 0.0f;
                     }
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("TriangleSetup => Sending triangle input to shader (FragmentFIFO) from %d\n",
                             nextSendShTriangle);
                     )
@@ -495,7 +495,7 @@ void TriangleSetup::clock(u64bit cycle)
                     /*  Check if shader result has been received.  */
                     if (triangleShaderQueue[nextShaderTriangle].shaded)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("TriangleSetup => Commiting setup triangle from the shader at %d.\n", nextShaderTriangle);
                         )
 
@@ -580,7 +580,7 @@ void TriangleSetup::clock(u64bit cycle)
 
                     triangleShaderQueue[shOutputTriangle].tArea = shAttributes[AREA_ATTRIBUTE][0];
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("TriangleSetup => Received setup triangle from shader (FragmentFIFO) for entry %d\n",
                             shOutputTriangle);
                     )
@@ -597,7 +597,7 @@ void TriangleSetup::clock(u64bit cycle)
                 /*  Read triangle from setup end signal.  */
                 while (setupEnd->read(cycle, (DynamicObject *&) tsInput))
                 {
-                    GPU_DEBUG_BOX( printf("TriangleSetup => End of setup.\n"); )
+                    GPU_DEBUG( printf("TriangleSetup => End of setup.\n"); )
 
                     /*  Check if the triangle is the last in the batch.  Last triangle is just a dummy
                         triangle without valid data so ignore and pass it down the pipeline.  */
@@ -651,7 +651,7 @@ void TriangleSetup::clock(u64bit cycle)
         case RAST_END:
             /*  Draw end state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => END state.\n");
             )
 
@@ -687,7 +687,7 @@ void TriangleSetup::processCommand(RasterizerCommand *command)
         case RSCOM_RESET:
             /*  Reset command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => RESET command received.\n");
             )
 
@@ -699,7 +699,7 @@ void TriangleSetup::processCommand(RasterizerCommand *command)
         case RSCOM_DRAW:
             /*  Draw command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => DRAW command received.\n");
             )
 
@@ -822,7 +822,7 @@ void TriangleSetup::processCommand(RasterizerCommand *command)
         case RSCOM_END:
             /*  End command received from Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => END command received.\n");
             )
 
@@ -840,7 +840,7 @@ void TriangleSetup::processCommand(RasterizerCommand *command)
         case RSCOM_REG_WRITE:
             /*  Write register command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => REG_WRITE command received.\n");
             )
 
@@ -873,7 +873,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport width regsiter.  */
             hRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_DISPLAY_X_RES = %d.\n", hRes);
             )
 
@@ -883,7 +883,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport height register.  */
             vRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_DISPLAY_Y_RES = %d.\n", vRes);
             )
 
@@ -894,7 +894,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write use D3D9 pixel coordinates convention register.
             d3d9PixelCoordinates = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_D3D9_PIXEL_COORDINATES = %s\n", d3d9PixelCoordinates ? "TRUE" : "FALSE");
             )
             
@@ -904,7 +904,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport left most X coordinate.  */
             iniX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_VIEWPORT_INI_X = %d.\n", iniX);
             )
 
@@ -914,7 +914,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport bottom most Y coordinate.  */
             iniY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_VIEWPORT_INI_Y = %d.\n", iniY);
             )
 
@@ -924,7 +924,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport width regsiter.  */
             width = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_VIEWPORT_WIDTH = %d.\n", width);
             )
 
@@ -934,7 +934,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport height register.  */
             height = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_VIEWPORT_HEIGHT = %d.\n", height);
             )
 
@@ -944,7 +944,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor test enable flag.  */
             scissorTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_SCISSOR_TEST = %s.\n", scissorTest?"TRUE":"FALSE");
             )
 
@@ -954,7 +954,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor left most X coordinate.  */
             scissorIniX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_SCISSOR_INI_X = %d.\n", scissorIniX);
             )
 
@@ -964,7 +964,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor bottom most Y coordinate.  */
             scissorIniY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_SCISSOR_INI_Y = %d.\n", scissorIniY);
             )
 
@@ -974,7 +974,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor width regsiter.  */
             scissorWidth = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_SCISSOR_WIDTH = %d.\n", scissorWidth);
             )
 
@@ -984,7 +984,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor height register.  */
             scissorHeight = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_SCISSOR_HEIGHT = %d.\n", scissorHeight);
             )
 
@@ -994,7 +994,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write near depth range register.  */
             near = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_DEPTH_RANGE_NEAR = %f.\n", near);
             )
 
@@ -1004,7 +1004,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write far depth range register.  */
             far = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_DEPTH_RANGE_FAR = %f.\n", far);
             )
 
@@ -1014,7 +1014,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth slope factor register.  */
             slopeFactor = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_DEPTH_SLOPE_FACTOR = %f.\n", slopeFactor);
             )
 
@@ -1024,7 +1024,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth unit offset register.  */
             unitOffset = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_DEPTH_UNIT_OFFSET = %f.\n", unitOffset);
             )
 
@@ -1034,7 +1034,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write Z Buffer bit precission register.  */
             zBitPrecission = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_Z_BUFFER_BIT_PRECISSION = %d.\n",
                     zBitPrecission);
             )
@@ -1046,7 +1046,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write use D3D9 depth range in clip space register.
             d3d9DepthRange = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Writing register GPU_D3D9_DEPTH_RANGE = %s.\n", d3d9DepthRange?"TRUE":"FALSE");
             )
 
@@ -1056,7 +1056,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write face mode register.  */
             faceMode = data.faceMode;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_FACEMODE = ");
                 switch(faceMode)
                 {
@@ -1075,7 +1075,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write face cull mode register.  */
             culling = data.culling;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Write GPU_CULLING = ");
                 switch(culling)
                 {
@@ -1101,7 +1101,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write use D3D9 rasterization rules register.
             d3d9RasterizationRules = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Writing register GPU_D3D9_RASTERIZATION_RULES = %s.\n", d3d9RasterizationRules?"TRUE":"FALSE");
             )
 
@@ -1111,7 +1111,7 @@ void TriangleSetup::processRegisterWrite(GPURegister reg, u32bit subreg,
             /* Write Two sided lighting register. */
             twoSidedLighting = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Writing register GPU_TWOSIDED_LIGHTING = %s.\n", twoSidedLighting?"TRUE":"FALSE");
             )
 
@@ -1133,7 +1133,7 @@ bool TriangleSetup::cullFaceTest(u32bit triangleID, u32bit setupID, f64bit &tAre
     /*  Ask for the triangle signed area.  */
     tArea = rastEmu.triangleArea(setupID);
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("TriangleSetup => Triangle ID %d with area %f\n", triangleID, tArea);
     )
 
@@ -1160,7 +1160,7 @@ bool TriangleSetup::cullFaceTest(u32bit triangleID, u32bit setupID, f64bit &tAre
                 all the triangles can be rasterized.  */
                 rastEmu.invertTriangleFacing(setupID);
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("TriangleSetup => Cull NONE.  Inverting back facing triangle ID %d.\n", triangleID);
                 )
 
@@ -1182,7 +1182,7 @@ bool TriangleSetup::cullFaceTest(u32bit triangleID, u32bit setupID, f64bit &tAre
                 /*  Destroy the triangle in the rasterizer emulator.  */
                 rastEmu.destroyTriangle(setupID);
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("TriangleSetup => Cull FRONT.  Culling front facing triangle ID %d.\n", triangleID);
                 )
             }
@@ -1195,7 +1195,7 @@ bool TriangleSetup::cullFaceTest(u32bit triangleID, u32bit setupID, f64bit &tAre
                 /*  Do not drop back facing triangles.  */
                 dropTriangle = FALSE;
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("TriangleSetup => Cull FRONT.  Inverting back facing triangle ID %d.\n", triangleID);
                 )
             }
@@ -1214,7 +1214,7 @@ bool TriangleSetup::cullFaceTest(u32bit triangleID, u32bit setupID, f64bit &tAre
                 /*  Destroy the triangle in the rasterizer emulator.  */
                 rastEmu.destroyTriangle(setupID);
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("TriangleSetup => Cull BACK.  Culling back facing triangle ID %d.\n", triangleID);
                 )
             }
@@ -1234,7 +1234,7 @@ bool TriangleSetup::cullFaceTest(u32bit triangleID, u32bit setupID, f64bit &tAre
             /*  Destroy the triangle in the rasterizer emulator.  */
             rastEmu.destroyTriangle(setupID);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Cull FRONT_AND_BACK.  Culling triangle ID %d\n", triangleID);
             )
 
@@ -1308,7 +1308,7 @@ void TriangleSetup::sendTriangles(u64bit cycle)
         /*  Get next setup triangle.  */
         tsOutput = setupFIFO[firstSetupTriangle];
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("TriangleSetup => Sending setup triangle ID %d to Fragment Generation.\n",
                 tsOutput->getTriangleID());
         )
@@ -1380,7 +1380,7 @@ void TriangleSetup::processSetupTriangle(TriangleSetupInput *tsInput, u32bit tri
             /*  Destroy the triangle in the rasterizer emulator.  */
             rastEmu.destroyTriangle(triangleID);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Cull by area.  Culling triangle ID %d with area %f.\n",
                     tsInput->getTriangleID(), tArea);
             )
@@ -1391,7 +1391,7 @@ void TriangleSetup::processSetupTriangle(TriangleSetupInput *tsInput, u32bit tri
         /*  Do no drop the triangle!!.  */
         dropTriangle = FALSE;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("TriangleSetup => Last triangle ID %d\n", tsInput->getTriangleID());
         )
     }
@@ -1418,7 +1418,7 @@ void TriangleSetup::processSetupTriangle(TriangleSetupInput *tsInput, u32bit tri
             /*  Send the last triangle down the pipeline.  */
             tsOutput = new TriangleSetupOutput(tsInput->getTriangleID(), 0, TRUE);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Triangle ID %d marked as last triangle.\n",
                     tsInput->getTriangleID());
             )
@@ -1433,7 +1433,7 @@ void TriangleSetup::processSetupTriangle(TriangleSetupInput *tsInput, u32bit tri
                 emulator.  */
             tsOutput = new TriangleSetupOutput(tsInput->getTriangleID(), triangleID, FALSE);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("TriangleSetup => Triangle ID %d stored in setup FIFO.\n",
                     tsInput->getTriangleID());
             )

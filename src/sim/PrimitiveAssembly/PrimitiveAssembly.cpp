@@ -155,7 +155,7 @@ void PrimitiveAssembly::clock(u64bit cycle)
     u32bit requestV;
     u32bit i;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("PrimitiveAssembly => clock %lld\n", cycle);
     )
 
@@ -179,7 +179,7 @@ void PrimitiveAssembly::clock(u64bit cycle)
         case PAST_RESET:
             /*  Reset state.  */
 
-            GPU_DEBUG_BOX( printf("PrimitiveAssembly => RESET state.\n"); )
+            GPU_DEBUG( printf("PrimitiveAssembly => RESET state.\n"); )
 
             /*  Reset Primitive Assembly state.  */
 
@@ -236,7 +236,7 @@ void PrimitiveAssembly::clock(u64bit cycle)
         case PAST_READY:
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX( printf("PrimitiveAssembly => READY state.\n"); )
+            GPU_DEBUG( printf("PrimitiveAssembly => READY state.\n"); )
 
             /*  Read a new command from the Command Processor. */
             if (assemblyCommand->read(cycle, (DynamicObject *&) paCommand))
@@ -247,9 +247,9 @@ void PrimitiveAssembly::clock(u64bit cycle)
         case PAST_DRAWING:
             /*  Drawing state.  */
 
-            GPU_DEBUG_BOX( printf("PrimitiveAssembly => DRAWING state.\n"); )
+            GPU_DEBUG( printf("PrimitiveAssembly => DRAWING state.\n"); )
 
-            GPU_DEBUG_BOX( printf("PrimitiveAssembly => Stored vertexes %d  Requested vertexes %d.\n",
+            GPU_DEBUG( printf("PrimitiveAssembly => Stored vertexes %d  Requested vertexes %d.\n",
                 storedVertex, requestVertex);
             )
 
@@ -297,7 +297,7 @@ void PrimitiveAssembly::clock(u64bit cycle)
                 /*  Set clip cycle counter.  */
                 clipCycles = clipperStartLat;
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => Last triangle ID %d.\n", triangleCount);
                 )
 
@@ -344,7 +344,7 @@ void PrimitiveAssembly::clock(u64bit cycle)
 //printf("PA %lld => Inserting vertex in assQ entry %d attributes %p\n", cycle, nextFreeEntry,
 //assemblyQueue[nextFreeEntry].attributes);
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => Vertex with index %d received from Streamer Commit.\n",
                         paInput->getID());
                 )
@@ -400,7 +400,7 @@ void PrimitiveAssembly::clock(u64bit cycle)
         case PAST_DRAW_END:
             /*  End of drawing state.  */
 
-            GPU_DEBUG_BOX( printf("PrimitiveAssembly => DRAW_END state.\n"); )
+            GPU_DEBUG( printf("PrimitiveAssembly => DRAW_END state.\n"); )
 
             /*  Wait for END command from the Command Processor.  */
             if (assemblyCommand->read(cycle, (DynamicObject *&) paCommand))
@@ -448,7 +448,7 @@ void PrimitiveAssembly::processCommand(PrimitiveAssemblyCommand *command)
     {
         case PACOM_RESET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => RESET command received.\n");
             )
 
@@ -459,7 +459,7 @@ void PrimitiveAssembly::processCommand(PrimitiveAssemblyCommand *command)
 
         case PACOM_DRAW:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => DRAW command received.\n");
             )
 
@@ -577,7 +577,7 @@ void PrimitiveAssembly::processCommand(PrimitiveAssemblyCommand *command)
 
         case PACOM_END:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => END command received.\n");
             )
 
@@ -593,7 +593,7 @@ void PrimitiveAssembly::processCommand(PrimitiveAssemblyCommand *command)
 
         case PACOM_REG_WRITE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => REGISTER WRITE command received.\n");
             )
 
@@ -624,7 +624,7 @@ void PrimitiveAssembly::processRegisterWrite(GPURegister reg, u32bit subReg,
     {
         case GPU_VERTEX_OUTPUT_ATTRIBUTE:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => Write GPU_VERTEX_OUTPUT_ATTRIBUTE[%d] = %s.\n",
                     subReg, data.booleanVal?"ACTIVE":"DISABLED");
             )
@@ -649,7 +649,7 @@ void PrimitiveAssembly::processRegisterWrite(GPURegister reg, u32bit subReg,
             /*  Store batch/stream vertex count.  */
             streamCount = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => Write GPU_STREAM_COUNT = %d\n",
                     data.uintVal);
             )
@@ -661,7 +661,7 @@ void PrimitiveAssembly::processRegisterWrite(GPURegister reg, u32bit subReg,
             //  Store batch/stream instance count.
             streamInstances = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => Write GPU_STREAM_INSTANCES = %d\n",
                     data.uintVal);
             )
@@ -673,7 +673,7 @@ void PrimitiveAssembly::processRegisterWrite(GPURegister reg, u32bit subReg,
             /*  Change the current primitive mode.  */
             primitiveMode = data.primitive;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => Write GPU_PRIMITIVE = ");
                 switch(data.primitive)
                 {
@@ -735,7 +735,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
         {
             case TRIANGLE:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => New TRIANGLE Primitive.\n");
                 )
 
@@ -760,7 +760,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
 
             case TRIANGLE_STRIP:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => New TRIANGLE_STRIP Primitive.\n");
                 )
 
@@ -805,7 +805,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
 
             case TRIANGLE_FAN:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => New TRIANGLE_FAN Primitive.\n");
                 )
 
@@ -837,7 +837,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
 
                  */
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => New QUAD Primitive.\n");
                 )
 
@@ -897,7 +897,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
 
                  */
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("PrimitiveAssembly => New QUAD_STRIP Primitive.\n");
                 )
 
@@ -978,7 +978,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
             /*  No need to send the culled triangle down the pipeline.
                 Using last triangle to mark end of batch and synchronization.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => Degenerated triangle (ID %d) culled.\n",
                     triangleCount);
             )
@@ -1022,7 +1022,7 @@ void PrimitiveAssembly::assembleTriangle(u64bit cycle)
             /*  Send triangle to clipper.  */
             clipperInput->write(cycle, setupInput);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("PrimitiveAssembly => Triangle (ID %d) sent to the Clipper.\n",
                     triangleCount);
             )

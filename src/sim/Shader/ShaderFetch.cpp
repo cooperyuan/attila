@@ -441,7 +441,7 @@ void ShaderFetch::clock(u64bit cycle)
     u32bit fetchedThreads;
     bool lastVisitedGroupReady;
 
-    GPU_DEBUG_BOX( printf("ShaderFetch >> Clock %lld.\n", cycle); )
+    GPU_DEBUG( printf("ShaderFetch >> Clock %lld.\n", cycle); )
 
 /*if ((cycle > 5024880) && (GPU_MOD(cycle, 1000) == 0))
 {
@@ -986,7 +986,7 @@ numFetchedGroups, numGroups);
     /*  Check if there is a transmission in progress.  */
     if (transInProgress)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderFetch => Transmission in progress Thread = %d Remaining cycles = %d.\n",
                 finThreadList[firstFinThread], transCycles);
         )
@@ -997,7 +997,7 @@ numFetchedGroups, numGroups);
         /*  Check end-of-transmission.  */
         if (transCycles == 0)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Loading new inputs.\n");
             )
 
@@ -1042,7 +1042,7 @@ numFetchedGroups, numGroups);
                 }
                 else
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ShaderFetch => Loading new inputs.\n");
                     )
 
@@ -1060,7 +1060,7 @@ numFetchedGroups, numGroups);
         (lockStep && ((numFreeThreads < (2 * GPU_MAX(inputCycle, threadGroup)) ||
             (freeResources < (2 * GPU_MAX(inputCycle, threadGroup) * maxThreadResources))))))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderFetch >> Sending Busy.\n");
         )
 
@@ -1089,7 +1089,7 @@ numFetchedGroups, numGroups);
     }
     else if (numFreeThreads == numBuffers)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderFetch >> Sending Empty.\n");
         )
 
@@ -1097,7 +1097,7 @@ numFetchedGroups, numGroups);
     }
     else
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderFetch >> Sending Ready (NumFreeThreads: %d).\n", numFreeThreads);
         )
 
@@ -1582,7 +1582,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
             //shEmul.loadShaderProgram(command->getProgramCode(), command->getLoadPC(), command->getProgramCodeSize());
             shEmul.loadShaderProgramLight(command->getProgramCode(), command->getLoadPC(), command->getProgramCodeSize());
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch >> LOAD_PROGRAM Size %d PC %x\n",
                     command->getProgramCodeSize(), command->getLoadPC());
             )
@@ -1613,7 +1613,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
             //  Write a single value in the constant/parameter memory.  Thread field is unused for constant memory.
             shEmul.loadShaderState(0, PARAM, values, firstAddr, command->getNumValues());
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 for (u32bit i = firstAddr; i < lastAddr; i ++)
                     printf("ShaderFetch >> PARAM_WRITE %d = {%f, %f, %f, %f}\n",
                         i, values[i - firstAddr][0], values[i - firstAddr][1],
@@ -1639,7 +1639,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
                 
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => SET_INIT_PC[%d] = %x.\n", command->getShaderTarget(), command->getInitPC());
             )
 
@@ -1678,7 +1678,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
             //  Recalculate max thread resources.
             maxThreadResources = computeMaxThreadResources();
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 char buffer[256];
                 switch(command->getShaderTarget())
                 {
@@ -1723,7 +1723,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
                     panic("ShaderFetch", "processShaderCommand", "Out of range shader input register identifier.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Setting input attribute %d as %s for partition %s\n", command->getAttribute(),
                     command->isAttributeActive()?"ACTIVE":"INACTIVE",
                     (partition == VERTEX_PARTITION)?"VERTEX":((partition == FRAGMENT_PARTITION)?"FRAGMENT":"TRIANGLE"));
@@ -1767,7 +1767,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
                     panic("ShaderFetch", "processShaderCommand", "Out of range shader output register identifier.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Setting output attribute %d as %s for partition %s\n", command->getAttribute(),
                     command->isAttributeActive()?"ACTIVE":"INACTIVE",
                     (partition == VERTEX_PARTITION)?"VERTEX":((partition == FRAGMENT_PARTITION)?"FRAGMENT":"TRIANGLE"));
@@ -1794,7 +1794,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
          
             /*  Set multisampling enabled/disabled.  */
              
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Setting multisampling register: %s\n", command->multisamplingEnabled()?"ENABLED":"DISABLED");
             )
  
@@ -1807,7 +1807,7 @@ void ShaderFetch::processShaderCommand(ShaderCommand *command, u32bit partition)
           
             /*  Set the MSAA number of samples.  */
  
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Setting MSAA samples register: %d\n", command->samplesMSAA()); 
             )
  
@@ -2064,7 +2064,7 @@ void ShaderFetch::processShaderInput(u64bit cycle, ShaderInput *input)
         inputOutAttribs->inc(GPU_MAX(u32bit(1), activeOutputs[PRIMARY_PARTITION]));
     }
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         if (unifiedModel)
             printf("ShaderFetch >> New Shader Input Thread = %d for partition %s\n", newThread,
                 partition==VERTEX_PARTITION?"VERTEX":(partition==FRAGMENT_PARTITION)?"FRAGMENT":"TRIANGLE");
@@ -2094,7 +2094,7 @@ void ShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
     {
         case UNBLOCK_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch(%p) => UNBLOCK_THREAD Thread = %d PC = %x\n",
                     this, numThread, pc);
             )
@@ -2145,7 +2145,7 @@ void ShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case BLOCK_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch(%p) => BLOCK_THREAD Thread = %d PC = %x\n", this, numThread, pc);
             )
 
@@ -2178,7 +2178,7 @@ void ShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
             /*  Finish the thread.  Mark as finished.  Add to finished list.  */
             finishThread(numThread);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch(%p) => END_THREAD Thread = %d PC = %x\n", this, numThread, pc);
             )
 
@@ -2187,7 +2187,7 @@ void ShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case REPEAT_LAST:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch(%p) => REPEAT_LAST Thread = %d PC = %x\n", this, numThread, pc);
             )
 
@@ -2233,7 +2233,7 @@ void ShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
             /*  Change thread PC.  */
             threadTable[numThread].PC = pc;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => NEW_PC Thread = %d PC = %x\n", numThread, pc);
             )
 
@@ -2241,7 +2241,7 @@ void ShaderFetch::processDecodeCommand(ShaderDecodeCommand *decodeCommand)
 
         case ZEXPORT_THREAD:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => ZEXPORT_THREAD Thread = %d PC = %x\n", numThread, pc);
             )
 
@@ -2337,7 +2337,7 @@ void ShaderFetch::fetchInstruction(u64bit cycle, u32bit threadID, ShaderExecInst
         /*  Check if a SIMD instruction was already fetched for the thread.  */
         if (fetchedSIMD && (!shInstr->isScalar()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Ignoring second SIMD instruction fetch.\n");
             )
 
@@ -2355,7 +2355,7 @@ void ShaderFetch::fetchInstruction(u64bit cycle, u32bit threadID, ShaderExecInst
         /*  Check if a scalar instruction was already fetched for the thread.  */
         if (fetchedScalar && shInstr->isScalar())
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderFetch => Ignoring second scalar instruction fetch.\n");
             )
 
@@ -2461,7 +2461,7 @@ void ShaderFetch::sendInstruction(u64bit cycle, u32bit threadID, ShaderExecInstr
     /*  Send instruction to decode/execute box.  */
     instructionSignal->write(cycle, shExecInstr);
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shExecInstr->getShaderInstruction().getShaderInstruction()->disassemble(&dis[0]);
 
         printf("ShaderFetch (%p) => Instruction Fetched Thread = %d PC = %x : %s\n",
@@ -2516,7 +2516,7 @@ void ShaderFetch::sendOutput(u64bit cycle, u32bit outputThread)
     /*  Send data to consumer.  */
     outputSignal->write(cycle, shOutput, transCycles + OUTPUT_DELAY_LATENCY);
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("ShaderFetch => Output sent\n");
         printf("vo[0] = {%f %f %f %f}\n",
             shOutput->getAttributes()[0][0],

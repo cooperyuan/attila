@@ -36,9 +36,6 @@ using gpu3d::tools::Queue;
 
 using namespace gpu3d;
 
-#undef GPU_DEBUG
-#define GPU_DEBUG(expr) if (debugMode) { expr }
-
 /*  Calculates the tag bank for a texture cache address.  */
 #define TAGBANK(address) ((address >> bankShift) & bankMask)
 

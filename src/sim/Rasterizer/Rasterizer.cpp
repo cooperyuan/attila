@@ -257,7 +257,7 @@ void Rasterizer::clock(u64bit cycle)
     RasterizerState ffState;
     int i;
 
-    GPU_DEBUG_BOX( printf("Rasterizer => Clock %lld\n", cycle); )
+    GPU_DEBUG( printf("Rasterizer => Clock %lld\n", cycle); )
 
     /*  Clock all rasterizer boxes.  */
 
@@ -354,7 +354,7 @@ void Rasterizer::clock(u64bit cycle)
         case RAST_RESET:
             /*  The rasterizer is reset state.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => State RESET.\n"); )
+            GPU_DEBUG( printf("Rasterizer => State RESET.\n"); )
 
             /*  Reset Rasterizer registers.  */
             hRes = 400;
@@ -419,7 +419,7 @@ void Rasterizer::clock(u64bit cycle)
             /*  The rasterizer is ready to receive commands from the
                 Command Processor.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => State READY.\n"); )
+            GPU_DEBUG( printf("Rasterizer => State READY.\n"); )
 
             /*  Check if there is an available rasterizer command from the
                 Command Processor.  */
@@ -434,7 +434,7 @@ void Rasterizer::clock(u64bit cycle)
         case RAST_DRAWING:
             /*  The rasterizer is drawing a batch for primitives.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => State DRAWING.\n"); )
+            GPU_DEBUG( printf("Rasterizer => State DRAWING.\n"); )
 
             /*  Check if the rasterizer units has finished the current
                 batch.  */
@@ -452,7 +452,7 @@ void Rasterizer::clock(u64bit cycle)
                 in the current batch.  Waiting for response from the
                 Command Processor.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => State RAST_END.\n"); )
+            GPU_DEBUG( printf("Rasterizer => State RAST_END.\n"); )
 
             /*  Check if there is an available rasterizer command from the
                 Command Processor.  */
@@ -466,7 +466,7 @@ void Rasterizer::clock(u64bit cycle)
 
             /*  Clear state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => State RAST_CLEAR.\n");
             )
 
@@ -483,7 +483,7 @@ void Rasterizer::clock(u64bit cycle)
             /*  The rasterizer has finished clearing the buffers. Waiting
                 for response from the Command Processor.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => State RAST_CLEAR_END.\n"); )
+            GPU_DEBUG( printf("Rasterizer => State RAST_CLEAR_END.\n"); )
 
             /*  Check if there is an available rasterizer command from the
                 Command Processor.  */
@@ -517,7 +517,7 @@ void Rasterizer::processRasterizerCommand(RasterizerCommand *rastComm,
         case RSCOM_RESET:
             /*  Reset the rasterizer.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => RESET Command.\n"); )
+            GPU_DEBUG( printf("Rasterizer => RESET Command.\n"); )
 
             /*  Send reset signal to all rasterizer boxes.  */
 
@@ -584,7 +584,7 @@ void Rasterizer::processRasterizerCommand(RasterizerCommand *rastComm,
                     panic("Rasterizer", "processRasterizerCommand", "Rasterizer register writes can only be received in READY state.");
             )
 
-            GPU_DEBUG_BOX( printf("Rasterizer => REG_WRITE Command.\n"); )
+            GPU_DEBUG( printf("Rasterizer => REG_WRITE Command.\n"); )
 
             /*  Process the rasterizer register write.  */
             processRegisterWrite(rastComm->getRegister(),
@@ -599,7 +599,7 @@ void Rasterizer::processRasterizerCommand(RasterizerCommand *rastComm,
         case RSCOM_DRAW:
             /*  Start drawing primitives.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => DRAW Command.\n"); )
+            GPU_DEBUG( printf("Rasterizer => DRAW Command.\n"); )
 
             /*  Check the current state.  */
             GPU_ASSERT(
@@ -665,7 +665,7 @@ void Rasterizer::processRasterizerCommand(RasterizerCommand *rastComm,
         case RSCOM_END:
             /*  End drawing primitives.  */
 
-            GPU_DEBUG_BOX( printf("Rasterizer => END Command.\n"); )
+            GPU_DEBUG( printf("Rasterizer => END Command.\n"); )
 
             /*  Check current state.  */
             if (state == RAST_END)
@@ -780,7 +780,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write display horizontal resolution register.  */
             hRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_DISPLAY_X_RES = %d.\n", hRes);
             )
 
@@ -825,7 +825,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write display vertical resolution register.  */
             vRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_DISPLAY_Y_RES = %d.\n", vRes);
             )
 
@@ -872,7 +872,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             
             d3d9PixelCoordinates = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_D3D9_PIXEL_COORDINATES = %s\n", d3d9PixelCoordinates ? "TRUE" : "FALSE");
             )
             
@@ -894,7 +894,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the viewport initial x coordinate.  */
             viewportIniX = data.intVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_VIEWPORT_INI_X = %d.\n", data.intVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_VIEWPORT_INI_X = %d.\n", data.intVal); )
 
 
             /*  Send register write to Triangle Setup.  */
@@ -938,7 +938,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the viewport initial y coordinate.  */
             viewportIniY = data.intVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_VIEWPORT_INI_Y = %d.\n", data.intVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_VIEWPORT_INI_Y = %d.\n", data.intVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -981,7 +981,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the viewport height register.  */
             viewportHeight = data.uintVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_VIEWPORT_HEIGHT = %d.\n", data.uintVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_VIEWPORT_HEIGHT = %d.\n", data.uintVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1024,7 +1024,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the viewport width register.  */
             viewportWidth = data.uintVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_VIEWPORT_WIDTH = %d.\n", data.uintVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_VIEWPORT_WIDTH = %d.\n", data.uintVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1067,7 +1067,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the scissor test enable falg.  */
             scissorTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_SCISSOR_TEST = %s.\n", scissorTest?"TRUE":"FALSE");
             )
 
@@ -1100,7 +1100,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the scissor initial x position register.  */
             scissorIniX = data.intVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_SCISSOR_INIT_X = %d.\n", data.intVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_SCISSOR_INIT_X = %d.\n", data.intVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1131,7 +1131,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the scissor initial y position register.  */
             scissorIniY = data.intVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_SCISSOR_INIT_Y = %d.\n", data.intVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_SCISSOR_INIT_Y = %d.\n", data.intVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1162,7 +1162,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the scissor width register.  */
             scissorWidth = data.uintVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_SCISSOR_WIDTH = %d.\n", data.uintVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_SCISSOR_WIDTH = %d.\n", data.uintVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1193,7 +1193,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the scissor height register.  */
             scissorHeight = data.uintVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_SCISSOR_HEIGHT = %d.\n", data.uintVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_SCISSOR_HEIGHT = %d.\n", data.uintVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1224,7 +1224,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the near depth range register.  */
             nearRange = data.f32Val;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_DEPTH_RANGE_NEAR = %f.\n", data.f32Val); )
+            GPU_DEBUG( printf("Rasterizer => GPU_DEPTH_RANGE_NEAR = %f.\n", data.f32Val); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1243,7 +1243,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the far depth range register.  */
             nearRange = data.f32Val;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_DEPTH_RANGE_FAR = %f.\n", data.f32Val); )
+            GPU_DEBUG( printf("Rasterizer => GPU_DEPTH_RANGE_FAR = %f.\n", data.f32Val); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1263,7 +1263,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write the D3D9 depth range in clip space register.
             d3d9DepthRange = data.booleanVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_D3D9_DEPTH_RANGE = %s.\n", data.booleanVal ? "T" : "F"); )
+            GPU_DEBUG( printf("Rasterizer => GPU_D3D9_DEPTH_RANGE = %s.\n", data.booleanVal ? "T" : "F"); )
 
             //  Send register write to Triangle Setup.
 
@@ -1282,7 +1282,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the depth slope factor register.  */
             slopeFactor = data.f32Val;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_DEPTH_SLOPE_FACTOR = %f.\n", data.f32Val); )
+            GPU_DEBUG( printf("Rasterizer => GPU_DEPTH_SLOPE_FACTOR = %f.\n", data.f32Val); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1301,7 +1301,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the depth unit offset register.  */
             unitOffset = data.f32Val;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_DEPTH_UNIT_OFFSET = %f.\n", data.f32Val); )
+            GPU_DEBUG( printf("Rasterizer => GPU_DEPTH_UNIT_OFFSET = %f.\n", data.f32Val); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1320,7 +1320,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth clear value.  */
             clearDepth = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_Z_BUFFER_CLEAR = %x.\n", clearDepth);
             )
 
@@ -1343,7 +1343,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the z buffer bit precisison register.  */
             zBufferBitPrecission = data.uintVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_Z_BUFFER_BIT_PRECISSION = %d.\n", data.uintVal); )
+            GPU_DEBUG( printf("Rasterizer => GPU_Z_BUFFER_BIT_PRECISSION = %d.\n", data.uintVal); )
 
             /*  Send register write to Triangle Setup.  */
 
@@ -1376,7 +1376,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
 
             hzEnable = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Writing register GPU_HIERARCHICALZ = %s.\n",
                     hzEnable?"TRUE":"FALSE");
             )
@@ -1401,7 +1401,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
 
             earlyZ = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Writing register GPU_EARLYZ = %s.\n",
                     earlyZ?"TRUE":"FALSE");
             )
@@ -1427,7 +1427,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             userClip[subreg][2] = data.qfVal[2];
             userClip[subreg][3] = data.qfVal[3];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_USER_CLIP(%d) = (%f, %f, %f, %f).\n",
                     subreg, data.qfVal[0], data.qfVal[1], data.qfVal[2], data.qfVal[3]);
             )
@@ -1438,7 +1438,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write user clip mode enable register.  */
             userClipPlanes = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_USER_CLIP_PLANE = %s.\n",
                     data.booleanVal?"TRUE":"FALSE");
             )
@@ -1449,7 +1449,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the face mode register.  */
             faceMode = data.faceMode;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_FACEMODE = ");
                 switch(data.culling)
                 {
@@ -1480,7 +1480,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the culling mode register.  */
             cullMode = data.culling;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_CULLING = ");
                 switch(data.culling)
                 {
@@ -1521,7 +1521,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write use D3D9 rasterization rules register.
             d3d9RasterizationRules = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_D3D9_RASTERIZATION_RULES = %s\n", data.booleanVal?"ENABLED":"DISABLED");
             )
 
@@ -1543,7 +1543,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write two sided color selection register.  */
             twoSidedLighting = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_TWOSIDED_LIGHTING = %s\n", data.booleanVal?"ENABLED":"DISABLED");
             )
 
@@ -1565,7 +1565,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write Multisampling enable flag.
             multisampling = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_MULTISAMPLING = %s\n", multisampling?"TRUE":"FALSE");
             )
                        
@@ -1599,7 +1599,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write MSAA z samples per fragment register.
             msaaSamples = data.uintVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_MSAA_SAMPLES = %d\n", msaaSamples);
             )
 
@@ -1636,7 +1636,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
                     panic("Rasterizer", "processRegisterWrite", "Out of range fragment attribute identifier.");
             )
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_INTERPOLATION = %s.\n",
                     data.booleanVal?"TRUE":"FALSE");
             )
@@ -1701,7 +1701,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write modify depth register.  */
             modifyDepth = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_MODIFY_FRAGMENT_DEPTH = %s\n",
                     data.booleanVal?"TRUE":"FALSE");
             )
@@ -1723,7 +1723,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the frustum clipping flag register.  */
             frustumClipping = data.booleanVal;
 
-            GPU_DEBUG_BOX( printf("Rasterizer => GPU_FRUSTUM_CLIPPING = %s.\n",
+            GPU_DEBUG( printf("Rasterizer => GPU_FRUSTUM_CLIPPING = %s.\n",
                 data.booleanVal?"ENABLE":"DISABLED"); )
 
             break;
@@ -1733,7 +1733,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the stencil test enable flag register.  */
             stencilTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_STENCIL_TEST = %s.\n", data.booleanVal?"ENABLED":"DISABLED");
             )
 
@@ -1755,7 +1755,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the depth test enable flag register.  */
             depthTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_DEPTH_TEST = %s.\n", data.booleanVal?"ENABLED":"DISABLED");
             )
 
@@ -1778,7 +1778,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth compare function register.  */
             depthFunction = data.compare;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => Write GPU_DEPTH_FUNCTION = ");
 
                 switch(depthFunction)
@@ -1838,7 +1838,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write the render target enable register.
             rtEnable[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_RENDER_TARGET_ENABLE[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1860,7 +1860,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write the red component color write mask register.
             colorMaskR[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_COLOR_MASK_R[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1882,7 +1882,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write the green component color write mask register.
             colorMaskG[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_COLOR_MASK_G[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1904,7 +1904,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write the blue component color write mask register.
             colorMaskB[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_COLOR_MASK_B[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 
@@ -1926,7 +1926,7 @@ void Rasterizer::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write the alpha component color write mask register.
             colorMaskA[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Rasterizer => GPU_COLOR_MASK_A[%d] = %s.\n", subreg, data.booleanVal?"TRUE":"FALSE");
             )
 

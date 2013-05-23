@@ -2857,7 +2857,7 @@ void GPUEmulator::processRegisterWrite(GPURegister gpuReg, u32bit gpuSubReg, GPU
         case GPU_TEXTURE_NON_NORMALIZED:
 
             GPU_DEBUG(
-                printf("Write GPU_TEXTURE_NON_NORMALIZED[%d] = ", gpuSubReg, gpuData.booleanVal ? "T" , "F");
+                printf("Write GPU_TEXTURE_NON_NORMALIZED[%d] = %d\n", gpuSubReg, gpuData.booleanVal ? "T" :"F");
             )
 
             //  Write texture non-normalized coordinates register.

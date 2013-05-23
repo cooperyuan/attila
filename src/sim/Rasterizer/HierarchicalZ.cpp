@@ -246,7 +246,7 @@ void HierarchicalZ::clock(u64bit cycle)
     u32bit i;
     u32bit j;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("HierarchicalZ => Clock %lld.\n", cycle);
     )
 
@@ -274,7 +274,7 @@ void HierarchicalZ::clock(u64bit cycle)
     {
         if (hzUpdate[i]->read(cycle, (DynamicObject *&) blockUpdate))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Received update request for block %x from Z Stencil Test unit %d with value %08x.\n",
                     blockUpdate->getBlockAddress(), i, blockUpdate->getBlockZ());
             )
@@ -298,7 +298,7 @@ void HierarchicalZ::clock(u64bit cycle)
         {
             case HZ_READ:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("HierarchicalZ => Received HZ Buffer read request for block %x.\n",
                         hzOperation->getAddress());
                 )
@@ -317,7 +317,7 @@ void HierarchicalZ::clock(u64bit cycle)
 
             case HZ_WRITE:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("HierarchicalZ => Received HZ Buffer write request for block %x <- %x.\n",
                         hzOperation->getAddress(), hzOperation->getData());
                 )
@@ -340,7 +340,7 @@ void HierarchicalZ::clock(u64bit cycle)
     {
         case RAST_RESET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => RESET state.\n");
             )
 
@@ -395,7 +395,7 @@ void HierarchicalZ::clock(u64bit cycle)
 
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => READY state.\n");
             )
 
@@ -412,7 +412,7 @@ void HierarchicalZ::clock(u64bit cycle)
             /*  Check end of the batch.  */
             if (lastFragment && (freeHZQE == hzQueueSize) && (ffState == FFIFO_READY))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("HierarchicalZ => Sending LAST FRAGMENT to Fragment FIFO.\n");
                 )
 
@@ -446,7 +446,7 @@ void HierarchicalZ::clock(u64bit cycle)
                 //  Search the stamp block in the HZ cache.  */
                 if (searchHZCache(hzQueue[nextRead].block[hzQueue[nextRead].currentBlock], cacheEntry))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("HierarchicalZ => Block %x for stamp at %d found at %d.\n",
                             hzQueue[nextRead].block[hzQueue[nextRead].currentBlock], nextRead, cacheEntry);
                     )
@@ -484,7 +484,7 @@ void HierarchicalZ::clock(u64bit cycle)
                         //  Add a request to the HZ cache.
                         if (insertHZCache(hzQueue[nextRead].block[hzQueue[nextRead].currentBlock], cacheEntry))
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("HierarchicalZ => Read block %x into entry %d for stamp at %d.\n",
                                     hzQueue[nextRead].block[hzQueue[nextRead].currentBlock], cacheEntry, nextRead);
                             )
@@ -536,7 +536,7 @@ void HierarchicalZ::clock(u64bit cycle)
                     /*  Check if the stamp has been culled.  */
                     if (!hzQueue[nextSend].culled)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("HierarchicalZ => Sending stamp at %d to Fragment FIFO.\n", nextSend);
                         )
 
@@ -555,7 +555,7 @@ void HierarchicalZ::clock(u64bit cycle)
                     }
                     else
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("HierarchicalZ => Culling stamp at %d.\n", nextSend);
                         )
 
@@ -611,7 +611,7 @@ void HierarchicalZ::clock(u64bit cycle)
                     //  Check if all the blocks required for the stamp where read.
                     if (hzQueue[nextTest].currentBlock == hzQueue[nextTest].numBlocks)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("HierarchicalZ => Testing stamp at %d.  Block Z (%x) = %x | Stamp Z = %x.\n",
                                 nextTest, hzQueue[nextTest].block[0], hzQueue[nextTest].blockZ, hzQueue[nextTest].stampZ);
                             printf("HZ %lld => hzBlockMask %d block %d cache line offset %d line %d\n", cycle,
@@ -622,7 +622,7 @@ void HierarchicalZ::clock(u64bit cycle)
                         //  Test and cull the stamp.
                         if (!hzCompare(hzQueue[nextTest].stampZ, hzQueue[nextTest].blockZ))
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("HierarchicalZ => Stamp culled.\n");
                             )
 
@@ -650,7 +650,7 @@ void HierarchicalZ::clock(u64bit cycle)
         case RAST_END:
 
             /*  End state.  */
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => END state.\n");
             )
 
@@ -693,7 +693,7 @@ void HierarchicalZ::clock(u64bit cycle)
         case RAST_CLEAR_END:
 
             /*  End state.  */
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => CLEAR_END state.\n");
             )
 
@@ -712,7 +712,7 @@ void HierarchicalZ::clock(u64bit cycle)
     /*  Send stamp queues state to the Triangle Traversal box.  */
     if (freeHZQE > (2 * stampsCycle) )
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("HierarchicalZ => Sending READY.\n");
         )
 
@@ -720,7 +720,7 @@ void HierarchicalZ::clock(u64bit cycle)
     }
     else
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("HierarchicalZ => Sending BUSY.\n");
         )
 
@@ -749,7 +749,7 @@ void HierarchicalZ::processCommand(RasterizerCommand *command)
         case RSCOM_RESET:
             /*  Reset command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => RESET command received.\n");
             )
 
@@ -761,7 +761,7 @@ void HierarchicalZ::processCommand(RasterizerCommand *command)
         case RSCOM_DRAW:
             /*  Draw command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => DRAW command received.\n");
             )
 
@@ -826,7 +826,7 @@ void HierarchicalZ::processCommand(RasterizerCommand *command)
         case RSCOM_END:
             /*  End command received from Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => END command received.\n");
             )
 
@@ -845,7 +845,7 @@ void HierarchicalZ::processCommand(RasterizerCommand *command)
         case RSCOM_CLEAR_ZSTENCIL_BUFFER:
             /*  Clear HZ buffer command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => CLEAR_ZSTENCIL_BUFFER command received.\n");
             )
 
@@ -865,7 +865,7 @@ void HierarchicalZ::processCommand(RasterizerCommand *command)
         case RSCOM_REG_WRITE:
             /*  Write register command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => REG_WRITE command received.\n");
             )
 
@@ -897,7 +897,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write display horizontal resolution register.  */
             hRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_DISPLAY_X_RES = %d.\n", hRes);
             )
 
@@ -907,7 +907,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write display vertical resolution register.  */
             vRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_DISPLAY_Y_RES = %d.\n", vRes);
             )
 
@@ -917,7 +917,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport initial x coordinate register.  */
             startX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_INI_X = %d.\n", startX);
             )
 
@@ -927,7 +927,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport initial y coordinate register.  */
             startY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_INI_Y = %d.\n", startY);
             )
 
@@ -937,7 +937,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport width register.  */
             width = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_WIDTH = %d.\n", width);
             )
 
@@ -947,7 +947,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write viewport height register.  */
             height = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_VIEWPORT_HEIGHT = %d.\n", height);
             )
 
@@ -957,7 +957,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor test enable flag.  */
             scissorTest = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_SCISSOR_TEST = %s.\n", scissorTest?"TRUE":"FALSE");
             )
 
@@ -967,7 +967,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor left most X coordinate.  */
             scissorIniX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_SCISSOR_INI_X = %d.\n", scissorIniX);
             )
 
@@ -977,7 +977,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor bottom most Y coordinate.  */
             scissorIniY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_SCISSOR_INI_Y = %d.\n", scissorIniY);
             )
 
@@ -987,7 +987,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor width regsiter.  */
             scissorWidth = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_SCISSOR_WIDTH = %d.\n", scissorWidth);
             )
 
@@ -997,7 +997,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write scissor height register.  */
             scissorHeight = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_SCISSOR_HEIGHT = %d.\n", scissorHeight);
             )
 
@@ -1007,7 +1007,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth clear value.  */
             clearDepth = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_Z_BUFFER_CLEAR = %x.\n", clearDepth);
             )
 
@@ -1019,7 +1019,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
 
             zBufferPrecission = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Writing register GPU_Z_BUFFER_BIT_PRECISSION = %d.\n",
                     zBufferPrecission);
             )
@@ -1032,7 +1032,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
 
             hzEnabled = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Writing register GPU_HIERARCHICALZ = %s.\n",
                     hzEnabled?"TRUE":"FALSE");
             )
@@ -1044,7 +1044,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write fragment shader modifies depth flag.  */
             modifyDepth = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Writing register GPU_MODIFY_FRAGMENT_DEPTH = %s.\n",
                     modifyDepth?"TRUE":"FALSE");
             )
@@ -1056,7 +1056,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth compare function register.  */
             depthFunction = data.compare;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_DEPTH_FUNCTION = ");
 
                 switch(depthFunction)
@@ -1105,7 +1105,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write Multisampling enable flag.
             multisampling = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_MULTISAMPLING = %s\n", multisampling?"TRUE":"FALSE");
             )
                        
@@ -1116,7 +1116,7 @@ void HierarchicalZ::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write MSAA z samples per fragment register.
             msaaSamples = data.uintVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("HierarchicalZ => Write GPU_MSAA_SAMPLES = %d\n", msaaSamples);
             )
 
@@ -1200,7 +1200,7 @@ void HierarchicalZ::receiveStamps(u64bit cycle)
                         /*  Determine if the fragment is inside the current viewport.  */
                         if ((x >= scissorMinX) && (x < scissorMaxX) && (y >= scissorMinY) && (y < scissorMaxY))
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("HierarchicalZ => Fragment %d in received stamp at (%d, %d) inside scissor box.\n",
                                     j, x, y);
                             )
@@ -1213,7 +1213,7 @@ void HierarchicalZ::receiveStamps(u64bit cycle)
                         }
                         else
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("HierarchicalZ => Fragment %d in received stamp at (%d, %d) outside scissor box.  Set fragment as culled.\n",
                                     j, x, y);
                             )
@@ -1230,7 +1230,7 @@ void HierarchicalZ::receiveStamps(u64bit cycle)
                     }
                     else
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("HierarchicalZ => Fragment %d in received stamp outside triangle.  Set fragment as culled.\n",
                                 j, x, y);
                         )
@@ -1249,7 +1249,7 @@ void HierarchicalZ::receiveStamps(u64bit cycle)
                 /*  Check if the whole stamp can be culled.  */
                 if (!cullStamp)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("HierarchicalZ => Adding stamp at %d\n", nextFree);
                     )
 
@@ -1326,7 +1326,7 @@ void HierarchicalZ::receiveStamps(u64bit cycle)
                 }
                 else
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("HierarchicalZ => Culling whole stamp.\n");
                     )
 

@@ -255,7 +255,7 @@ void ZStencilTestV2::postCacheUpdate(u64bit cycle)
     //  Check updates for Hierarchical Z from the Z cache.
     if ((!disableHZUpdate) && zCache->updateHZ(hzBlock, hzBlockZ))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ZStencilTest => Sending update to Hierarchical Z.  Block %x Z %x\n",
                 hzBlock, hzBlockZ);
         )
@@ -422,7 +422,7 @@ void ZStencilTestV2::operateStamp(u64bit cycle, ROPQueue *stamp)
         }
     }
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
     //if ((stamp->stamp[0]->getFragment()->getX() == 0) && (stamp->stamp[0]->getFragment()->getY() == 144))
     //{
         cout << "<< ZStencilTestV2::operateStamp >>" << endl;
@@ -572,7 +572,7 @@ void ZStencilTestV2::operateStamp(u64bit cycle, ROPQueue *stamp)
         }
     }
     
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
     //if ((stamp->stamp[0]->getFragment()->getX() == 0) && (stamp->stamp[0]->getFragment()->getY() == 144))
     //{
         cout << "<< ZStencilTestV2::operateStamp >>" << endl;
@@ -769,7 +769,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_RESET:
             //  Reset command from the Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RESET command received.\n", getName());
             )
 
@@ -781,7 +781,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_DRAW:
             //  Draw command from the Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => DRAW command received.\n", getName(), cycle);
             )
 
@@ -826,7 +826,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_END:
             //  End command received from Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => END command received.\n", getName());
             )
 
@@ -844,7 +844,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
         case RSCOM_REG_WRITE:
             //  Write register command from the Rasterizer main box.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => REG_WRITE command received.\n", getName());
             )
 
@@ -865,7 +865,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
             
             //  DUMP BUFFER command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => DUMP_BUFFER command received.\n", getName());
             )
 
@@ -886,7 +886,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
        case RSCOM_FLUSH:
             //  Flush Z Stencil caches command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => FLUSH command received.\n", getName());
             )
 
@@ -907,7 +907,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
        case RSCOM_SAVE_STATE:
             //  Save state Z Stencil caches command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => SAVE_STATE command received.\n", getName());
             )
 
@@ -928,7 +928,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
        case RSCOM_RESTORE_STATE:
             //  Restore state Z Stencil caches command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RESTORE_STATE command received.\n", getName());
             )
 
@@ -949,7 +949,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
        case RSCOM_RESET_STATE:
             //  Reset block state Z Stencil caches command.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RESET_STATE command received.\n", getName());
             )
 
@@ -976,7 +976,7 @@ void ZStencilTestV2::processCommand(RasterizerCommand *command, u64bit cycle)
             //  AT THE SAME TIME
             //
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => CLEAR_ZSTENCIL_BUFFER command received.\n", getName());
             )
 
@@ -1011,7 +1011,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write display horizontal resolution register.
             hRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DISPLAY_X_RES = %d.\n", getName(), hRes);
             )
 
@@ -1021,7 +1021,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write display vertical resolution register.
             vRes = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DISPLAY_Y_RES = %d.\n", getName(), vRes);
             )
 
@@ -1031,7 +1031,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport initial x coordinate register.
             startX = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_VIEWPORT_INI_X = %d.\n", getName(), startX);
             )
 
@@ -1041,7 +1041,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport initial y coordinate register.
             startY = data.intVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_VIEWPORT_INI_Y = %d.\n", getName(), startY);
             )
 
@@ -1051,7 +1051,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport width register.
             width = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_VIEWPORT_WIDTH = %d.\n", getName(), width);
             )
 
@@ -1061,7 +1061,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write viewport height register.
             height = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_VIEWPORT_HEIGHT = %d.\n", getName(), height);
             )
 
@@ -1072,7 +1072,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write depth clear value.
             clearDepth = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_Z_BUFFER_CLEAR = %x.\n", getName(), clearDepth);
             )
 
@@ -1083,7 +1083,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write stencil clear value.
             clearStencil = (u8bit) (data.uintVal & 0xff);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_BUFFER_CLEAR = %x.\n", getName(), clearStencil);
             )
 
@@ -1094,7 +1094,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write z buffer bit precission register.
             depthPrecission = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_Z_BUFFER_BIT_PRECISSION = %x.\n", getName(), depthPrecission);
             )
 
@@ -1110,7 +1110,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set ROP data buffer address.
             bufferAddress[0] = zBuffer;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_ZSTENCILBUFFER_ADDR = %08x.\n", getName(), zBuffer);
             )
 
@@ -1124,7 +1124,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set block state buffer address in the z cache.
             zCache->setStateAddress(stateBufferAddress);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_ZSTENCIL_STATE_BUFFER_MEM_ADDR = %x\n", getName(), stateBufferAddress);
             )
 
@@ -1135,7 +1135,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write Multisampling enable flag.
             multisampling = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_MULTISAMPLING = %s\n", getName(), multisampling?"TRUE":"FALSE");
             )
             
@@ -1152,7 +1152,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write MSAA z samples per fragment register.
             msaaSamples = data.uintVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_MSAA_SAMPLES = %d\n", getName(), msaaSamples);
             )
 
@@ -1169,7 +1169,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write fragment shader modifies depth flag.
             modifyDepth = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_MODIFY_FRAGMENT_DEPTH = %s\n", getName(), modifyDepth?"TRUE":"FALSE");
             )
 
@@ -1183,7 +1183,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Update bypass ROP flag.
             bypassROP[0] = !(zTest || stencilTest);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_TEST = %s.\n", getName(), stencilTest?"TRUE":"FALSE");
             )
 
@@ -1194,7 +1194,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write Stencil function register.
             stencilFunction = data.compare;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_FUNCTION = ", getName());
 
                 switch(stencilFunction)
@@ -1243,7 +1243,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write stencil reference value register.
             stencilReference = (u8bit) (data.uintVal & 0xff);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_REFERENCE = %x.\n", getName(), stencilReference);
             )
 
@@ -1254,7 +1254,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write stencil compare mask.
             stencilTestMask = (u8bit) (data.uintVal & 0xff);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_COMPARE_MASK = %x.\n", getName(), stencilTestMask);
             )
 
@@ -1265,7 +1265,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write stencil update mask.
             stencilUpdateMask = (u8bit) (data.uintVal & 0xff);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_UPDATE_MASK = %x.\n", getName(), stencilUpdateMask);
             )
 
@@ -1276,7 +1276,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write stencil fail update function.
             stencilFail = data.stencilUpdate;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_STENCIL_FAIL_UPDATE = ", getName());
 
                 switch(stencilFail)
@@ -1326,7 +1326,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write depth fail update function.
             depthFail = data.stencilUpdate;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DEPTH_FAIL_UPDATE = ", getName());
 
                 switch(depthFail)
@@ -1376,7 +1376,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write depth pass stencil update function.
             depthPass = data.stencilUpdate;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DEPTH_PASS_UPDATE = ", getName());
 
                 switch(depthPass)
@@ -1429,7 +1429,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Update bypass ROP flag.
             bypassROP[0] = !(zTest || stencilTest);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DEPTH_TEST = %s.\n", getName(), zTest?"TRUE":"FALSE");
             )
 
@@ -1440,7 +1440,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write depth compare function register.
             depthFunction = data.compare;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DEPTH_FUNCTION = ", getName());
 
                 switch(depthFunction)
@@ -1490,7 +1490,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Write depth update mask register.
             depthMask = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_DEPTH_MASK = %s.\n", getName(), depthMask?"TRUE":"FALSE");
             )
 
@@ -1504,7 +1504,7 @@ void ZStencilTestV2::processRegisterWrite(GPURegister reg, u32bit subreg,
             //  Set color compression flag in the Z Stencil Cache.
             zCache->setCompression(compression);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_ZSTENCIL_COMPRESSION = %s\n", getName(), compression ? "TRUE" : "FALSE");
             )
             

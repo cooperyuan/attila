@@ -401,7 +401,7 @@ void TextureUnit::clock(u64bit cycle)
         Only one command per cycle can be recieved.  The Command
         Processor shouldn't send commands if the Texture Unit is busy.  */
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s >> Clock %lld.\n", getName(), cycle);
     )
 
@@ -432,7 +432,7 @@ void TextureUnit::clock(u64bit cycle)
     /*  Check if a line was filled in the texture cache.  */
     if (lineFilled || (pendingMoveToReady > 0))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s %lld => Received line filled for tag %llx.\n", getName(), cycle, filledLineTag);
         )
 
@@ -476,7 +476,7 @@ void TextureUnit::clock(u64bit cycle)
                     readyReadQ[nextFreeReadyRead].access = waitAccess;
                     readyReadQ[nextFreeReadyRead].trilinear = waitTrilinear;
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Moving trilinear element (%d, %d) from wait read window %d (order %d) to ready read queue %d\n",
                             getName(), waitAccess, waitTrilinear, waitReadQ[i], i, nextFreeReadyRead);
                     )
@@ -590,7 +590,7 @@ cycle, numFreeFilters, numToFilter, numFiltered);
     /*  Check if shader state is reset.  */
     if (state == SH_RESET)
     {
-        GPU_DEBUG_BOX( printf("%s => RESET state.\n", getName()); )
+        GPU_DEBUG( printf("%s => RESET state.\n", getName()); )
 
         /*  Set default register values.  */
         for (i = 0; i < MAX_TEXTURES; i++)
@@ -716,7 +716,7 @@ cycle, numFreeFilters, numToFilter, numFiltered);
     }
     else
     {
-        GPU_DEBUG_BOX( printf("%s => READY state.\n", getName()); )
+        GPU_DEBUG( printf("%s => READY state.\n", getName()); )
 
         /*  Send back texture accesses result to the Shader Decode Execute unit.  */
         sendTextureSample(cycle);
@@ -779,7 +779,7 @@ void TextureUnit::calculateAddress(u64bit cycle)
         /*  Get pointer to the next texture access for which to calculate addresses.  */
         addressAccess = calcTexAccessQ[nextCalcTexAcc];
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Starting address calculation of trilinear access %d for texture access at %d\n",
                 getName(), texAccessQ[addressAccess]->currentAnisoSample, addressAccess);
         )
@@ -827,7 +827,7 @@ void TextureUnit::calculateAddress(u64bit cycle)
             /*  Update pointer to the next texture access waiting to be fetched.  */
             lastFetchTexAcc = GPU_MOD(lastFetchTexAcc + 1, accessQueueSize);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Texture Address calculated : \n", getName());
                 printTextureAccessInfo(texAccessQ[addressAccess]);
             )
@@ -856,7 +856,7 @@ void TextureUnit::calculateAddress(u64bit cycle)
     if (addressALUOutput->read(cycle, (DynamicObject *&) aluOp))
     {
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => End of trilinear sample address calculation.\n", getName());
         )
 
@@ -912,7 +912,7 @@ void TextureUnit::fetch(u64bit cycle)
         /*  Get pointer to the next trilinear sample for the texture access to fetch.  */
         nextTrilinear =  texAccessQ[fetchAccess]->nextTrilinearFetch;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Fetching data for trilinear element %d of texture access at %d\n", getName(), nextTrilinear, fetchAccess);
         )
 
@@ -1029,7 +1029,7 @@ GPU_TEX_TRACE(
 )
                 /*  A whole trilinear element has been fetched.  */
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => End of fetch for trilinear sample %d for texture access at %d\n",
                         getName(), nextTrilinear, fetchAccess);
                 )
@@ -1048,7 +1048,7 @@ GPU_TEX_TRACE(
                     readyReadQ[nextFreeReadyRead].access = fetchAccess;
                     readyReadQ[nextFreeReadyRead].trilinear = nextTrilinear;
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Adding trilinear element to the ready read queue entry %d\n",
                             getName(), nextFreeReadyRead);
                     )
@@ -1067,7 +1067,7 @@ GPU_TEX_TRACE(
                     /*  Get the next free entry in the wait read window.  */
                     waitReadEntry = freeWaitReadQ[nextFreeWaitRead];
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Adding trilinear element to be wait read window entry %d (order %d)\n",
                             getName(), waitReadEntry, numWaitReads);
                     )
@@ -1096,7 +1096,7 @@ GPU_TEX_TRACE(
 GPU_TEX_TRACE(
     texAddrTrace << "EndTexAccess" << endl;
 )
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => End of fetch for for texture access at %d\n", getName(), fetchAccess);
                     )
 
@@ -1168,7 +1168,7 @@ void TextureUnit::read(u64bit cycle)
         /*  Get pointer to the next trilinear sample to read in the texture access.  */
         nextTrilinear = readyReadQ[nextReadyRead].trilinear;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Reading data for trilinear element %d from texture access at %d.\n",
                 getName(), nextTrilinear, readAccess);
         )
@@ -1267,7 +1267,7 @@ void TextureUnit::read(u64bit cycle)
             /*  Check if all the loops have been finished.  */
             if (lastLoop)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => End of read for trilinear sample %d for texture access at %d\n",
                         getName(), nextTrilinear, readAccess);
                 )
@@ -1323,7 +1323,7 @@ void TextureUnit::filter(u64bit cycle)
             /*  Check there are free entries in the result queue.  */
             if (freeResults > 0)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Adding texture access %d as texture result at %d\n", getName(), filterAccess, nextFreeResult);
                 )
 
@@ -1398,7 +1398,7 @@ void TextureUnit::filter(u64bit cycle)
                 texAccessQ[filterAccess]->trilinear[nextTrilinear]->loops[frag]);
         }
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s (%lld) => Starting filtering of texture access at %d trilinear element %d of %d\n",
                 getName(), cycle, filterAccess, nextTrilinear, texAccessQ[filterAccess]->anisoSamples);
         )
@@ -1429,7 +1429,7 @@ void TextureUnit::filter(u64bit cycle)
     if (filterOutput->read(cycle, (DynamicObject *&) filterOp))
     {
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => End of texture access filtering.\n", getName());
         )
 
@@ -1459,11 +1459,11 @@ void TextureUnit::sendTextureSample(u64bit cycle)
     /*  Check if there is a texture access to be sent.  */
     if (numResults > 0)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s (%lld) => Sending texture result at %d to Shader\n", getName(), cycle, nextResult);
         )
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             QuadFloat *samples;
             samples = textResultQ[nextResult]->getTextSamples();
             printf("%s => Sample TxID %d :\n", getName(), textResultQ[nextResult]->getTextAccessID());
@@ -1500,7 +1500,7 @@ void TextureUnit::processTextureRequest(TextureRequest *txRequest)
             panic("TextureUnit", "processTextureRequest", "No free entry in the texture request queue.");
     )
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Adding texture request at %d\n", getName(), nextFreeRequest);
     )
 
@@ -1548,7 +1548,7 @@ GPU_TEX_TRACE(
         /*  Get next free entry in the texture access queue.  */
         freeAccess = freeTexAccessQ[nextFreeTexAcc];
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Evaluating texture request at %d to be stored in texture queue at %d\n",
                 getName(), nextRequest, freeAccess);
         )
@@ -1593,7 +1593,7 @@ void TextureUnit::processShaderCommand(u64bit cycle, ShaderCommand *command)
             /*  Change to reset state.  */
             state = SH_RESET;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => RESET command received.\n", getName());
             )
 
@@ -1639,7 +1639,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture enable register.  */
             textureEnabled[subReg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_ENABLE[%d] = %s\n",
                     getName(), subReg, data.booleanVal?"TRUE":"FALSE");
             )
@@ -1662,7 +1662,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture mode register.  */
             textureMode[subReg] = data.txMode;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MODE[%d] = ", getName(), subReg);
                 switch(textureMode[subReg])
                 {
@@ -1730,7 +1730,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture address register (per mipmap and texture unit).  */
             textureAddress[textUnit][mipmap][cubemap] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_ADDRESS[%d][%d][%d] = %x\n",
                     getName(), textUnit, mipmap, cubemap, textureAddress[textUnit][mipmap][cubemap]);
             )
@@ -1751,7 +1751,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture width (first mipmap).  */
             textureWidth[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_WIDTH[%d] = %d\n",
                     getName(), subReg, textureWidth[subReg]);
             )
@@ -1774,7 +1774,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture height (first mipmap).  */
             textureHeight[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_HEIGHT[%d] = %d\n",
                     getName(), subReg, textureHeight[subReg]);
             )
@@ -1797,7 +1797,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture width (first mipmap).  */
             textureDepth[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_DEPTH[%d] = %d\n",
                     getName(), subReg, textureDepth[subReg]);
             )
@@ -1820,7 +1820,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture width (log of 2 of the first mipmap).  */
             textureWidth2[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_WIDTH2[%d] = %d\n",
                     getName(), subReg, textureWidth2[subReg]);
             )
@@ -1843,7 +1843,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture height (log 2 of the first mipmap).  */
             textureHeight2[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_HEIGHT2[%d] = %d\n",
                     getName(), subReg, textureHeight2[subReg]);
             )
@@ -1866,7 +1866,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture depth (log of 2 of the first mipmap).  */
             textureDepth2[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_DEPTH2[%d] = %d\n",
                     getName(), subReg, textureDepth2[subReg]);
             )
@@ -1889,7 +1889,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture border register.  */
             textureBorder[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_BORDER[%d] = %d\n",
                     getName(), subReg, textureBorder[subReg]);
             )
@@ -1913,7 +1913,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture format register.  */
             textureFormat[subReg] = data.txFormat;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_FORMAT[%d] = ", getName(), subReg);
 
                 switch(textureFormat[subReg])
@@ -2103,7 +2103,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture reverse register.  */
             textureReverse[subReg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_REVERSE[%d] = %s\n", getName(), subReg,
                     textureReverse[subReg]?"TRUE":"FALSE");
             )
@@ -2126,7 +2126,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture d3d9 color component order register.  */
             textD3D9ColorConv[subReg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_D3D9_COLOR_CONVERSION[%d] = %s\n", getName(), subReg,
                     textD3D9ColorConv[subReg]?"TRUE":"FALSE");
             )
@@ -2149,7 +2149,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture d3d9 u coordinate invert register.  */
             textD3D9VInvert[subReg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_D3D9_V_INV[%d] = %s\n", getName(), subReg,
                     textD3D9VInvert[subReg]?"TRUE":"FALSE");
             )
@@ -2172,7 +2172,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture compression mode register.  */
             textureCompr[subReg] = data.txCompression;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_COMPRESSION[%d] = ", getName(), subReg);
 
                 switch(textureCompr[subReg])
@@ -2237,7 +2237,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             //  Write texture blocking mode register.
             textureBlocking[subReg] = data.txBlocking;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_BLOCKING[%d] = ", getName(), subReg);
 
                 switch(textureBlocking[subReg])
@@ -2277,7 +2277,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             textBorderColor[subReg][2] = data.qfVal[2];
             textBorderColor[subReg][3] = data.qfVal[3];
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_BORDER_COLOR[%d] = {%d, %d, %d, %d}\n",
                     getName(), subReg, textBorderColor[subReg][0], textBorderColor[subReg][1], textBorderColor[subReg][2],
                     textBorderColor[subReg][3]);
@@ -2308,7 +2308,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture wrap in s dimension register.  */
             textureWrapS[subReg] = data.txClamp;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_WRAP_S[%d] = ", getName(), subReg);
 
                 switch(textureWrapS[subReg])
@@ -2358,7 +2358,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture wrap in t dimension register.  */
             textureWrapT[subReg] = data.txClamp;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_WRAP_T[%d] = ", getName(), subReg);
 
                 switch(textureWrapT[subReg])
@@ -2408,7 +2408,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture wrap in r dimension register.  */
             textureWrapR[subReg] = data.txClamp;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_WRAP_R[%d] = ", getName(), subReg);
 
                 switch(textureWrapR[subReg])
@@ -2458,7 +2458,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             //  Write texture non normalized texture coordinates.
             textureNonNormalized[subReg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_NON_NORMALIZED[%d] = ", getName(), subReg, data.booleanVal ? "T" : "F");
             )
 
@@ -2480,7 +2480,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture minification filter register.  */
             textureMinFilter[subReg] = data.txFilter;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MIN_FILTER[%d] = ", getName(), subReg);
 
                 switch(textureMinFilter[subReg])
@@ -2538,7 +2538,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture magnification filter register.  */
             textureMagFilter[subReg] = data.txFilter;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MAG_FILTER[%d] = ", getName(), subReg);
 
                 switch(textureMagFilter[subReg])
@@ -2592,7 +2592,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             //  Write texture enable comparison filter (PCF) register.
             textureEnableComparison[subReg] = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_TEXTURE_ENABLE_COMPARISON[%d] = %s.\n", getName(), subReg, data.booleanVal ? "T" : "F");
             )
 
@@ -2614,7 +2614,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             //  Write texture comparison function (PCF) register.
             textureComparisonFunction[subReg] = data.compare;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_TEXTURE_COMPARISON_FUNCTION[%d] = ", getName(), subReg);
                 switch(data.compare)
                 {
@@ -2673,7 +2673,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             //  Write texture sRGB space to linear space conversion register.
             textureSRGB[subReg] = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Write GPU_TEXTURE_SRGB[%d] = %s.\n", getName(), subReg, data.booleanVal ? "T" : "F");
             )
 
@@ -2695,7 +2695,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture minimum lod register.  */
             textureMinLOD[subReg] = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MIN_LOD[%d] = %f\n",
                     getName(), subReg, textureMinLOD[subReg]);
             )
@@ -2718,7 +2718,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture maximum lod register.  */
             textureMaxLOD[subReg] = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MAX_LOD[%d] = %f\n",
                     getName(), subReg, textureMaxLOD[subReg]);
             )
@@ -2741,7 +2741,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture lod ways register.  */
             textureLODWays[subReg] = data.f32Val;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_LOD_BIAS[%d] = %f\n",
                     getName(), subReg, textureLODWays[subReg]);
             )
@@ -2764,7 +2764,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture minimum mipmap level register.  */
             textureMinLevel[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MIN_LEVEL[%d] = %d\n",
                     getName(), subReg, textureMinLevel[subReg]);
             )
@@ -2787,7 +2787,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture maximum mipmap level register.  */
             textureMaxLevel[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MAX_LEVEL[%d] = %d\n",
                     getName(), subReg, textureMaxLevel[subReg]);
             )
@@ -2811,7 +2811,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture unit lod ways register.  */
             textureUnitLODWays[subReg] = data.f32Val;
  
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXT_UNIT_LOD_BIAS[%d] = %f\n",
                     getName(), subReg, textureUnitLODWays[subReg]);
             )
@@ -2842,7 +2842,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
             /*  Write texture unit max anisotropy register.  */
             maxAnisotropy[subReg] = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Writing register GPU_TEXTURE_MAX_ANISOTROPY[%d] = %d\n",
                     getName(), subReg, maxAnisotropy[subReg]);
             )
@@ -2858,7 +2858,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Vertex attribute to stream buffer map register.
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => Writing register VERTEX_ATTRIBUTE_MAP[%d] = %d\n",
                     getName(), cycle, subReg, data.uintVal);
             )
@@ -2882,7 +2882,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Vertex attribute default value register.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => GPU_VERTEX_ATTRIBUTE_DEFAULT_VALUE[%d] = {%f, %f, %f, %f}.\n",
                     getName(), cycle, subReg, data.qfVal[0], data.qfVal[1], data.qfVal[2], data.qfVal[3]);
             )
@@ -2908,7 +2908,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Stream buffer address.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => GPU_STREAM_ADDRESS[%d] = %x.\n", getName(), cycle, subReg, data.uintVal);
             )
             
@@ -2930,7 +2930,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Stream buffer stride.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                printf("%s (%lld) => GPU_STREAM_STRIDE[%d] = %d.\n", getName(), cycle, subReg, data.uintVal);
             )
 
@@ -2952,7 +2952,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Stream buffer data type.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => GPU_STREAMDATA[%d] = ", getName(), cycle, subReg);
                 switch(data.streamData)
                 {
@@ -3022,7 +3022,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Stream buffer elements.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => GPU_STREAM_ELEMENTS[%d] = %d.\n", getName(), cycle, subReg, data.uintVal);
             )
             
@@ -3050,7 +3050,7 @@ void TextureUnit::processRegisterWrite(u64bit cycle, GPURegister reg, u32bit sub
         
             //  Sets if the color stream must be read using the component order defined by D3D9.
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s (%lld) => GPU_D3D9_COLOR_STREAM[%d] = %s.\n", getName(), cycle, subReg, data.booleanVal? "TRUE" : "FALSE");
             )
 
@@ -3088,7 +3088,7 @@ void TextureUnit::processMemoryTransaction(u64bit cycle, MemoryTransaction *memT
             /*  Received state of the Memory controller.  */
             memoryState = memTrans->getState();
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Memory Controller State = %d\n", getName(), memoryState);
             )
 
@@ -3096,7 +3096,7 @@ void TextureUnit::processMemoryTransaction(u64bit cycle, MemoryTransaction *memT
 
         default:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Memory Transaction to the Texture Cache.\n", getName());
             )
 

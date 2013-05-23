@@ -34,9 +34,6 @@
 
 using namespace gpu3d;
 
-#undef GPU_DEBUG
-#define GPU_DEBUG(expr) if (debugMode) { expr }
-
 /*
  *
  *  This macro is temporaly used to mask statistic gathering for all those fetch caches

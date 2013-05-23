@@ -27,13 +27,6 @@
 
 namespace gpu3d
 {
-
-#ifdef GPU_DEBUG_ON
-    #define GPU_DEBUG_BOX(expr) { expr }
-#else
-    #define GPU_DEBUG_BOX(expr) if (debugMode) { expr }
-#endif
-
 /**
  *
  *  Defines the threshold in cycles that marks when a queue or stage is considered

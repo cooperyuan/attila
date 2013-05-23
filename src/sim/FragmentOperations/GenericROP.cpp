@@ -253,7 +253,7 @@ void GenericROP::clock(u64bit cycle)
     RasterizerCommand *rastComm;
     ROPStatusInfo *consumerStateInfo;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("%s => Clock %lld\n", getName(), cycle);
     )
 
@@ -323,7 +323,7 @@ void GenericROP::clock(u64bit cycle)
 
             //  Reset state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Reset state.\n", getName());
             )
 
@@ -351,7 +351,7 @@ void GenericROP::clock(u64bit cycle)
 
             //  Ready state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Ready state.\n", getName());
             )
 
@@ -368,14 +368,14 @@ void GenericROP::clock(u64bit cycle)
 
             //  Draw state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Drawing state.\n", getName());
             )
 
             //  Check end of the batch.
             if (lastFragment && freeQueue.full() && (memTrans == NULL))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s (%p) => Sending last stamp\n", getName(), this);
                 )
 
@@ -413,7 +413,7 @@ void GenericROP::clock(u64bit cycle)
 
             /*  End of batch state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ZStencilTest => End state.\n");
             )
 
@@ -427,7 +427,7 @@ void GenericROP::clock(u64bit cycle)
 
             /*  Swap buffer state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Swap state.\n", getName());
             )
 
@@ -439,7 +439,7 @@ void GenericROP::clock(u64bit cycle)
 
             //  ROP Flush state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Flush state.\n", getName());
             )
 
@@ -451,7 +451,7 @@ void GenericROP::clock(u64bit cycle)
 
             //  ROP Save State state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Save State state.\n", getName());
             )
 
@@ -477,7 +477,7 @@ void GenericROP::clock(u64bit cycle)
 
             //  ROP Restore State state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Restore State state.\n", getName());
             )
 
@@ -504,7 +504,7 @@ void GenericROP::clock(u64bit cycle)
                    
             //  ROP Reset Block State state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Reset Block State state.\n", getName());
             )
 
@@ -530,7 +530,7 @@ void GenericROP::clock(u64bit cycle)
 
             //  Clear Z and stencil buffer state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Clear state.\n", getName());
             )
 
@@ -550,7 +550,7 @@ void GenericROP::clock(u64bit cycle)
     //    by the ROP stage.
     if (inQueue.items() < (inQueueSize - (2 * stampsCycle)))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Sending READY.\n", getName());
         )
 
@@ -559,7 +559,7 @@ void GenericROP::clock(u64bit cycle)
     }
     else
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Sending BUSY.\n", getName());
         )
 
@@ -674,7 +674,7 @@ void GenericROP::processStamp()
                 //  Get fragment attributes.
                 attrib = stamp[i]->getAttributes();
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     //  Get fragment position.
                     //x = (s32bit) attrib[POSITION_ATTRIBUTE][0];
                     //y = (s32bit) attrib[POSITION_ATTRIBUTE][1];
@@ -687,7 +687,7 @@ void GenericROP::processStamp()
             else
             {
                 //  Fragment culled.
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Received Fragment Culled (%d, %d) Inside? %s.\n",
                         getName(),
                         fr->getX(), fr->getY(),
@@ -715,7 +715,7 @@ void GenericROP::processStamp()
         {
 
             //  Stamp can be culled.
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Culling whole stamp.\n", getName());
             )
 
@@ -765,7 +765,7 @@ void GenericROP::processStamp()
         //  Return the stamp queue object to the free queue.
         freeQueue.add(currentStamp);
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s (%p) => Received last stamp\n", getName(), this);
         )
     }
@@ -778,7 +778,7 @@ void GenericROP::receiveStamps(u64bit cycle)
     bool receivedFragment;
     int i, j;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         cout << getName() << " => Waiting for " << stampsCycle << " stamps" << endl;
     )
 
@@ -800,7 +800,7 @@ void GenericROP::receiveStamps(u64bit cycle)
             //  Check if a fragment has been received.
             if (receivedFragment)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     cout << getName() << " => Received fragment " << j << " for stamp " << i << endl;
                 )
 
@@ -889,7 +889,7 @@ void GenericROP::fetchStamp()
                     //  Check result of the fetch operation.
                     if (fetchResult)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Fetched stamp at %x to cache line (%d, %d) for buffer %d\n", getName(),
                                 currentStamp->address[currentStamp->nextBuffer],
                                 currentStamp->way[currentStamp->nextBuffer],
@@ -960,7 +960,7 @@ void GenericROP::fetchStamp()
                     //  Check result of the allocate operation.
                     if (allocateResult)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Allocating cache line (%d, %d) for stamp at %x buffer %d.\n",
                                 getName(), currentStamp->way[currentStamp->nextBuffer], currentStamp->line[currentStamp->nextBuffer],
                                 currentStamp->address[currentStamp->nextBuffer], currentStamp->nextBuffer);
@@ -1008,7 +1008,7 @@ void GenericROP::fetchStamp()
             //  Check if the written stamp queue is full.
             if (!writeQueue.full())
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Bypassing stamp to the next stage.\n", getName());
                 )
 
@@ -1057,7 +1057,7 @@ void GenericROP::readStamp()
             if ((currentStamp->address[currentStamp->nextBuffer] == rawCAM[i]->address[currentStamp->nextBuffer]) &&
                  (currentStamp != rawCAM[i]))
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("%s => Reading a stamp at %x before writing it.\n", getName(),
                         currentStamp->address[currentStamp->nextBuffer]);
                 )
@@ -1083,7 +1083,7 @@ void GenericROP::readStamp()
                                        STAMP_FRAGMENTS * bytesPixel[currentStamp->nextBuffer],
                                        &currentStamp->data[STAMP_FRAGMENTS * bytesPixel[currentStamp->nextBuffer] * currentStamp->nextBuffer]))
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Reading stamp at %x for buffer %d\n", getName(),
                                 currentStamp->address[currentStamp->nextBuffer], currentStamp->nextBuffer);
                         )
@@ -1147,7 +1147,7 @@ void GenericROP::readStamp()
                                        STAMP_FRAGMENTS * bytesPixel[currentStamp->nextBuffer],
                                        &currentStamp->data[dataOffset]))
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("%s => Reading sample %d for stamp at %x for buffer %d\n", getName(), currentStamp->nextSample,
                                 currentStamp->address[currentStamp->nextBuffer], currentStamp->nextBuffer);
                         )
@@ -1313,7 +1313,7 @@ void GenericROP::endOperation(u64bit cycle)
         //  Delete ROP operation object.
         delete ropOperation;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("%s => Finished ROP operation on stamp.\n", getName());
         )
 
@@ -1358,7 +1358,7 @@ void GenericROP::writeStamp()
                                     &currentStamp->data[currentStamp->nextBuffer * STAMP_FRAGMENTS * bytesPixel[currentStamp->nextBuffer]],
                                     &currentStamp->mask[currentStamp->nextBuffer * STAMP_FRAGMENTS * bytesPixel[currentStamp->nextBuffer]]))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Writing stamp at %x for buffer %d\n", getName(),
                             currentStamp->address[currentStamp->nextBuffer], currentStamp->nextBuffer);
                         printf("%s => Written data :", getName());
@@ -1432,7 +1432,7 @@ void GenericROP::writeStamp()
                                     &currentStamp->data[dataOffset],
                                     &currentStamp->mask[dataOffset]))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("%s => Writing sample %d for stamp at %x for buffer %d\n", getName(),
                             currentStamp->nextSample, currentStamp->address[currentStamp->nextBuffer], currentStamp->nextBuffer);
                     )
@@ -1553,7 +1553,7 @@ void GenericROP::processMemoryTransaction(u64bit cycle,
             //  Received state of the Memory controller.
             memoryState = memTrans->getState();
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Memory Controller State = %d\n", getName(), memoryState);
             )
 
@@ -1561,7 +1561,7 @@ void GenericROP::processMemoryTransaction(u64bit cycle,
 
         default:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("%s => Memory Transaction to the Cache.\n", getName());
             )
 

@@ -200,7 +200,7 @@ void StreamerOutputCache::clock(u64bit cycle)
     u32bit instance;
     u32bit e, ePrev;
 
-    GPU_DEBUG_BOX( printf("StreamerOutputCache => Clock %lld\n", cycle);)
+    GPU_DEBUG( printf("StreamerOutputCache => Clock %lld\n", cycle);)
 /*
 if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
 {
@@ -213,7 +213,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
         case ST_RESET:
             /*  Reset state.  Just reset some structures and go back to ready state.  */
 
-            GPU_DEBUG_BOX( printf("StreamerOutputCache => RESET state.\n"); )
+            GPU_DEBUG( printf("StreamerOutputCache => RESET state.\n"); )
 
             /*  Set all output cache valid bits to FALSE.  */
             for (i = 0; i < outputMemorySize; i++)
@@ -245,7 +245,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
         case ST_READY:
             /*  Ready state.  Just wait for a START command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerOutputCache => READY state.\n"); )
+            GPU_DEBUG( printf("StreamerOutputCache => READY state.\n"); )
 
             /*  Read commands from the main Streamer box.  */
             if (streamerCommand->read(cycle, (DynamicObject *&) streamCom))
@@ -258,7 +258,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
             /*  Streaming state.  Wait for indexes from the Streamer Fetch.
                 Change to ready state when the END command is received.  */
 
-            GPU_DEBUG_BOX( printf("StreamerOutputCache => STREAMING state.\n"); )
+            GPU_DEBUG( printf("StreamerOutputCache => STREAMING state.\n"); )
 
             /*  Read output cache updates.  */
             while (streamerOCUpdateRead->read(cycle, (DynamicObject *&) streamCCom))
@@ -268,7 +268,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
                         panic("StreamerOutputCache", "clock", "Unsupported Streamer Control Command from the Streamer Output Cache.");
                 )
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("StreamerOutputCache => UPDATE_OC command received: (Index = %d, Line = %d).\n",
                         streamCCom->getIndex(), streamCCom->getOMLine());
                 )
@@ -306,7 +306,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
                 {
                     case STRC_DEALLOC_OM:
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerOutputCache => DEALLOC_OM command received: %d.\n",
                             streamCCom->getOMLine());
                         )
@@ -325,7 +325,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
 
                     case STRC_DEALLOC_OM_CONFIRM:
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerOutputCache => DEALLOC_OM_CONFIRM command received: %d.\n",
                                  streamCCom->getOMLine());
                         )
@@ -392,7 +392,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
                         panic("StreamerOutputCache", "clock", "Unsupported Streamer Control Command from the Streamer Fetch.");
                 )
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("StreamerOutputCache => NEW_INDEX command: Index %d Instance %d OFIFO %d.\n",
                         streamCCom->getIndex(), streamCCom->getInstanceIndex(), streamCCom->getOFIFOEntry());
                 )
@@ -422,7 +422,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
                     /*  Get the streamer control command for the index request.  */
                     streamCCom = indexReqQ[i];
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("StreamerOutputCache => HIT index %d instance %d.\n", streamCCom->getIndex(), streamCCom->getInstanceIndex());
                     )
 
@@ -488,7 +488,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
                     /*  Check if the index was found between the solved misses.  */
                     if (j < solvedMisses)
                     {
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerOutputCache => HIT (secondary) index %d instance %d.\n", streamCCom->getIndex(), streamCCom->getInstanceIndex());
                         )
 
@@ -507,7 +507,7 @@ if ((cycle > 240000) && (GPU_MOD(cycle, 10000) == 0))
                     else
                     {
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerOutputCache => MISS index %d instance %d.\n", streamCCom->getIndex(), streamCCom->getInstanceIndex());
                         )
 
@@ -617,7 +617,7 @@ void StreamerOutputCache::processStreamerCommand(StreamerCommand *streamCom)
     {
         case STCOM_RESET:
 
-            GPU_DEBUG_BOX( printf("StreamerOutputCache => Received RESET command.\n"); )
+            GPU_DEBUG( printf("StreamerOutputCache => Received RESET command.\n"); )
 
             /*  Set state as reset.  */
             state = ST_RESET;
@@ -626,7 +626,7 @@ void StreamerOutputCache::processStreamerCommand(StreamerCommand *streamCom)
 
         case STCOM_START:
 
-            GPU_DEBUG_BOX( printf("StreamerOutputCache => Received START command.\n"); )
+            GPU_DEBUG( printf("StreamerOutputCache => Received START command.\n"); )
 
             /*  Set all output cache valid bits to FALSE.  */
             for (i = 0; i < outputMemorySize; i++)
@@ -658,7 +658,7 @@ void StreamerOutputCache::processStreamerCommand(StreamerCommand *streamCom)
                     panic("StreamerOutputCache", "processStreamerCommand", "");
             )
 
-            GPU_DEBUG_BOX( printf("StreamerOutputCache => Received END command.\n"); )
+            GPU_DEBUG( printf("StreamerOutputCache => Received END command.\n"); )
 
             /*  Set state to ready.  */
             state = ST_READY;

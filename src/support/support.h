@@ -52,14 +52,11 @@
 #endif
 
 /**  Macro for debug code and messages.  */
-//#define GPU_DEBUG_ON
-
 #ifdef GPU_DEBUG_ON
     #define GPU_DEBUG(expr) { expr }
 #else
     #define GPU_DEBUG(expr) { }
 #endif
-
 
 //#define GPU_TEX_TRACE_ENABLE 1
 

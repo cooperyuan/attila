@@ -95,7 +95,7 @@ void Interpolator::clock(u64bit cycle)
     u32bit i;
     u32bit j;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("Interpolator => clock %lld.\n", cycle);
     )
 
@@ -105,7 +105,7 @@ void Interpolator::clock(u64bit cycle)
         case RAST_RESET:
             /*  Reset state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => RESET state.\n");
             )
 
@@ -132,7 +132,7 @@ void Interpolator::clock(u64bit cycle)
         case RAST_READY:
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => READY state.\n");
             )
 
@@ -145,14 +145,14 @@ void Interpolator::clock(u64bit cycle)
         case RAST_DRAWING:
             /*  Draw state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => DRAWING state.\n");
             )
 
             /*  Check if last fragment interpolation was finished.  */
             if (remainingCycles > 0)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("Interpolator => Interpolating fragment attributes.  Cycles remaining %d.\n",
                         remainingCycles);
                 )
@@ -176,7 +176,7 @@ void Interpolator::clock(u64bit cycle)
                     {
                         if (newFragment->read(cycle, (DynamicObject *&) frInput))
                         {
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("Interpolator => Received new fragment to interpolate.\n");
                             )
 
@@ -267,7 +267,7 @@ void Interpolator::clock(u64bit cycle)
                             /*  Check if interpolation is enabled.  */
                             if (interpolation[i])
                             {
-                                GPU_DEBUG_BOX(
+                                GPU_DEBUG(
                                     printf("Interpolator => Interpolating fragment.\n");
                                 )
 
@@ -277,7 +277,7 @@ void Interpolator::clock(u64bit cycle)
                             }
                             else
                             {
-                                GPU_DEBUG_BOX(
+                                GPU_DEBUG(
                                     printf("Interpolator => Copying from vertex attributes.\n");
                                 )
 
@@ -311,7 +311,7 @@ void Interpolator::clock(u64bit cycle)
                     //  Triangle face/area attribute is another special case.
                     attributes[FACE_ATTRIBUTE][3] = frInput->getFragment()->getTriangle()->getArea();
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("Interpolator => Interpolated fragment attributes:\n");
                         for(i = 0; i < MAX_FRAGMENT_ATTRIBUTES; i++)
                             if (fragmentAttributes[i])
@@ -332,7 +332,7 @@ void Interpolator::clock(u64bit cycle)
                 /*  Send fragment back to Fragment FIFO unit.  */
                 interpolatorOutput->write(cycle, frInput);
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("Interpolator => Sending interpolated fragment to Fragment FIFO.\n");
                 )
 
@@ -363,7 +363,7 @@ void Interpolator::clock(u64bit cycle)
         case RAST_END:
             /*  Draw end state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 if (state == RAST_END)
                     printf("Interpolator => END state.\n");
             )
@@ -403,7 +403,7 @@ void Interpolator::processCommand(RasterizerCommand *command)
         case RSCOM_RESET:
             /*  Reset command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => RESET command received.\n");
             )
 
@@ -415,7 +415,7 @@ void Interpolator::processCommand(RasterizerCommand *command)
         case RSCOM_DRAW:
             /*  Draw command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => DRAW command received.\n");
             )
 
@@ -467,7 +467,7 @@ void Interpolator::processCommand(RasterizerCommand *command)
         case RSCOM_END:
             /*  End command received from Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => END command received.\n");
             )
 
@@ -485,7 +485,7 @@ void Interpolator::processCommand(RasterizerCommand *command)
         case RSCOM_REG_WRITE:
             /*  Write register command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => REG_WRITE command received.\n");
             )
 
@@ -518,7 +518,7 @@ void Interpolator::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write depth buffer bit precission.  */
             depthBitPrecission = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => Write GPU_Z_BUFFER_BIT_PRECISSION = %d.\n",
                     depthBitPrecission);
             )
@@ -536,7 +536,7 @@ void Interpolator::processRegisterWrite(GPURegister reg, u32bit subreg,
 
             interpolation[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => Write GPU_INTERPOLATION = %s.\n",
                     interpolation?"ENABLED":"DISABLED");
             )
@@ -555,7 +555,7 @@ void Interpolator::processRegisterWrite(GPURegister reg, u32bit subreg,
             /*  Write the fragment attribute active flag.  */
             fragmentAttributes[subreg] = data.booleanVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("Interpolator => Write GPU_FRAGMENT_INPUT_ATTRIBUTES[%d] = %s.\n",
                     subreg, data.booleanVal?"ACTIVE":"INACTIVE");
             )

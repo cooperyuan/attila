@@ -20,12 +20,6 @@ using namespace std;
 using namespace gpu3d;
 using namespace gpu3d::memorycontroller;
 
-#ifdef GPU_DEBUG
-    #undef GPU_DEBUG
-#endif
-//#define GPU_DEBUG(expr) { expr }
-#define GPU_DEBUG(expr) {  }
-
 SchedulerState::SchedulerState(SchedulerState::State state) : allBanksShareState(true), sharedSchedState(state), bankStates(0)
 {}
 

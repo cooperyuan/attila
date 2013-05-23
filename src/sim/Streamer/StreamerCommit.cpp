@@ -261,7 +261,7 @@ void StreamerCommit::clock(u64bit cycle)
     u32bit nextVertexBus;
     bool addedToDeAllocTable;
 
-    GPU_DEBUG_BOX( printf("StreamerCommit => Clock %lld\n", cycle);)
+    GPU_DEBUG( printf("StreamerCommit => Clock %lld\n", cycle);)
 
     /*  Get state from the Primitive Assembly..  */
     while (assemblyRequestSignal->read(cycle, (DynamicObject *&) assemblyRequest))
@@ -269,7 +269,7 @@ void StreamerCommit::clock(u64bit cycle)
         /*  Update primitive assembly requested vertex counter.  */
         requestVertex += assemblyRequest->getRequest();
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("StreamerCommit => Vertex request from Primitive Assembly.  Requested %d\n",
                 assemblyRequest->getRequest());
         )
@@ -310,7 +310,7 @@ outputFIFO[nextOutput].stCCom);
         case ST_RESET:
             /*  Reset state.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => RESET state.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => RESET state.\n"); )
 
             //  Initialize registers.
             streamCount = 0;
@@ -336,7 +336,7 @@ outputFIFO[nextOutput].stCCom);
             /*  Ready state.  Wait for a start command from
                 the streamer main box.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => READY state.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => READY state.\n"); )
 
             /*  Get commands from the Streamer main box.  */
             if (streamerCommitCommand->read(cycle, (DynamicObject *&) streamCom))
@@ -353,7 +353,7 @@ outputFIFO[nextOutput].stCCom);
                 to the Rasterizer.  Deallocate output FIFO and output
                 memory entries.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => STREAMING state.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => STREAMING state.\n"); )
 
             /*  Read new index command from the Streamer Output Cache.  */
             while (streamerCommitNewIndex->read(cycle, (DynamicObject *&) streamCCom))
@@ -527,7 +527,7 @@ outputFIFO[nextOutput].stCCom);
                         /*  Send the next output to the rasterizer.  */
                         assemblyOutputSignal->write(cycle, assemblyInput, transCycles[nextVertexBus] + outputBusLat);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerCommit => Sending output with index %d instance %d to Primitive Assembly.\n",
                                 outputFIFO[nextOutput].index, outputFIFO[nextOutput].instance);
                             printf("v[0] = {%f, %f, %f, %f}\n",
@@ -684,7 +684,7 @@ outputFIFO[nextOutput].stCCom);
                         outputMemory[oMemLine][COLOR_ATTRIBUTE][3] =
                             GPU_CLAMP(outputMemory[oMemLine][COLOR_ATTRIBUTE][3], 0.0f, 1.0f);
 
-                        GPU_DEBUG_BOX(
+                        GPU_DEBUG(
                             printf("StreamerCommit => Receiving output with index %d from shader.\n",
                                 output->getID());
                             for(j = 0; j < MAX_VERTEX_ATTRIBUTES; j++)
@@ -764,7 +764,7 @@ outputFIFO[nextOutput].stCCom);
             /*  Finished state.  Wait for END command from the Streamer
                 main box.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => FINISHED state.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => FINISHED state.\n"); )
 
             /*  Receive a command from the Streamer main box */
             if (streamerCommitCommand->read(cycle, (DynamicObject *&) streamCom))
@@ -835,7 +835,7 @@ void StreamerCommit::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_RESET:
             /*  Reset command from the Command Processor.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => RESET command.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => RESET command.\n"); )
 
             /*  Do whatever to do.  */
 
@@ -847,7 +847,7 @@ void StreamerCommit::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_REG_WRITE:
             /*  Write to register command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => REG_WRITE command.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => REG_WRITE command.\n"); )
 
             /*  Check Streamer Commit state.  */
             GPU_ASSERT(
@@ -864,7 +864,7 @@ void StreamerCommit::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_REG_READ:
             /*  Read from register command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => REG_READ command.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => REG_READ command.\n"); )
 
             /*  Not supported.  */
             panic("StreamerCommit", "processStreamerCommand", "STCOM_REG_READ not supported.");
@@ -874,7 +874,7 @@ void StreamerCommit::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_START:
             /*  Start streaming (drawing) command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => START command.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => START command.\n"); )
 
             /*  Check Streamer state.  */
             GPU_ASSERT(
@@ -920,7 +920,7 @@ void StreamerCommit::processStreamerCommand(StreamerCommand *streamCom)
         case STCOM_END:
             /*  End streaming (drawing) command.  */
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => END command.\n"); )
+            GPU_DEBUG( printf("StreamerCommit => END command.\n"); )
 
             /*  Check Streamer state.  */
             GPU_ASSERT(
@@ -981,7 +981,7 @@ void StreamerCommit::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
 
             streamCount = gpuData.uintVal;
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => GPU_STREAM_COUNT = %d.\n", gpuData.uintVal); )
+            GPU_DEBUG( printf("StreamerCommit => GPU_STREAM_COUNT = %d.\n", gpuData.uintVal); )
 
             break;
 
@@ -991,7 +991,7 @@ void StreamerCommit::processGPURegisterWrite(GPURegister gpuReg, u32bit gpuSubRe
 
             streamInstances = gpuData.uintVal;
 
-            GPU_DEBUG_BOX( printf("StreamerCommit => GPU_STREAM_INSTANCES = %d.\n", gpuData.uintVal); )
+            GPU_DEBUG( printf("StreamerCommit => GPU_STREAM_INSTANCES = %d.\n", gpuData.uintVal); )
 
             break;
 

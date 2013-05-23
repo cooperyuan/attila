@@ -247,7 +247,7 @@ void ShaderDecodeExecute::clock(u64bit cycle)
     /*  Get all instructions that have finished their execution in this
         cycle.  */
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("ShaderDecodeExecute => Clock %lld.\n", cycle);
     )
 
@@ -676,7 +676,7 @@ void ShaderDecodeExecute::clock(u64bit cycle)
                     //textRequest->copyParentCookies(?shExecInstr);
                     //textRequest->addCookie();
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ShaderDecodeExecute %lld => Sending texture request to texture unit %d\n", cycle,
                             nextRequestTU);
                     )
@@ -770,7 +770,7 @@ void ShaderDecodeExecute::replayInstruction(u64bit cycle, u32bit numThread, u32b
     /*  Send control command to fetch.  */
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
 //if (cycle > 73000)
         printf("ShaderDecodeExecute >> Sending REPEAT_LAST thread = %d PC = %x.\n", numThread, PC);
     )
@@ -798,7 +798,7 @@ void ShaderDecodeExecute::endThread(u64bit cycle, u32bit numThread, u32bit PC, S
     /*  Send control command to fetch.  */
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
 //if (cycle > 139500)
         printf("ShaderDecodeExecute => Sending END_THREAD thread = %d PC = %x.\n", numThread, PC);
     )
@@ -826,7 +826,7 @@ void ShaderDecodeExecute::zExportThread(u64bit cycle, u32bit numThread, u32bit P
     /*  Send control command to fetch.  */
     controlSignal->write(cycle, decodeCommand) ;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("ShaderDecodeExecute => Sending ZEXPORT_THREAD thread = %d PC = %x.\n", numThread, PC);
     )
 
@@ -855,7 +855,7 @@ void ShaderDecodeExecute::blockThread(u64bit cycle, u32bit numThread, u32bit PC,
         /*  Send control command to fetch.  */
         controlSignal->write(cycle, decodeCommand) ;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
 //if (cycle > 139500)
             printf("ShaderDecodeExecute => Sending BLOCK_THREAD thread = %d PC = %x.\n", numThread, PC);
         )
@@ -889,7 +889,7 @@ void ShaderDecodeExecute::unblockThread(u64bit cycle, u32bit numThread, u32bit P
         /*  Send control command to fetch.  */
         controlSignal->write(cycle, decodeCommand) ;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
 //if (cycle > 139500)
             printf("ShaderDecodeExecute => Sending UNBLOCK_THREAD thread = %d PC = %x.\n", numThread, PC);
         )
@@ -911,7 +911,7 @@ void ShaderDecodeExecute::processCommand(ShaderCommand *shCom)
     {
         case RESET:
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderDecodeExecute => RESET command received.\n");
             )
 
@@ -949,7 +949,7 @@ void ShaderDecodeExecute::endExecution(u64bit cycle)
         /*  Get shader thread PC after execution of the instruction.  */
         pc = shEmul.threadPC(numThread);
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             shInstr->disassemble(&dis[0]);
             printf("ShaderDecodeExecute => End Execution Thread = %d PC = %x : %s\n",
                 numThread, pc, dis);
@@ -1059,7 +1059,7 @@ void ShaderDecodeExecute::startExecution(u64bit cycle, ShaderExecInstruction *sh
     //{
         /*  Ignore any instruction from a blocked thread.  */
 
-    //    GPU_DEBUG_BOX(
+    //    GPU_DEBUG(
     //        printf("ShaderDecodeExecute => Ignoring instruction from blocked thread.\n");
     //    )
     //    return;
@@ -1154,7 +1154,7 @@ void ShaderDecodeExecute::startExecution(u64bit cycle, ShaderExecInstruction *sh
     /*  Start instruction execution.  */
     executionStartSignal->write(cycle, shExecInstr, instrLat);
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 
 //if (cycle > 71000)
@@ -1278,7 +1278,7 @@ void ShaderDecodeExecute::repeatInstruction(u64bit cycle, ShaderExecInstruction 
     /*  Get instruction PC.  */
     pc = shInstrDec->getPC();
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 
         printf("ShaderDecodeExecute => Repeating Instr. Thread = %d  PC = %d : %s \n",
@@ -1318,7 +1318,7 @@ bool ShaderDecodeExecute::decodeInstruction(u64bit cycle, ShaderExecInstruction 
     /*  Get instruction PC.  */
     pc = shInstrDec->getPC();
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 
 printf("ShDExec => %lld\n", cycle);
@@ -1339,7 +1339,7 @@ printf("ShDExec => %lld\n", cycle);
     {
         /*  Ignore the instruction.  */
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderDecodeExecute => Ignoring instruction because of replay request last cycle.\n");
         )
 
@@ -1356,7 +1356,7 @@ printf("ShDExec => %lld\n", cycle);
     {
         /*  Ignore any instruction after a thread receives END.  */
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderDecodeExecute => Ignoring instruction after END.\n");
         )
 
@@ -1369,7 +1369,7 @@ printf("ShDExec => %lld\n", cycle);
    {
         /*  Ignore any instruction from a blocked thread.  */
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderDecodeExecute => Ignoring instruction from blocked thread.\n");
         )
 
@@ -1380,7 +1380,7 @@ printf("ShDExec => %lld\n", cycle);
     /*  Check if there is a texture ticket for the texture instruction.  */
     if (shInstr->isALoad() && (textureTickets[nextRequestTU] == 0))
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("ShaderDecodeExecute => No texture ticket available for the texture instruction.\n");
         )
 
@@ -1405,7 +1405,7 @@ printf("ShDExec => %lld\n", cycle);
         /*  Only allow one scalar op per cycle and thread rate.  */
         if (shInstr->isScalar() && reserveScalarALU)
         {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("ShaderDecodeExecute => No more ALU ops allowed in current cycle.\n");
                 )
 
@@ -1426,7 +1426,7 @@ printf("ShDExec => %lld\n", cycle);
         /*  Only allow one SIMD op per cycle and thread rate.  */
         if ((!shInstr->isScalar()) && reserveSIMDALU)
         {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("ShaderDecodeExecute => No more SIMD ops allowed in current cycle.\n");
                 )
 
@@ -1453,7 +1453,7 @@ printf("ShDExec => %lld\n", cycle);
         /*  Check RAW dependence.  */
         if (checkRAWDependence(numThread, shInstr->getBankOp1(), shInstr->getOp1()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderDecodeExecute => RAW dependence found for first operand.\n");
             )
 
@@ -1479,7 +1479,7 @@ printf("ShDExec => %lld\n", cycle);
         /*  Check RAW dependence.  */
         if (checkRAWDependence(numThread, shInstr->getBankOp2(), shInstr->getOp2()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderDecodeExecute => RAW dependence found for second operand.\n");
             )
 
@@ -1505,7 +1505,7 @@ printf("ShDExec => %lld\n", cycle);
         /*  Check RAW dependence.  */
         if (checkRAWDependence(numThread, shInstr->getBankOp3(), shInstr->getOp3()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderDecodeExecute => RAW dependence found for third operand.\n");
             )
 
@@ -1531,7 +1531,7 @@ printf("ShDExec => %lld\n", cycle);
         /*  Check RAW dependence.  */
         if (checkRAWDependence(numThread, ADDR, shInstr->getRelMAddrReg()))
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("ShaderDecodeExecute => RAW dependence for address register %d in relative access mode to the constant bank.\n",
                     shInstr->getRelMAddrReg());
             )
@@ -1574,7 +1574,7 @@ printf("ShDExec => %lld\n", cycle);
                 /*  Check WAW dependence for output bank register.  */
                 if (threadInfo[numThread].outpBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ShaderDecodeExecute => WAW dependence for OUTPUT register %d.\n", resReg);
                     )
 
@@ -1599,7 +1599,7 @@ printf("ShDExec => %lld\n", cycle);
                 /*  Check WAW dependence for address bank register.  */
                 if (threadInfo[numThread].addrBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ShaderDecodeExecute => WAW dependence for ADDRESS register %d.\n", resReg);
                     )
 
@@ -1624,7 +1624,7 @@ printf("ShDExec => %lld\n", cycle);
                 /*  Check WAW dependence for temporal bank register.  */
                 if (threadInfo[numThread].tempBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ShaderDecodeExecute => WAW dependence for TEMPORAL register %d.\n", resReg);
                     )
 
@@ -1649,7 +1649,7 @@ printf("ShDExec => %lld\n", cycle);
                 //  Check WAW dependence for predicate bank register.
                 if (threadInfo[numThread].predBankWrite[resReg] >= (cycle + instrLat))
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("ShaderDecodeExecute => WAW dependence for PREDICATE register %d.\n", resReg);
                     )
 
@@ -1682,7 +1682,7 @@ printf("ShDExec => %lld\n", cycle);
     /*  Check register write ports availability.  */
     if (regWrites[GPU_MOD(nextRegWrite + instrLat, MAX_EXEC_LAT)] >= (MAX_EXEC_BW * threadsCycle * instrCycle))
     {
-       GPU_DEBUG_BOX(
+       GPU_DEBUG(
             printf("ShaderDecodeExecute => Register write port limit reached.\n");
        )
 
@@ -1732,7 +1732,7 @@ bool ShaderDecodeExecute::checkWritePorts(u64bit cycle, ShaderExecInstruction *s
     /*  Get instruction PC.  */
     pc = shInstrDec->getPC();
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         shInstr->disassemble(&dis[0]);
 
         printf("ShaderDecodeExecute => Check write ports Instr. Thread = %d  PC = %d : %s.\n",
@@ -1754,7 +1754,7 @@ bool ShaderDecodeExecute::checkWritePorts(u64bit cycle, ShaderExecInstruction *s
     /*  Check register write ports availability.  */
     if (regWrites[GPU_MOD(nextRegWrite + instrLat, MAX_EXEC_LAT)] >= (MAX_EXEC_BW * threadsCycle * instrCycle))
     {
-       GPU_DEBUG_BOX(
+       GPU_DEBUG(
             printf("ShaderDecodeExecute => Register write port limit reached.\n");
        )
 

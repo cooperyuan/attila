@@ -293,7 +293,7 @@ void DAC::clock(u64bit cycle)
     /*  Keep DAC state.  */
     lastState = state;
 
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("DAC => clock %lld.\n", cycle);
     )
 
@@ -307,7 +307,7 @@ void DAC::clock(u64bit cycle)
     /*  Update color buffer block state update cycles.  */
     if (stateUpdateCycles > 0)
     {
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("DAC => Remaining update cycles %d.\n",
                 stateUpdateCycles);
         )
@@ -330,7 +330,7 @@ void DAC::clock(u64bit cycle)
             //)
 
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC (%lld) => Received color buffer state memory from Color Write unit %d.  Blocks %d.\n",
                     cycle, i, colorBlockStateInfo->getNumBlocks());
             )
@@ -386,7 +386,7 @@ void DAC::clock(u64bit cycle)
             //)
 
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC (%lld) => Received z stencil buffer state memory from Z Stencil Test unit %d.  Blocks %d.\n",
                     cycle, i, colorBlockStateInfo->getNumBlocks());
             )
@@ -440,7 +440,7 @@ void DAC::clock(u64bit cycle)
 
             //  Reset state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => RESET state.\n");
             )
 
@@ -455,7 +455,7 @@ void DAC::clock(u64bit cycle)
         case RAST_READY:
             /*  Ready state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => READY state.\n");
             )
 
@@ -475,7 +475,7 @@ void DAC::clock(u64bit cycle)
         case RAST_END:
             /*  End state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 if (state == RAST_END)
                     printf("DAC => END state.\n");
             )
@@ -490,7 +490,7 @@ void DAC::clock(u64bit cycle)
 
             //  Swap state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Swap state.\n");
             )
 
@@ -516,7 +516,7 @@ void DAC::clock(u64bit cycle)
                 /*  Write the ppm file with the current framebuffer.  */
                 writeColorBuffer();
 
-                //GPU_DEBUG_BOX(
+                //GPU_DEBUG(
                     printf("DAC => Cycle %lld Color Buffer Dumped.\n", cycle);
                 //)
 
@@ -548,7 +548,7 @@ void DAC::clock(u64bit cycle)
 
             //  Dump buffer state.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => DUMP BUFFER state.\n");
             )
 
@@ -622,7 +622,7 @@ void DAC::clock(u64bit cycle)
                         //  Dump the color buffer as a PPM file.
                         writeColorBuffer();
                         
-                        //GPU_DEBUG_BOX(
+                        //GPU_DEBUG(
                             printf("DAC => Cycle %lld Color Buffer Dumped.\n", cycle);
                         //)
                         
@@ -636,7 +636,7 @@ void DAC::clock(u64bit cycle)
                         //  Dump the z buffer as a PPM file.
                         writeDepthBuffer();
                         
-                        //GPU_DEBUG_BOX(
+                        //GPU_DEBUG(
                             printf("DAC => Cycle %lld Depth Buffer Dumped.\n", cycle);
                         //)
 
@@ -650,7 +650,7 @@ void DAC::clock(u64bit cycle)
                         //  Dump the stencil buffer as a PPM file.
                         writeStencilBuffer();
                         
-                        //GPU_DEBUG_BOX(
+                        //GPU_DEBUG(
                             printf("DAC => Cycle %lld Stencil Buffer Dumped.\n", cycle);
                         //)
 
@@ -674,7 +674,7 @@ void DAC::clock(u64bit cycle)
 
             /*  Blit state.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Blit state.\n");
             )
 
@@ -688,7 +688,7 @@ void DAC::clock(u64bit cycle)
                 /*  Update bus use counter.  */
                 busCycles--;
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("DAC %lld => Transmission in progress.  Remaining cycles %d\n",
                         cycle, busCycles);
                 )
@@ -696,7 +696,7 @@ void DAC::clock(u64bit cycle)
                 /*  Check end of transmission.  */
                 if (busCycles == 0)
                 {
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("DAC => End of memory read.\n");
                     )
 
@@ -721,7 +721,7 @@ void DAC::clock(u64bit cycle)
 
             if (blt->currentFinished())
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("DAC::Blitter %lld => End of bit blit operation.\n", cycle);
                 )
 
@@ -768,7 +768,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         case RSCOM_RESET:
             /*  Reset command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => RESET command received.\n");
             )
 
@@ -780,7 +780,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         case RSCOM_END:
             /*  End command received from Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => END command received.\n");
             )
 
@@ -802,7 +802,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         case RSCOM_REG_WRITE:
             /*  Write register command from the Rasterizer main box.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => REG_WRITE command received.\n");
             )
 
@@ -821,7 +821,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         case RSCOM_SWAP:
             /*  Swap front and back buffer command.  */
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => SWAP command received.\n");
             )
 
@@ -863,7 +863,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         
             //  Dump the color buffer.
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => DUMP_COLOR command received.\n");
             )
 
@@ -888,7 +888,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
             //  Compute color buffer size.
             colorBufferSize = colorPixelMapper.computeFrameBufferSize();
           
-            //GPU_DEBUG_BOX(
+            //GPU_DEBUG(
                 printf("DAC => Color Buffer Address %08x | Color Buffer Size %d (%d x %d)\n", backBuffer, colorBufferSize, hRes, vRes);
             //)
 
@@ -904,7 +904,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         
             //  Dump the depth buffer.
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => DUMP_COLOR command received.\n");
             )
 
@@ -929,7 +929,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
             //  Compute z stencil buffer size.
             zStencilBufferSize = zstPixelMapper.computeFrameBufferSize();
           
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Z Stencil Buffer Address %08x Size %d (%d x %d)\n", zStencilBuffer, zStencilBufferSize, hRes, vRes);
             )
 
@@ -954,7 +954,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
         
             //  Dump the stencil buffer.
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => DUMP_STENCIL command received.\n");
             )
 
@@ -979,7 +979,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
             //  Compute z stencil buffer size.
             zStencilBufferSize = zstPixelMapper.computeFrameBufferSize();
           
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Z Stencil Buffer Address %08x Size %d (%d x %d)\n", zStencilBuffer, zStencilBufferSize, hRes, vRes);
             )
 
@@ -1004,7 +1004,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
             
             //  Blit a framebuffer region to a texture destination address.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => BLIT command received at cycle %lld.\n", cycle);
             )
 
@@ -1039,7 +1039,7 @@ void DAC::processCommand(u64bit cycle, RasterizerCommand *command)
 
             //  Fake swap buffer command for draw command skipping mode.
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => FRAME CHANGE command received.\n");
             )
 
@@ -1117,7 +1117,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setDisplayXRes(hRes);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_DISPLAY_X_RES = %d.\n", hRes);
             )
 
@@ -1134,7 +1134,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setDisplayYRes(vRes);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_DISPLAY_Y_RES = %d.\n", vRes);
             )
 
@@ -1152,7 +1152,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             //blt->setUseD3D9PixelCoordinates(d3d9PixelCoordinates);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_D3D9_PIXEL_COORDINATE = %s\n", d3d9PixelCoordinates ? "TRUE" : "FALSE");
             )
             
@@ -1164,7 +1164,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setViewportStartX(startX);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_VIEWPORT_INI_X = %d.\n", startX);
             )
 
@@ -1176,7 +1176,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setViewportStartY(startY);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_VIEWPORT_INI_Y = %d.\n", startY);
             )
 
@@ -1188,7 +1188,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setViewportWidth(width);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_VIEWPORT_WIDTH = %d.\n", width);
             )
 
@@ -1200,7 +1200,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setViewportHeight(height);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_VIEWPORT_HEIGHT = %d.\n", height);
             )
 
@@ -1231,7 +1231,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
                     break;
             }
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_COLOR_BUFFER_FORMAT = ");
                 switch(colorBufferFormat)
                 {
@@ -1368,7 +1368,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setClearColor(clearColor);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_COLOR_BUFFER_CLEAR = (%f, %f, %f, %f).\n", clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
             )
 
@@ -1379,7 +1379,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write Multisampling enable flag.
             multisampling = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_MULTISAMPLING = %s\n", multisampling?"TRUE":"FALSE");
             )
             
@@ -1398,7 +1398,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             msaaSamples = data.uintVal;
             
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_MSAA_SAMPLES = %d\n", msaaSamples);
             )
 
@@ -1416,7 +1416,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write the z/stencil buffer compression enabled register.
             zStencilCompression = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_ZSTENCIL_COMPRESSION = %s\n", zStencilCompression ? "ENABLED" : "DISABLED");
             )
             
@@ -1427,7 +1427,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write the color buffer compression enabled register.
             colorCompression = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_COLOR_COMPRESSION = %s\n", colorCompression ? "ENABLED" : "DISABLED");
             )
             
@@ -1438,7 +1438,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setBlitIniX(data.uintVal);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_INI_X = %x.\n", data.uintVal);
             )
 
@@ -1449,7 +1449,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setBlitIniY(data.uintVal);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_INI_Y = %x.\n", data.uintVal);
             )
 
@@ -1460,7 +1460,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setBlitXOffset(data.uintVal);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_X_OFFSET = %x.\n", data.uintVal);
             )
 
@@ -1471,7 +1471,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
 
             blt->setBlitYOffset(data.uintVal);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_Y_OFFSET = %x.\n", data.uintVal);
             )
 
@@ -1482,7 +1482,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             blt->setBlitWidth(data.uintVal);
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_WIDTH = %x.\n", data.uintVal);
             )
 
@@ -1493,7 +1493,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             blt->setBlitHeight(data.uintVal);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_HEIGHT = %x.\n", data.uintVal);
             )
 
@@ -1504,7 +1504,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             blt->setDestAddress(data.uintVal);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC:Blitter => Write GPU_BLIT_DST_ADDRESS = %x.\n", data.uintVal);
             )
 
@@ -1515,7 +1515,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             blt->setDestTextWidth2(data.uintVal);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_DST_TX_WIDTH2 = %x.\n", data.txFormat);
             )
 
@@ -1526,7 +1526,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             blt->setDestTextFormat(data.txFormat);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_DST_TX_FORMAT = ");
                 
                 switch(data.txFormat)
@@ -1669,7 +1669,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             
             blt->setDestTextBlock(data.txBlocking);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC::Blitter => Write GPU_BLIT_DST_TX_BLOCK = ");
                 
                 switch(data.txBlocking)
@@ -1694,7 +1694,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             /*  Write front color buffer address register.  */
             frontBuffer = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_FRONTBUFFER_ADDR = %08x.\n",
                     frontBuffer);
             )
@@ -1705,7 +1705,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             /*  Write back color buffer address register.  */
             backBuffer = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_BACKBUFFER_ADDR = %08x.\n",
                     backBuffer);
             )
@@ -1722,7 +1722,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write depth clear value.
             clearDepth = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_Z_BUFFER_CLEAR = %x.\n", clearDepth);
             )
 
@@ -1733,7 +1733,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write stencil clear value.
             clearStencil = (u8bit) (data.uintVal & 0xff);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_STENCIL_BUFFER_CLEAR = %x.\n", clearStencil);
             )
 
@@ -1744,7 +1744,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write z buffer bit precission register.
             depthPrecission = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_Z_BUFFER_BIT_PRECISSION = %x.\n", depthPrecission);
             )
 
@@ -1755,7 +1755,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write z stencil buffer address register.
             zStencilBuffer = data.uintVal;
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_ZSTENCILBUFFER_ADDR = %08x.\n", zStencilBuffer);
             )
 
@@ -1772,7 +1772,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write render target enable register.
             rtEnable[subreg] = data.booleanVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_RENDER_TARGET_ENABLE[%d] = %s\n", subreg, rtEnable[subreg] ? "TRUE" : "FALSE");
             )            
             
@@ -1789,7 +1789,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write render target format register.
             rtFormat[subreg] = data.txFormat;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_RENDER_TARGET_FORMAT[%d] = ", subreg);
                 switch(rtFormat[subreg])
                 {
@@ -1907,7 +1907,7 @@ void DAC::processRegisterWrite(GPURegister reg, u32bit subreg, GPURegData data)
             //  Write render target address register.
             rtAddress[subreg] = data.uintVal;
             
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => Write GPU_RENDER_TARGET_ADDRESS[%d] = %08x\n", subreg, rtAddress[subreg]);
             )
             
@@ -1976,7 +1976,7 @@ void DAC::startRefresh()
     //  Compute color buffer size.
     colorBufferSize = colorPixelMapper.computeFrameBufferSize();
   
-    GPU_DEBUG_BOX(
+    GPU_DEBUG(
         printf("DAC => Color Buffer Size %d (%d x %d)\n",
             colorBufferSize, hRes, vRes);
     )
@@ -2908,7 +2908,7 @@ void DAC::updateMemory(u64bit cycle)
         //  Update bus use counter.
         busCycles--;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("DAC %lld => Transmission in progress.  Remaining cycles %d\n",
                 cycle, busCycles);
         )
@@ -2916,7 +2916,7 @@ void DAC::updateMemory(u64bit cycle)
         //  Check end of transmission.
         if (busCycles == 0)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC => End of memory read.\n");
             )
 
@@ -2944,7 +2944,7 @@ void DAC::updateDecompressor(u64bit cycle, CompressorEmulator *compressorEmulato
         //  Update decompress cycles.
         decompressCycles--;
 
-        GPU_DEBUG_BOX(
+        GPU_DEBUG(
             printf("DAC %lld => Decompressing block.  Remaining cycles %d\n",
                 cycle, decompressCycles);
         )
@@ -2969,7 +2969,7 @@ void DAC::updateDecompressor(u64bit cycle, CompressorEmulator *compressorEmulato
         //  Check that the block has been received from memory.
         if (blockQueue[nextDecompress].received == blockQueue[nextDecompress].size)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC %lld => Decompressing block %d at address %x.\n",
                     cycle, blockQueue[nextDecompress].block, blockQueue[nextDecompress].address);
             )
@@ -2992,7 +2992,7 @@ void DAC::updateDecompressor(u64bit cycle, CompressorEmulator *compressorEmulato
             {
                 case ROPBlockState::CLEAR:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("DAC => CLEAR block.\n");
                     )
 
@@ -3013,7 +3013,7 @@ void DAC::updateDecompressor(u64bit cycle, CompressorEmulator *compressorEmulato
 
                 case ROPBlockState::UNCOMPRESSED:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("DAC => UNCOMPRESSED block.\n");
                     )
 
@@ -3035,7 +3035,7 @@ void DAC::updateDecompressor(u64bit cycle, CompressorEmulator *compressorEmulato
 
                 case ROPBlockState::COMPRESSED:
 
-                    GPU_DEBUG_BOX(
+                    GPU_DEBUG(
                         printf("DAC => COMPRESSED block with level %i.\n", block.comprLevel);
                     )
 
@@ -3057,7 +3057,7 @@ void DAC::updateDecompressor(u64bit cycle, CompressorEmulator *compressorEmulato
                         case 1: stateBlocksCompressedNormal++; break;
                         case 2: stateBlocksCompressedWorst++; break;
                         default:
-                            GPU_DEBUG_BOX(
+                            GPU_DEBUG(
                                 printf("DAC => Warning: stattistics for compressor level %i not supported.\n", block.comprLevel);
                             )
                             break;                            
@@ -3095,7 +3095,7 @@ void DAC::updateBlockRequest(u64bit cycle)
         //  Determine if the block has been fully requested (check for clear blocks!!).
         if (blockQueue[nextRequest].size == blockQueue[nextRequest].requested)
         {
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC %lld => Block %d fully requested to memory.\n",
                     cycle, blockQueue[nextRequest].block);
             )
@@ -3116,7 +3116,7 @@ void DAC::updateBlockRequest(u64bit cycle)
             //  Calculate transaction size.
             u32bit size = GPU_MIN(MAX_TRANSACTION_SIZE, blockQueue[nextRequest].size);
 
-            GPU_DEBUG_BOX(
+            GPU_DEBUG(
                 printf("DAC %lld => Requesting memory at %x %d bytes for block %d.\n",
                     cycle, blockQueue[nextRequest].address + blockQueue[nextRequest].requested,
                     size, blockQueue[nextRequest].block);
@@ -3156,7 +3156,7 @@ void DAC::updateBlockRequest(u64bit cycle)
             //  Determine if the block has been fully requested.
             if (blockQueue[nextRequest].size == blockQueue[nextRequest].requested)
             {
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("DAC %lld => Block %d fully requested to memory.\n",
                         cycle, blockQueue[nextRequest].block);
                 )
@@ -3195,7 +3195,7 @@ void DAC::updateRequestQueue(u64bit cycle, CompressorEmulator *compressorEmulato
         {
             case ROPBlockState::CLEAR:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("DAC => Adding request for CLEAR block %d\n",
                         blockQueue[nextFree].block);
                 )
@@ -3206,7 +3206,7 @@ void DAC::updateRequestQueue(u64bit cycle, CompressorEmulator *compressorEmulato
 
             case ROPBlockState::UNCOMPRESSED:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("DAC => Adding request for UNCOMPRESSED block %d\n",
                         blockQueue[nextFree].block);
                 )
@@ -3217,7 +3217,7 @@ void DAC::updateRequestQueue(u64bit cycle, CompressorEmulator *compressorEmulato
 
             case ROPBlockState::COMPRESSED:
 
-                GPU_DEBUG_BOX(
+                GPU_DEBUG(
                     printf("DAC => Adding request for COMPRESSED block %d with level %d\n",
                         blockQueue[nextFree].block, block.comprLevel);
                 )
