@@ -2487,50 +2487,6 @@ void GPUSimulator::driverMemAllocCommand(stringstream &comStream)
     }
 }
 
-/*
-  DEPRECATED
-  
-void GPUSimulator::libraryGLContextCommand(stringstream &comStream)
-{
-    libgl::GLContext *ctx;
-
-    // Skip white spaces.
-    comStream >> ws;
-
-    // Check if there is a parameter.
-    if (!comStream.eof())
-    {
-        cout << "Usage: glcontext" << endl;
-    }
-    else
-    {
-        cout << "GPU Driver => AGP Buffer Content: " << endl;
-        ctx = (libgl::GLContext *) GPUDriver::getGPUDriver()->getContext();
-        ctx -> dump();
-        cout << endl;
-    }
-}
-
-void GPUSimulator::libraryDumpStencilCommand(stringstream &comStream)
-{
-    libgl::GLContext *ctx;
-
-    // Skip white spaces.
-    comStream >> ws;
-
-    // Check if there is a parameter.
-    if (!comStream.eof())
-    {
-        cout << "Usage: dumpStencil" << endl;
-    }
-    else
-    {
-        cout << "GPU Driver => Dumping stencil buffer " << endl;
-        ctx = (libgl::GLContext *) GPUDriver::getGPUDriver()->getContext();
-        libgl::afl::dumpStencilBuffer(ctx);
-    }
-}*/
-
 //  Simulate until a force command finishes.
 bool GPUSimulator::simForcedCommand()
 {
