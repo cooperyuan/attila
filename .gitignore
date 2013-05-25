@@ -12,3 +12,6 @@
 *.la
 *.a
 .what
+
+# auto generated files
+*.gen
