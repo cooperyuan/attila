@@ -24,14 +24,8 @@ OBJECTS=$(SOURCES:%.cpp=%.o)
 
 INCLUDES=$(INC_DIRS:%=-I %)
 
-#ifndef $(PROGRAM_TARGET)
-#	PROGRAM_TARGET=$(PROGRAM:%=$(BINDIR)/%)
-#endif
 PROGRAM_TARGET=$(PROGRAM:%=$(BINDIR)/%)
 
-#ifndef $(ARCHIVE_TARGET)
-#	ARCHIVE_TARGET=$(ARCHIVE:%=$(LIBDIR)/%)
-#endif
 ARCHIVE_TARGET=$(ARCHIVE:%=$(LIBDIR)/%)
 
 clean_inc=$(foreach elm,$(CLEAN_INCLUDE),$(wildcard $(elm)))

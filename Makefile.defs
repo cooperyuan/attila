@@ -52,7 +52,7 @@ TRACEDIR = $(SRCDIR)/trace
 GLDIR = $(SRCDIR)/GL
 
 # Compiler Optimization level by default
-OLEVEL="1"
+OLEVEL=1
 
 # CONFIG Optional compilation flags
 CONFIG_CXXFLAGS_debug = -g -fno-inline
@@ -79,13 +79,11 @@ PLATFORM_CXXFLAGS_cygwin = -D _CYGWIN_ -D GL_GLEXT_LEGACY -D GL_GLEXT_PROTOTYPES
 
 # Default options
 CONFIG=optimized
-#UNIFIED=yes
 CPU=
 PLATFORM=linux
 
 # Variables exports
 export CONFIG
-#export UNIFIED
 export CPU
 export PLATFORM
 
