@@ -36,8 +36,7 @@ CLEANS=$(ARCHIVE_TARGET) $(PROGRAM_TARGET) $(OBJECTS) $(clean_inc)
 
 .PHONY: all clean
 	
-all: $(ARCHIVE_TARGET) $(PROGRAM_TARGET) $(TARGETS) \
-		Makefile.new $(TOPDIR)/Makefile.defs $(TOPDIR)/Makefile.common
+all: $(ARCHIVE_TARGET) $(PROGRAM_TARGET) $(TARGETS) Makefile $(TOPDIR)/Makefile.defs $(TOPDIR)/Makefile.common
 
 %.o : %.cpp %.h
 	@echo "  CC $@"
@@ -57,13 +56,13 @@ $(ARCHIVE_TARGET): $(OBJECTS) $(ARCHIVE_DEPS)
 
 $(SUBDIR_TARGETS):
 	@echo "  MAKE $@"
-	@$(MAKE) -C $@ -f Makefile.new
+	@$(MAKE) -C $@
 
 clean: subdir_clean
 	@echo "  CLEAN $(notdir $(CLEANS))"
 	@$(RM) $(CLEANS)
 	
 subdir_clean:
-	@for d in $(SUBDIR_TARGETS); do ($(MAKE) -C $$d -f Makefile.new clean); done
+	@for d in $(SUBDIR_TARGETS); do ($(MAKE) -C $$d clean); done
 
 ###############################################################

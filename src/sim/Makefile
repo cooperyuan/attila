@@ -31,7 +31,7 @@ SRC_DIRS = . \
 	MemoryControllerV2 \
 	PrimitiveAssembly \
 	Rasterizer \
-        MicroPolygonRasterizer \
+	MicroPolygonRasterizer \
 	Shader \
 	VectorShader \
 	Streamer

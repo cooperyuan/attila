@@ -26,4 +26,4 @@ TARGETS = usage all bGPU bgpu gl2atila extractTraceRegion tests clean simclean t
 .PHONY: $(TARGETS)
 
 $(TARGETS):
-	@$(TIME) $(MAKE) -C $(SRCDIR) -f Makefile.new $@
+	@$(TIME) $(MAKE) -C $(SRCDIR) $@

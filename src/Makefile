@@ -95,7 +95,7 @@ all: $(TARGETS)
 bgpu: support emul gpu sim trace
 
 bGPU: bgpu
-	@$(MAKE) -C bgpu -f Makefile.new build-all
+	@$(MAKE) -C bgpu build-all
 
 $(TRACEDIR)/gl2atila: bgpu
 
@@ -106,16 +106,16 @@ $(TRACEDIR)/extractTraceRegion: bgpu
 extractTraceRegion: $(TRACEDIR)/extractTraceRegion
 
 $(SUBDIR_TARGETS):
-	@$(MAKE) -C $@ -f Makefile.new
+	@$(MAKE) -C $@
 
 simclean:
-	@for d in $(SIMCLEAN_DIRS); do ($(MAKE) -C $$d -f Makefile.new clean); done
-	@$(MAKE) -C bgpu -f Makefile.new clean-build
+	@for d in $(SIMCLEAN_DIRS); do ($(MAKE) -C $$d clean); done
+	@$(MAKE) -C bgpu clean-build
 
 traceclean:
-	@for d in $(TRACECLEAN_DIRS); do ($(MAKE) -C $$d -f Makefile.new clean); done
+	@for d in $(TRACECLEAN_DIRS); do ($(MAKE) -C $$d clean); done
 	
 clean:
-	@for d in $(CLEAN_DIRS); do ($(MAKE) -C $$d -f Makefile.new clean); done
-	@$(MAKE) -C bgpu -f Makefile.new clean-build
+	@for d in $(CLEAN_DIRS); do ($(MAKE) -C $$d clean); done
+	@$(MAKE) -C bgpu clean-build
 
