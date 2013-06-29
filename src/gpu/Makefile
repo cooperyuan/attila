@@ -9,32 +9,47 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
-#  $Revision: 1.9 $
-#  $Author: vmoya $
-#  $Date: 2008-02-22 18:32:44 $
+#  $RCSfile: Makefile.new,v $
+#  $Revision: 1.1 $
+#  $Author: christip $
+#  $Date: 2007-09-03 14:57:46 $
 # 
 #  GPU simulation basic classes Makefile. 
 # 
 # 
 
-include ../Makefile.defs
+TOPDIR = ../..
 
-INCLUDE = -I ./ -I $(SUPPORTDIR)/  
-CXFLAGS = $(HOWFLAGS) $(WHEREFLAGS)
-LIBS = 
+include $(TOPDIR)/Makefile.defs
 
-OBJECTS = $(OBJDIR)/GPUSignal.o $(OBJDIR)/SignalBinder.o \
-          $(OBJDIR)/StatisticsManager.o $(OBJDIR)/Box.o \
-          $(OBJDIR)/Statistic.o
+#########################################################################
+ 
+# All source files below this subdirectories
+# will be compiled automatically
+SRC_DIRS = .
 
-all: $(OBJECTS)
+# Source files to be excluded from SRC_DIRS
+SRC_EXCLUDE = 
+	
+# Extra source files to be included
+SRC_INCLUDE = 
 
-test: $(OBJDIR)/StatisticsManager.o $(OBJDIR)/Statistic.o $(OBJDIR)/Box.o $(OBJDIR)/GPUSignal.o $(OBJDIR)/SignalBinder.o
-	$(CX) $(CXFLAGS) -o  $(OBJDIR)/StatisticsManager.o $(OBJDIR)/Statistic.o $(OBJDIR)/Box.o $(OBJDIR)/GPUSignal.o $(OBJDIR)/SignalBinder.o 
+# Directories where compiler will search for includes
+INC_DIRS = $(SRC_DIRS) $(SUPPORTDIR)
+	
+# C++ compilation flags
+CXXFLAGS += 
 
-$(OBJECTS): $(OBJDIR)/%.o : %.cpp
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-clean:
-	for o in $(OBJECTS); do (rm $$o); done
+# Library dependences
+LIBS += 
+
+# Directories where MAKE will search for target pre-requisites
+VPATH = $(SRC_DIRS)
+
+# Archive library to be generated
+ARCHIVE = libgpu.a
+
+#########################################################################
+
+include $(TOPDIR)/Makefile.common
 

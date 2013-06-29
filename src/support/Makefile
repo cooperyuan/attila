@@ -9,30 +9,48 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
-#  $Revision: 1.9 $
+#  $RCSfile: Makefile.new,v $
+#  $Revision: 1.2 $
 #  $Author: vmoya $
-#  $Date: 2008-02-22 18:32:55 $
+#  $Date: 2007-10-19 08:53:40 $
 # 
 #  Support files and classes Makefile. 
 # 
 # 
 
+TOPDIR = ../..
 
-include ../Makefile.defs
+include $(TOPDIR)/Makefile.defs
 
-INCLUDE = -I . 
-CXFLAGS = $(HOWFLAGS) $(WHEREFLAGS)
-LIBS = 
+#########################################################################
 
-OBJECTS = $(OBJDIR)/QuadFloat.o $(OBJDIR)/QuadInt.o $(OBJDIR)/support.o \
-	  $(OBJDIR)/OptimizedDynamicMemory.o $(OBJDIR)/DynamicObject.o \
-	  $(OBJDIR)/Parser.o 
+# All source files below this subdirectories
+# will be compiled automatically
+SRC_DIRS = .
 
-all: $(OBJECTS)
+# Source files to be excluded from SRC_DIRS
+SRC_EXCLUDE = ./FixedPoint.cpp
+	
+# Extra source files to be included
+SRC_INCLUDE = 
 
-$(OBJECTS): $(OBJDIR)/%.o : %.cpp
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-clean:
-	@for o in $(OBJECTS); do (rm $$o); done
+# Directories where compiler will search for includes
+INC_DIRS = $(SRC_DIRS) \
+	   $(SRCDIR)/extern-libs/libpng-1.4.0
+	
+# C++ compilation flags
+CXXFLAGS += 
+
+# Library dependences
+LIBS +=  
+
+# Directories where MAKE will search for target pre-requisites
+VPATH = $(SRC_DIRS)
+
+# Archive library to be generated
+ARCHIVE = libsupport.a
+
+#########################################################################
+
+include $(TOPDIR)/Makefile.common
 

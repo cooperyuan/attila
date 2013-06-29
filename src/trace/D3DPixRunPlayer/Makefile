@@ -9,60 +9,54 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
+#  $RCSfile: Makefile.new,v $
 #  $Revision: 1.1 $
-#  $Author: csolis $
-#  $Date: 2007-08-02 17:22:04 $
+#  $Author: christip $
+#  $Date: 2007-09-03 14:57:47 $
 # 
 #  Shader Simulator classes Makefile. 
 # 
 # 
 
-include ../../Makefile.defs
+TOPDIR = ../../..
+
+include $(TOPDIR)/Makefile.defs
 
 # All source files below this subdirectories
 # will be included automatically
-SRCDIRS = . 
+SRC_DIRS = . 
 
 # Source files to be excluded from SRCDIRS
 SRC_EXCLUDE = 
 	
 # Extra source files to be included
-SRC_INCLUDE = \
-	$(TRACEDIR)/utils/StringUtils.cpp
-
-
-# Directories where MAKE will search for target pre-requisites
-VPATH = $(SRCDIRS)
+SRC_INCLUDE = $(TRACEDIR)/utils/StringUtils.cpp
 
 # Directories where compiler will search for includes
-INCDIRS = \
+INC_DIRS = \
 	$(SRCDIRS) \
 	$(SRCDIR)/D3D \
 	$(SUPPORTDIR) \
 	$(TRACEDIR) \
-	$(TRACEDIR)/utils
+	$(TRACEDIR)/utils \
+	$(TRACEDIR)/utils/log
 
-CPPFLAGS = $(CONFIG_FLAGS) $(WHEREFLAGS)
+# C++ compilation flags
+CXXFLAGS += 
 
-LIBS =  
+# Library dependences
+LIBS += 
 
-src_found=$(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
-src_exc=$(wildcard $(SRC_EXCLUDE))
-src_inc=$(wildcard $(SRC_INCLUDE))
-SOURCES=$(filter-out $(src_exc),$(src_found)) $(src_inc)
-obj_temp=$(notdir $(SOURCES))
-OBJECTS=$(obj_temp:%.cpp=$(OBJDIR)/%.o)
-INCLUDES=$(INCDIRS:%=-I %)
+# Directories where MAKE will search for target pre-requisites
+VPATH = $(SRC_DIRS)
 
-.PHONY: all clean
-	
-all: $(OBJECTS)
+# Archive library to be generated
+ARCHIVE = libd3dpixrunplayer.a
 
-$(OBJDIR)/%.o : $(notdir %).cpp $(notdir %).h
-	@echo "  CC $< --> $(@F)"
-	@$(CX) $(CPPFLAGS) $(INCLUDES) -o $@ -c $< $(LIBS)
-	
-clean:
-	@echo "  CLEAN $(notdir $(OBJECTS))"
-	@rm -f $(OBJECTS)
+# Include this files in clean
+CLEAN_INCLUDE =
+
+#########################################################################
+
+include $(TOPDIR)/Makefile.common
+

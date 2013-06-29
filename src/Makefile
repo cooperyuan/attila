@@ -9,116 +9,113 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
-#  $Revision: 1.10 $
-#  $Author: vmoya $
-#  $Date: 2006-12-20 18:13:11 $
+#  $RCSfile: Makefile.new,v $
+#  $Revision: 1.6 $
+#  $Author: christip $
+#  $Date: 2008-02-25 22:32:18 $
 # 
 #  GPU3D framework Makefile. 
 # 
 # 
 
-include ./Makefile.defs
+TOPDIR = ..
 
-WHATS = all bGPU bGPU-Uni gl2atila extractTraceRegion
+include $(TOPDIR)/Makefile.defs
 
-HOWS = debug profiling optimized verbose
+#########################################################################
 
-TARGETS = mk-bGPU mk-bGPU-Uni mk-gl2atila mk-extractTraceRegion
+TARGETS = bGPU gl2atila extractTraceRegion
 
-ALLDIR = $(BGPUDIR) $(SUPPORTDIR) $(EMUDIR) $(GPUDIR) $(SIMDIR) \
-	 $(TRACEDIR)
-	 
-SIMDIRS = $(BGPUDIR) $(EMUDIR) $(GPUDIR) $(SIMDIR)
+SUBDIR_TARGETS = \
+	support \
+	trace \
+	emul \
+	gpu \
+	sim \
+	bgpu \
+	$(TRACEDIR)/gl2atila \
+	$(TRACEDIR)/extractTraceRegion \
+	tests
 
-TRACEDIRS = $(TRACEDIR)
+CLEAN_DIRS = $(SUBDIR_TARGETS)
 
+SIMCLEAN_DIRS = $(BGPUDIR) $(EMUDIR) $(GPUDIR) $(SIMDIR)
 
-default: usage
+TRACECLEAN_DIRS = $(TRACEDIR)
+
+#########################################################################
+
+.PHONY: usage $(SUBDIR_TARGETS) $(TARGETS) clean simclean traceclean
 
 usage:
-	@echo "Usage: make [ clean | simclean | traceclean ]"
-	@echo "       make [what how]"
+	@echo "Usage: make { clean | simclean | traceclean | <target> } <options>"
 	@echo ""
 	@echo "clean      - Delete all OBJs and binary files."
 	@echo "simclean   - Delete only simulator related OBJs, and binary files."
 	@echo "traceclean - Delete only OBJS generated from trace directory (includes lib & driver)"
 	@echo ""
-	@echo "what:"
-	@echo "       all      - All GPU programs"
-	@echo "       bGPU     - bGPU"
-	@echo "       bGPU-Uni - bGPU unified shaders"
-	@echo "       gl2atila - Tool for translating OpenGL traces into AGP traces"
+	@echo "Available <target> are:"
+	@echo ""
+	@echo "       all                - All GPU programs"
+	@echo "       bGPU               - bGPU"
+	@echo "       gl2atila           - Tool for translating OpenGL traces into AGP traces"
 	@echo "       extractTraceRegion - Tool for extracting frames from AGP traces"
 	@echo ""
-	@echo "how: "
+	@echo "Available <options> are:"
+	@echo ""
+	@echo "CONFIG={ debug  | profiling | optimized | verbose } "
+	@echo ""
 	@echo "       debug     - Compiler debug information"
 	@echo "       profiling - Compiler profiling information"
-	@echo "       optimized - Maximum optimization"
-	@echo "       verbose   - Full simulation trace."
+	@echo "       optimized - Maximum optimization (default)"
+	@echo ""
+#	@echo "UNIFIED={ yes | no }"
+#	@echo ""
+#	@echo "       yes       - Use Unified shaders (default)"
+#	@echo "       no        - Don't use Unified shaders"
+	@echo ""
+	@echo "CPU=<cpu>"
+	@echo ""
+	@echo "       <cpu>   - Target cpu for compilation. This lets apply some optimizations."
+	@echo "                 Possible values: x86, x86_64, pentium4, athlon, core2"
+	@echo ""
+	@echo "VERBOSE={ yes | no }"
+	@echo ""
+	@echo "       yes       - Activate debug messages"
+	@echo "       no        - Deactive debug messages (default)"
+	@echo ""
+	@echo "PLATFORM=<platf>"
+	@echo ""
+	@echo "       <platf> - Target platform for compilation."
+	@echo "                 Possible values: linux (default), cygwin"	
+#########################################################################
 
-$(WHATS): FORCE ; echo $@ > .what
-$(HOWS): FORCE ; echo $@ > .how
-	$(MAKE) mk-`cat .what` WHAT=`cat .what` HOW=`cat .how`
-	rm -f .what .how
-	
-FORCE: ;
+all: $(TARGETS)
 
-#######################################################################
+bgpu: support emul gpu sim trace
 
-ifeq ($(HOW),debug)
-    export HOWFLAGS = $(DEBUGFLG)
-endif 
-ifeq ($(HOW),profiling)
-    export HOWFLAGS = $(PROFFLG)
-endif
-ifeq ($(HOW),optimized)
-    export HOWFLAGS = $(OPTFLG)
-endif
-ifeq ($(HOW),verbose)
-    export HOWFLAGS = $(VERBFLG)
-endif
+bGPU: bgpu
+	@$(MAKE) -C bgpu -f Makefile.new build-all
 
-#########################################################################			
-		
-mk-all: $(TARGETS)
+$(TRACEDIR)/gl2atila: bgpu
 
-mk-bGPU: mk-support mk-trace mk-emul mk-gpu mk-sim
-	cd $(BGPUDIR); $(MAKE) bgpu
+gl2atila: $(TRACEDIR)/gl2atila
 
-mk-bGPU-Uni: mk-support mk-trace mk-emul mk-gpu mk-sim-uni
-	cd $(BGPUDIR); $(MAKE) bgpu-uni
+$(TRACEDIR)/extractTraceRegion: bgpu
 
-mk-gl2atila: mk-support mk-trace mk-emul mk-gpu mk-sim-uni
-	cd $(TRACEDIR); $(MAKE) gl2atila
+extractTraceRegion: $(TRACEDIR)/extractTraceRegion
 
-mk-extractTraceRegion: mk-support mk-trace mk-emul mk-gpu mk-sim-uni
-	cd $(TRACEDIR); $(MAKE) extractTraceRegion
-	
-mk-support:
-	cd $(SUPPORTDIR); $(MAKE) all
-	
-mk-trace:
-	cd $(TRACEDIR); $(MAKE) all
-
-mk-emul:
-	cd $(EMUDIR); $(MAKE) all
-	
-mk-gpu:
-	cd $(GPUDIR); $(MAKE) all
-	
-mk-sim:
-	cd $(SIMDIR); $(MAKE) sim
-
-mk-sim-uni:
-	cd $(SIMDIR); $(MAKE) sim-uni
+$(SUBDIR_TARGETS):
+	@$(MAKE) -C $@ -f Makefile.new
 
 simclean:
-	for d in $(SIMDIRS); do (cd $$d; $(MAKE) clean);done
+	@for d in $(SIMCLEAN_DIRS); do ($(MAKE) -C $$d -f Makefile.new clean); done
+	@$(MAKE) -C bgpu -f Makefile.new clean-build
 
 traceclean:
-	for d in $(TRACEDIRS); do (cd $$d; $(MAKE) clean);done
+	@for d in $(TRACECLEAN_DIRS); do ($(MAKE) -C $$d -f Makefile.new clean); done
 	
 clean:
-	for d in $(ALLDIR); do (cd $$d; $(MAKE) $@);done
-	
+	@for d in $(CLEAN_DIRS); do ($(MAKE) -C $$d -f Makefile.new clean); done
+	@$(MAKE) -C bgpu -f Makefile.new clean-build
+

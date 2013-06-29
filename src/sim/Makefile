@@ -9,131 +9,77 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
-#  $Revision: 1.33 $
-#  $Author: cgonzale $
-#  $Date: 2008-02-29 15:56:39 $
-# 
 #  Shader Simulator classes Makefile. 
 # 
 # 
 
-include ../Makefile.defs
+TOPDIR = ../..
 
-INCLUDE = -I . -I $(SUPPORTDIR) -I $(EMUDIR) -I $(GPUDIR) -I $(TRACEDIR) \
-	  -I $(TRACEDIR)/GLLib -I $(TRACEDIR)/GPUDriver \
-	  -I $(TRACEDIR)/GLLib/GLObject \
-	  -I $(TRACEDIR)/utils -I $(TRACEDIR)/utils/TraceReader \
-          -I $(TRACEDIR)/utils/log \
-	  -I $(TRACEDIR)/utils/Gen -I $(GLDIR) \
-	  -I $(BGPUDIR) -I ./CommandProcessor -I ./MemoryController \
-	  -I ./MemoryControllerV2 \
-	  -I ./Streamer -I ./Shader -I ./PrimitiveAssembly -I ./Rasterizer \
-	  -I ./Clipper -I ./FragmentOperations -I ./DAC -I ./Cache
-CXFLAGS = $(HOWFLAGS) $(WHEREFLAGS)
-LIBS = 
+include $(TOPDIR)/Makefile.defs
 
-COMMANDPROCESSOR = $(OBJDIR)/CommandProcessor.o $(OBJDIR)/AGPTransaction.o
+#########################################################################
 
-MEMORYCONTROLLER = $(OBJDIR)/MemoryController.o $(OBJDIR)/MemoryTransaction.o \
-                   $(OBJDIR)/MemoryControllerCommand.o
+# All source files below this subdirectories
+# will be compiled automatically
+SRC_DIRS = . \
+	Cache \
+	Clipper \
+	CommandProcessor \
+	DAC \
+	FragmentOperations \
+	MemoryController \
+	MemoryControllerV2 \
+	PrimitiveAssembly \
+	Rasterizer \
+        MicroPolygonRasterizer \
+	Shader \
+	VectorShader \
+	Streamer
 
-MEMORYCONTROLLER_V2 = $(OBJDIR)/MemoryControllerV2.o $(OBJDIR)/ChannelScheduler.o \
-	   $(OBJDIR)/ChannelTransaction.o $(OBJDIR)/DDRBank.o $(OBJDIR)/DDRBurst.o \
-	   $(OBJDIR)/DDRCommand.o $(OBJDIR)/DDRModule.o $(OBJDIR)/DDRModuleState.o \
-	   $(OBJDIR)/MemoryRequest.o $(OBJDIR)/MemoryRequestSplitter.o \
-	   $(OBJDIR)/MCSplitter.o $(OBJDIR)/MCSplitter2.o \
-	   $(OBJDIR)/DependencyQueue.o $(OBJDIR)/SchedulerSelector.o \
-	   $(OBJDIR)/FifoSchedulerBase.o \
-	   $(OBJDIR)/FifoScheduler.o $(OBJDIR)/RWFifoScheduler.o \
-	   $(OBJDIR)/BankQueueScheduler.o $(OBJDIR)/MemoryTraceRecorder.o
+# Source files to be excluded from SRC_DIRS
+SRC_EXCLUDE = \
+	Cache/ColorCache.cpp Cache/ZCache.cpp Cache/ColorCache.old.cpp \
+	FragmentOperations/*.cpp \
+	Rasterizer/RecursiveDescent.cpp Rasterizer/RecursiveRasterizer.cpp \
+	Rasterizer/TileEvaluator.cpp Rasterizer/TileEvaluatorStateInfo.cpp Rasterizer/TileInput.cpp \
+	Rasterizer/FragmentFIFO-nonUnified-legacy.cpp Rasterizer/Rasterizer-nonUnified-legacy.cpp \
+	Shader/ShaderDecodeExecute-nonUnified-legacy.cpp Shader/ShaderDecodeExecute-perGroupDecode.cpp \
+	Shader/ShaderFetch-nonUnified-legacy.cpp Shader/TextureUnit-in-order.cpp \
+	Shader/TextureUnit-out-of-order.cpp
 
-STREAMER = $(OBJDIR)/Streamer.o $(OBJDIR)/StreamerFetch.o \
-	   $(OBJDIR)/StreamerOutputCache.o $(OBJDIR)/StreamerLoader.o \
-	   $(OBJDIR)/StreamerCommit.o $(OBJDIR)/StreamerCommand.o \
-	   $(OBJDIR)/StreamerControlCommand.o $(OBJDIR)/StreamerStateInfo.o
+# Extra source files to be included
+SRC_INCLUDE = \
+	FragmentOperations/ColorBlockStateInfo.cpp \
+	FragmentOperations/GenericROP.cpp \
+	FragmentOperations/ROPOperation.cpp \
+	FragmentOperations/ROPStatusInfo.cpp \
+	FragmentOperations/ZStencilTestV2.cpp \
+	FragmentOperations/ColorWriteV2.cpp
 
-SHADER =  $(OBJDIR)/ShaderCommand.o $(OBJDIR)/ShaderDecodeCommand.o \
-	  $(OBJDIR)/ShaderExecInstruction.o $(OBJDIR)/ShaderInput.o \
-	  $(OBJDIR)/ShaderStateInfo.o $(OBJDIR)/ShaderDecodeStateInfo.o \
-	  $(OBJDIR)/ConsumerStateInfo.o $(OBJDIR)/TextureUnit.o \
-	  $(OBJDIR)/FilterOperation.o $(OBJDIR)/TextureRequest.o \
- 	  $(OBJDIR)/TextureResult.o $(OBJDIR)/TextureUnitStateInfo.o \
-	  $(OBJDIR)/ShaderFetch.o $(OBJDIR)/ShaderDecodeExecute.o
-						      
-PRIMITIVEASSEMBLY = $(OBJDIR)/PrimitiveAssembly.o \
-		    $(OBJDIR)/PrimitiveAssemblyInput.o \
-		    $(OBJDIR)/PrimitiveAssemblyCommand.o \
-		    $(OBJDIR)/PrimitiveAssemblyStateInfo.o \
-		    $(OBJDIR)/PrimitiveAssemblyRequest.o
+# Directories where compiler will search for includes
+INC_DIRS = \
+	$(SRC_DIRS) \
+	$(SUPPORTDIR) $(EMUDIR) $(GPUDIR) $(TRACEDIR) \
+	$(TRACEDIR)/GLLib $(TRACEDIR)/GPUDriver \
+	$(TRACEDIR)/GLLib/GLObject \
+	$(TRACEDIR)/utils $(TRACEDIR)/utils/TraceReader \
+	$(TRACEDIR)/utils/log \
+	$(TRACEDIR)/utils/Gen $(GLDIR) \
+	$(BGPUDIR) 
 
-CLIPPER = $(OBJDIR)/Clipper.o $(OBJDIR)/ClipperCommand.o \
-	  $(OBJDIR)/ClipperStateInfo.o $(OBJDIR)/ClipperStatusInfo.o
+# C++ compilation flags
+CXXFLAGS +=
 
-RASTERIZER = $(OBJDIR)/RasterizerStateInfo.o $(OBJDIR)/RasterizerCommand.o \
-	     $(OBJDIR)/TriangleSetup.o \
-	     $(OBJDIR)/TriangleSetupInput.o $(OBJDIR)/TriangleSetupOutput.o \
-	     $(OBJDIR)/TriangleSetupStateInfo.o $(OBJDIR)/TriangleTraversal.o \
-	     $(OBJDIR)/TriangleSetupRequest.o $(OBJDIR)/Interpolator.o \
-	     $(OBJDIR)/FragmentInput.o \
-	     $(OBJDIR)/HierarchicalZ.o $(OBJDIR)/HZAccess.o \
-	     $(OBJDIR)/HZUpdate.o $(OBJDIR)/HZStateInfo.o \
-	     $(OBJDIR)/FFIFOStateInfo.o \
-	     $(OBJDIR)/Rasterizer.o $(OBJDIR)/FragmentFIFO.o
+# Library dependences
+LIBS +=
 
-FRAGMENTOPS = $(OBJDIR)/ColorBlockStateInfo.o $(OBJDIR)/GenericROP.o \
-	      $(OBJDIR)/ROPOperation.o $(OBJDIR)/ROPStatusInfo.o \
-	      $(OBJDIR)/ZStencilTestV2.o $(OBJDIR)/ColorWriteV2.o
+# Directories where MAKE will search for target pre-requisites
+VPATH = $(SRC_DIRS)
 
-DAC = $(OBJDIR)/DAC.o $(OBJDIR)/Blitter.o
+# Archive library to be generated
+ARCHIVE = libsim.a
 
-CACHE = $(OBJDIR)/FetchCache.o $(OBJDIR)/InputCache.o \
-	$(OBJDIR)/TextureCache.o $(OBJDIR)/TextureCacheL2.o \
-	$(OBJDIR)/TextureCacheGen.o $(OBJDIR)/FetchCache64.o $(OBJDIR)/ROPCache.o \
-	$(OBJDIR)/ColorCacheV2.o $(OBJDIR)/ZCacheV2.o
+#########################################################################
 
-OBJECTS = $(COMMANDPROCESSOR) $(MEMORYCONTROLLER) $(MEMORYCONTROLLER_V2) $(STREAMER) \
-	  $(SHADER) $(PRIMITIVEASSEMBLY) $(CLIPPER) $(RASTERIZER) $(FRAGMENTOPS) \
-	  $(DAC) $(CACHE)
+include $(TOPDIR)/Makefile.common
 
-all : $(OBJECTS)
-
-sim: $(OBJECTS)
-
-sim-uni: $(OBJECTS)
-
-$(COMMANDPROCESSOR): $(OBJDIR)/%.o : CommandProcessor/%.cpp CommandProcessor/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(MEMORYCONTROLLER): $(OBJDIR)/%.o : MemoryController/%.cpp MemoryController/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(MEMORYCONTROLLER_V2): $(OBJDIR)/%.o : MemoryControllerV2/%.cpp MemoryControllerV2/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(STREAMER): $(OBJDIR)/%.o : Streamer/%.cpp Streamer/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(SHADER): $(OBJDIR)/%.o : Shader/%.cpp Shader/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(PRIMITIVEASSEMBLY): $(OBJDIR)/%.o : PrimitiveAssembly/%.cpp PrimitiveAssembly/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(CLIPPER): $(OBJDIR)/%.o : Clipper/%.cpp Clipper/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(RASTERIZER): $(OBJDIR)/%.o : Rasterizer/%.cpp Rasterizer/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(FRAGMENTOPS): $(OBJDIR)/%.o : FragmentOperations/%.cpp FragmentOperations/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-$(DAC): $(OBJDIR)/%.o : DAC/%.cpp DAC/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-	
-$(CACHE): $(OBJDIR)/%.o : Cache/%.cpp Cache/%.h
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-
-clean:
-	for o in $(OBJECTS); do (rm $$o); done

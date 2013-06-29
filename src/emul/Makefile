@@ -9,33 +9,47 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
-#  $Revision: 1.11 $
+#  $RCSfile: Makefile.new,v $
+#  $Revision: 1.2 $
 #  $Author: vmoya $
-#  $Date: 2008-02-22 18:32:41 $
+#  $Date: 2007-10-19 08:53:40 $
 # 
 #  GPU Emulation classes Makefile. 
 # 
 # 
 
-include ../Makefile.defs
+TOPDIR = ../..
 
-INCLUDE = -I . -I $(SIMDIR) -I $(SUPPORTDIR)
-CXFLAGS = $(HOWFLAGS) $(WHEREFLAGS)
-LIBS = 
+include $(TOPDIR)/Makefile.defs
 
-OBJECTS = $(OBJDIR)/GPUMath.o $(OBJDIR)/ShaderInstruction.o \
-          $(OBJDIR)/ShaderEmulator.o $(OBJDIR)/SetupTriangle.o \
-          $(OBJDIR)/Fragment.o $(OBJDIR)/RasterizerEmulator.o \
-          $(OBJDIR)/ClipperEmulator.o $(OBJDIR)/Tile.o \
-          $(OBJDIR)/FragmentOpEmulator.o $(OBJDIR)/Cache.o \
-          $(OBJDIR)/Cache64.o $(OBJDIR)/CacheReplacement.o \
-          $(OBJDIR)/TextureEmulator.o
+#########################################################################
 
-all: $(OBJECTS)
+# All source files below this subdirectories
+# will be included automatically
+SRC_DIRS = .
 
-$(OBJECTS): $(OBJDIR)/%.o : %.cpp
-	$(CX) $(CXFLAGS) -c -o $@ $< $(INCLUDE) $(LIBS)
-clean:
-	for o in $(OBJECTS); do (rm $$o); done
+# Source files to be excluded from SRCDIRS
+SRC_EXCLUDE = ./pruebaCache.cpp ./pruebaMask.cpp ./rastEmuTest.cpp
+	
+# Extra source files to be included
+SRC_INCLUDE = 
+
+# Directories where compiler will search for includes
+INC_DIRS = $(SRC_DIRS) $(SIMDIR) $(SUPPORTDIR)
+	
+# C++ compilation flags
+CXXFLAGS += 
+
+# Library dependences
+LIBS +=  
+
+# Directories where MAKE will search for target pre-requisites
+VPATH = $(SRC_DIRS)
+
+# Archive library to be generated
+ARCHIVE = libemul.a
+
+#########################################################################
+
+include $(TOPDIR)/Makefile.common
 

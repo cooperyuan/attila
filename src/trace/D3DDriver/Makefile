@@ -9,64 +9,66 @@
 #  prior permission of the authors, Computer Architecture Department
 #  and Universitat Politecnica de Catalunya.
 # 
-#  $RCSfile: Makefile,v $
-#  $Revision: 1.3 $
+#  $RCSfile: Makefile.new,v $
+#  $Revision: 1.5 $
 #  $Author: csolis $
-#  $Date: 2007-09-06 15:26:51 $
+#  $Date: 2007-11-28 17:18:28 $
 # 
-#  Shader Simulator classes Makefile. 
+#  D3D Driver Makefile. 
 # 
 # 
 
-include ../../Makefile.defs
+TOPDIR = ../../..
+
+include $(TOPDIR)/Makefile.defs
 
 # All source files below this subdirectories
 # will be included automatically
-SRCDIRS = . 
+SRC_DIRS = . \
+	   AD3D9 \
+	   AD3D9/ShaderTranslator \
+	   AD3D9/FFGenerator
 
 # Source files to be excluded from SRCDIRS
-SRC_EXCLUDE = 
+SRC_EXCLUDE = ToString.cpp
 	
 # Extra source files to be included
-SRC_INCLUDE =
-
-# Directories where MAKE will search for target pre-requisites
-VPATH = $(SRCDIRS)
+SRC_INCLUDE = 
 
 # Directories where compiler will search for includes
-INCDIRS = \
+INC_DIRS = \
 	$(SRCDIRS) \
 	$(SRCDIR)/D3D \
 	$(SRCDIR)/support \
+        $(SRCDIR)/trace \
 	$(SRCDIR)/trace/GPUDriver \
 	$(SRCDIR)/trace/utils \
 	$(SRCDIR)/sim \
+	$(SRCDIR)/emul \
 	$(SRCDIR)/sim/CommandProcessor \
-	$(SRCDIR)/sim/MemoryController
+	$(SRCDIR)/sim/MemoryController \
+	$(SRCDIR)/trace/ACD/Interface \
+	$(SRCDIR)/trace/D3DDriver \
+	$(SRCDIR)/trace/D3DDriver/AD3D9 \
+	$(SRCDIR)/trace/D3DDriver/AD3D9/ShaderTranslator \
+	$(SRCDIR)/trace/D3DDriver/AD3D9/FFGenerator
 
-CPPFLAGS = $(CONFIG_FLAGS) $(WHEREFLAGS)
+# C++ compilation flags
+CXXFLAGS += 
 
-LIBS =  
+# Library dependences
+LIBS += 
 
-src_found=$(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
-src_exc=$(wildcard $(SRC_EXCLUDE))
-src_inc=$(wildcard $(SRC_INCLUDE))
-SOURCES=$(filter-out $(src_exc),$(src_found)) $(src_inc)
-obj_temp=$(notdir $(SOURCES))
-OBJECTS=$(obj_temp:%.cpp=$(OBJDIR)/%.o)
-INCLUDES=$(INCDIRS:%=-I %)
+# Directories where MAKE will search for target pre-requisites
+VPATH = $(SRC_DIRS)
 
-.PHONY: all clean
-	
-all: $(OBJECTS)
-	@cd D3DControllers ; $(MAKE)
-	@cd AD3D9 ; $(MAKE)
-	
-$(OBJDIR)/%.o : $(notdir %).cpp $(notdir %).h
-	@echo "  CC $< --> $(@F)"
-	@$(CX) $(CPPFLAGS) $(INCLUDES) -o $@ -c $< $(LIBS)
-	
-clean:
-	@echo "  CLEAN $(notdir $(OBJECTS))"
-	@rm -f $(OBJECTS)
+# Archive library to be generated
+ARCHIVE = libd3ddriver.a
+
+# Include this files in clean
+CLEAN_INCLUDE =
+
+#########################################################################
+
+include $(TOPDIR)/Makefile.common
 
