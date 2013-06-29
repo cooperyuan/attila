@@ -35,7 +35,7 @@ SRC_INCLUDE = $(TRACEDIR)/utils/StringUtils.cpp
 # Directories where compiler will search for includes
 INC_DIRS = \
 	$(SRCDIRS) \
-	$(SRCDIR)/D3D \
+	$(SRCDIR)/inc/d3d \
 	$(SUPPORTDIR) \
 	$(TRACEDIR) \
 	$(TRACEDIR)/utils \

@@ -37,7 +37,7 @@ VPATH = $(SRCDIRS)
 # Directories where compiler will search for includes
 INCDIRS = \
 	$(SRCDIRS) \
-	$(SRCDIR)/D3D \
+	$(SRCDIR)/inc/d3d \
 	$(SRCDIR)/support
 
 CPPFLAGS = $(CONFIG_FLAGS) $(WHEREFLAGS)

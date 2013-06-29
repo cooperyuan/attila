@@ -34,8 +34,7 @@ SUBDIR_TARGETS = \
 	sim \
 	bgpu \
 	$(TRACEDIR)/gl2atila \
-	$(TRACEDIR)/extractTraceRegion \
-	tests
+	$(TRACEDIR)/extractTraceRegion
 
 CLEAN_DIRS = $(SUBDIR_TARGETS)
 

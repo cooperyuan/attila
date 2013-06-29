@@ -47,8 +47,7 @@ INC_DIRS = $(SRC_DIRS) \
 	$(TRACEDIR)/utils/log $(TRACEDIR)/GLLib/ARBP/VertexProgram \
 	$(TRACEDIR)/GLLib/ARBP/FragmentProgram $(GLDIR) \
 	$(TRACEDIR)/GLLib/GLObject $(TRACEDIR)/GLLib/Texture \
-	$(TRACEDIR)/GLLib/BufferObject \
-	$(SRCDIR)/extern-libs/libpng-1.4.0
+	$(TRACEDIR)/GLLib/BufferObject
 
 # C++ compilation flags
 CXXFLAGS += -D UNIFIEDSHADER
@@ -93,15 +92,15 @@ $(BINDIR)/bGPU-emu: bGPU-emu.o $(BUILD_OBJECTS) $(PROGRAM_LIBS:%=$(LIBDIR)/%) $(
 
 bGPU.o : bGPU-Unified.cpp bGPU-Unified.h
 	@echo "  CC $@" 
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
 
 bGPU-Unified.o : bGPU-Unified.cpp bGPU-Unified.h
 	@echo " CC $@"
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -D UNIFIEDSHADER -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -D UNIFIEDSHADER -o $@ -c $<
 
 bGPU-emu.o : bGPU-emu.cpp bGPU-emu.h
 	@echo "  CC $@"  
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $< 
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $< 
 
 clean-build:
 	@for o in $(BUILD_OBJECTS); do (rm $$o); done

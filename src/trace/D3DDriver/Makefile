@@ -38,9 +38,9 @@ SRC_INCLUDE =
 # Directories where compiler will search for includes
 INC_DIRS = \
 	$(SRCDIRS) \
-	$(SRCDIR)/D3D \
+	$(SRCDIR)/inc/d3d \
 	$(SRCDIR)/support \
-        $(SRCDIR)/trace \
+	$(SRCDIR)/trace \
 	$(SRCDIR)/trace/GPUDriver \
 	$(SRCDIR)/trace/utils \
 	$(SRCDIR)/sim \

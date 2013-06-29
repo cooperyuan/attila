@@ -49,7 +49,7 @@ SUPPORTDIR = $(SRCDIR)/support
 SHSIMDIR = $(SRCDIR)/shSim
 BGPUDIR = $(SRCDIR)/bgpu
 TRACEDIR = $(SRCDIR)/trace
-GLDIR = $(SRCDIR)/GL
+GLDIR = $(SRCDIR)/inc/gl
 
 # Compiler Optimization level by default
 OLEVEL=1
