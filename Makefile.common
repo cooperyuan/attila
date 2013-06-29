@@ -40,27 +40,27 @@ all: $(ARCHIVE_TARGET) $(PROGRAM_TARGET) $(TARGETS) Makefile $(TOPDIR)/Makefile.
 
 %.o : %.cpp %.h
 	@echo "  CC $@"
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
 
 %.o : %.cpp
 	@echo "  CC $@"
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
 
 $(PROGRAM_TARGET): $(OBJECTS) $(PROGRAM_LIBS:%=$(LIBDIR)/%) $(PROGRAM_DEPS)
 	@echo "  BUILD $(notdir $@)"
-	@$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(PROGRAM_LIBS:%=$(LIBDIR)/%) $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(PROGRAM_LIBS:%=$(LIBDIR)/%) $(LDFLAGS) $(LIBS)
 
 $(ARCHIVE_TARGET): $(OBJECTS) $(ARCHIVE_DEPS)
 	@echo "  AR $(notdir $@)"
-	@$(AR) -rcs $@ $(OBJECTS)
+	$(AR) -rcs $@ $(OBJECTS)
 
 $(SUBDIR_TARGETS):
 	@echo "  MAKE $@"
-	@$(MAKE) -C $@
+	$(MAKE) -C $@
 
 clean: subdir_clean
 	@echo "  CLEAN $(notdir $(CLEANS))"
-	@$(RM) $(CLEANS)
+	$(RM) $(CLEANS)
 	
 subdir_clean:
 	@for d in $(SUBDIR_TARGETS); do ($(MAKE) -C $$d clean); done

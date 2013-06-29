@@ -51,11 +51,7 @@ INC_DIRS = $(SRC_DIRS) \
 	$(SRCDIR)/extern-libs/libpng-1.4.0
 
 # C++ compilation flags
-ifeq ($(UNIFIED),yes)
-	CXXFLAGS += -D UNIFIEDSHADER
-else
-	CXXFLAGS += 
-endif
+CXXFLAGS += -D UNIFIEDSHADER
 
 INTERNAL_LIBS = \
 	tracedriver \
