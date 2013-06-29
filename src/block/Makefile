@@ -47,7 +47,7 @@ LIBS +=
 VPATH = $(SRC_DIRS)
 
 # Archive library to be generated
-ARCHIVE = libgpu.a
+ARCHIVE = libblock.a
 
 #########################################################################
 

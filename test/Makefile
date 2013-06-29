@@ -37,7 +37,7 @@ INC_DIRS = $(SRC_DIRS) \
 	$(SIMDIR)/MemoryControllerV2 $(SIMDIR)/Shader $(SIMDIR)/Streamer \
 	$(SIMDIR)/PrimitiveAssembly $(SIMDIR)/Clipper \
 	$(SIMDIR)/Rasterizer $(SIMDIR)/FragmentOperations \
-	$(SIMDIR)/DAC $(SIMDIR)/Cache $(GPUDIR) $(TRACEDIR) \
+	$(SIMDIR)/DAC $(SIMDIR)/Cache $(BLOCKDIR) $(TRACEDIR) \
 	$(TRACEDIR)/GLLib $(TRACEDIR)/GPUDriver \
 	$(TRACEDIR)/utils $(TRACEDIR)/utils/TraceReader \
 	$(TRACEDIR)/utils/Gen $(TRACEDIR)/GLLib/ARBP \

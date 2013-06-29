@@ -40,7 +40,7 @@ INC_DIRS = $(SRC_DIRS) \
 	$(SIMDIR)/PrimitiveAssembly $(SIMDIR)/Clipper \
 	$(SIMDIR)/Rasterizer $(SIMDIR)/MicroPolygonRasterizer \
 	$(SIMDIR)/FragmentOperations $(SIMDIR)/DAC \
-	$(SIMDIR)/Cache $(GPUDIR) $(TRACEDIR) \
+	$(SIMDIR)/Cache $(BLOCKDIR) $(TRACEDIR) \
 	$(TRACEDIR)/GLLib $(TRACEDIR)/GPUDriver \
 	$(TRACEDIR)/utils $(TRACEDIR)/utils/TraceReader \
 	$(TRACEDIR)/utils/Gen $(TRACEDIR)/GLLib/ARBP \

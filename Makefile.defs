@@ -42,7 +42,7 @@ LIBDIR = $(TOPDIR)/lib
 OBJDIR = $(TOPDIR)/obj
 DOCDIR = $(TOPDIR)/doc
 
-GPUDIR = $(SRCDIR)/gpu
+BLOCKDIR = $(SRCDIR)/block
 SIMDIR = $(SRCDIR)/sim
 EMUDIR = $(SRCDIR)/emul
 SUPPORTDIR = $(SRCDIR)/support

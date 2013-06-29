@@ -59,7 +59,7 @@ SRC_INCLUDE = \
 # Directories where compiler will search for includes
 INC_DIRS = \
 	$(SRC_DIRS) \
-	$(SUPPORTDIR) $(EMUDIR) $(GPUDIR) $(TRACEDIR) \
+	$(SUPPORTDIR) $(EMUDIR) $(BLOCKDIR) $(TRACEDIR) \
 	$(TRACEDIR)/GLLib $(TRACEDIR)/GPUDriver \
 	$(TRACEDIR)/GLLib/GLObject \
 	$(TRACEDIR)/utils $(TRACEDIR)/utils/TraceReader \

@@ -30,7 +30,7 @@ SUBDIR_TARGETS = \
 	support \
 	trace \
 	emul \
-	gpu \
+	block \
 	sim \
 	bgpu \
 	$(TRACEDIR)/gl2atila \
@@ -38,7 +38,7 @@ SUBDIR_TARGETS = \
 
 CLEAN_DIRS = $(SUBDIR_TARGETS)
 
-SIMCLEAN_DIRS = $(BGPUDIR) $(EMUDIR) $(GPUDIR) $(SIMDIR)
+SIMCLEAN_DIRS = $(BGPUDIR) $(EMUDIR) $(BLOCKDIR) $(SIMDIR)
 
 TRACECLEAN_DIRS = $(TRACEDIR)
 
@@ -91,7 +91,7 @@ usage:
 
 all: $(TARGETS)
 
-bgpu: support emul gpu sim trace
+bgpu: support emul block sim trace
 
 bGPU: bgpu
 	@$(MAKE) -C bgpu build-all
